@@ -1,0 +1,15 @@
+{
+    "tabWidth": 4,
+    "singleQuote": true,
+    "semi": true,
+    "jsxBracketSameLine": false,
+    "printWidth": 120,
+    "overrides": [
+        {
+            "files": "*.scss",
+            "options": {
+                "singleQuote": false
+            }
+        }
+    ]
+}

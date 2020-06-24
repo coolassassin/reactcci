@@ -1,0 +1,51 @@
+{
+  "name": "reactcc",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "repository": "git@github.com:coolassassin/reactcc.git",
+  "author": "coolassassin <coolstreetassassin@gmail.com>",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "reactcc": "./build/cli.js"
+  },
+  "scripts": {
+    "start": "babel-node -x .ts index.ts",
+    "build": "rollup -c",
+    "typecheck": "tsc --noEmit",
+    "run-build": "node build/cli.js",
+    "prettier": "prettier --write src/*.ts index.ts"
+  },
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "commander": "^5.1.0",
+    "prompts": "^2.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-typescript": "^7.10.1",
+    "@rollup/plugin-babel": "^5.0.3",
+    "@rollup/plugin-node-resolve": "^8.0.1",
+    "@types/node": "^14.0.13",
+    "babelrc-rollup": "^3.0.0",
+    "prettier": "^2.0.5",
+    "rollup": "^2.7.5",
+    "rollup-plugin-hashbang": "^2.2.2",
+    "typescript": "^3.9.5"
+  },
+  "files": [
+    "defaultConfig.js",
+    "package.json",
+    "yarn.lock",
+    "templates",
+    "build"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "browserslist": [
+    "node 12"
+  ]
+}
