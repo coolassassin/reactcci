@@ -2,6 +2,8 @@
 CLI which allows you to build your React application with your own file structure and make your components interactively without typing any paths.
 Setup your config once to build your app as quick as it possible.
 
+![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
+
 ## Installation
 To install via npm:  
 ```npm install reactcci```  
