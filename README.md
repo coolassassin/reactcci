@@ -4,27 +4,27 @@ Setup your config once to build your app as quick as it possible.
 
 ## Installation
 To install via npm:  
-```npm install reactcc```  
+```npm install reactcci```  
 
 To install via yarn:  
-```yarn add reactcc```
+```yarn add reactcci```
 
 Also, you are able to install it globally:  
-```npm install reactcc -g```
+```npm install reactcci -g```
 
 ## Running
-If the package has been installed globally, run it simply by `reactcc`
+If the package has been installed globally, run it simply by `reactcci`
 
-If it is the local package type `npx reactcc` or `yarn reactcc`
+If it is the local package type `npx reactcci` or `yarn reactcci`
 
 ## Setup
 By default, components will be added into `src/` folder. To change this, you can set up your own config or run it with the flag:  
-```reactcc --dist src/app/components```
+```reactcci --dist src/app/components```
 
-Also, you can type `reactcc --help` to see all available commands.
+Also, you can type `reactcci --help` to see all available commands.
 
 ## Config
-To set up your config, you need to create `rcc.config.js`  
+To set up your config, you need to create `rcci.config.js`  
 The default config has the next structure:
 ```javascript
 module.exports = {

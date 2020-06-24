@@ -1,13 +1,13 @@
 {
-  "name": "reactcc",
+  "name": "reactcci",
   "version": "1.0.0",
   "main": "index.ts",
-  "repository": "git@github.com:coolassassin/reactcc.git",
+  "repository": "git@github.com:coolassassin/reactcci.git",
   "author": "coolassassin <coolstreetassassin@gmail.com>",
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
-    "reactcc": "./build/cli.js"
+    "reactcci": "./build/cli.js"
   },
   "scripts": {
     "start": "babel-node -x .ts index.ts",
@@ -48,5 +48,14 @@
   },
   "browserslist": [
     "node 12"
+  ],
+  "keywords": [
+    "react",
+    "react create component",
+    "cli",
+    "generate",
+    "interactve",
+    "multi project",
+    "configurable"
   ]
 }
