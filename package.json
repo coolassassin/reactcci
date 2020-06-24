@@ -40,7 +40,8 @@
     "package.json",
     "yarn.lock",
     "templates",
-    "build"
+    "build",
+    "README.md"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
