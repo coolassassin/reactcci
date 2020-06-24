@@ -12,6 +12,7 @@ export type Setting = {
     root: string;
     config: {
         multiProject: boolean;
+        skipFinalStep: boolean;
         folderPath: string;
         templatesFolder: string;
         templates: {

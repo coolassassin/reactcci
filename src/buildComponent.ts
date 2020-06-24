@@ -28,20 +28,22 @@ export const buildComponent = async () => {
 
     componentSettingsMap.fileList = fileList;
 
-    console.log(`\nCreating component ${chalk.yellow(componentName)}`);
-    console.log(
-        `\nFile list:\n${Object.entries(fileList)
-            .map(
-                ([tmp, options]) =>
-                    `- ${tmp}${options.type ? ` (${chalk.yellow(options.type)})` : ''}${chalk.gray(
-                        ` - ${options.name}`
-                    )}`
-            )
-            .join('\n')}`
-    );
-    console.log(`\nFolder: ${chalk.yellow(path.join(project, projectRootPath, resultPath))}`);
+    if (!config.skipFinalStep) {
+        console.log(`\nCreating component ${chalk.yellow(componentName)}`);
+        console.log(
+            `\nFile list:\n${Object.entries(fileList)
+                .map(
+                    ([tmp, options]) =>
+                        `- ${tmp}${options.type ? ` (${chalk.yellow(options.type)})` : ''}${chalk.gray(
+                            ` - ${options.name}`
+                        )}`
+                )
+                .join('\n')}`
+        );
+        console.log(`\nFolder: ${chalk.yellow(path.join(project, projectRootPath, resultPath))}`);
+    }
 
-    if (await getFinalAgreement()) {
+    if (config.skipFinalStep || await getFinalAgreement()) {
         await generateFiles();
         await processAfterGeneration();
         console.log(chalk.green('\nComponent is created!!! \\(•◡ •)/ '));

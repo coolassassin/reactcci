@@ -1,5 +1,6 @@
 module.exports = {
     multiProject: false,
+    skipFinalStep: false,
     folderPath: 'src/',
     templatesFolder: 'templates',
     templates: {

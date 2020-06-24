@@ -31,6 +31,7 @@ The default config has the next structure:
 ```javascript
 module.exports = {
     multiProject: false,
+    skipFinalStep: false,
     folderPath: 'src/',
     templatesFolder: 'templates',
     templates: {
@@ -67,6 +68,7 @@ module.exports = {
 | `folderPath` | `string` or array of `string` | `src/` |
 | `templatesFolder` | Path to your own components templates | `templates` |
 | `multiProject` | Allow you to set up config for mono-repository with several projects | `false` |
+| `skipFinalStep` | Allow you to switch off the last checking step | `false` |
 | `templates` | Object which describes the structure of your component. You are able to set up `name` for your files. Filename of template in template folder or array of files to be able to select variant. You are able to make it optional and make it switched off by default. | Example of setup above |
 | `placeholders` | List of placeholders which you can use to build your own component template | Example of setup above |
 | `afterCreation` | Object with scripts to process you file after creation | - |
