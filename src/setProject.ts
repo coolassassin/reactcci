@@ -11,15 +11,20 @@ export const setProject = async () => {
     const {
         root,
         config: { multiProject, folderPath },
-        commandLineFlags: { dist },
+        commandLineFlags,
     } = componentSettingsMap;
 
-    if (dist) {
+    if (commandLineFlags.dist) {
         componentSettingsMap.project = project;
         return;
     }
 
-    if (multiProject) {
+    if (commandLineFlags.project) {
+        project = commandLineFlags.project;
+        console.log(`${chalk.green('√')} Selected project ${chalk.gray(`»`)} ${project}`);
+    }
+
+    if (!project && multiProject) {
         const projectList = await fs.promises.readdir(path.resolve(root)).then((items) => {
             return items
                 .filter((item) => isDirectory(path.join(root, item)))
@@ -62,11 +67,14 @@ export const setProject = async () => {
 
     if (
         (Array.isArray(folderPath) && folderPath.some((fp) => fs.existsSync(path.resolve(root, project, fp)))) ||
-        fs.existsSync(path.resolve(root, project, folderPath))
+        (!Array.isArray(folderPath) && fs.existsSync(path.resolve(root, project, folderPath)))
     ) {
         componentSettingsMap.project = project;
     } else {
-        console.error(chalk.red('Error: There is no folder for components'), project, folderPath);
+        console.error(
+            chalk.red(`Error: There is no folder for components in ${chalk.yellow(project)} project`),
+            folderPath
+        );
         process.exit();
     }
 };
