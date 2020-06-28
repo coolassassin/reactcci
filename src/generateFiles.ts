@@ -18,7 +18,7 @@ export const generateFiles = async () => {
     };
 
     for (const [, options] of Object.entries(fileList)) {
-        const template = options.file ? (await getTemplate(options.file, dataForTemplate) ?? '') : '';
+        const template = options.file ? (await getTemplate(options.file, dataForTemplate)) ?? '' : '';
         await fs.promises.writeFile(path.join(folder, options.name), template);
     }
 };

@@ -3,7 +3,10 @@ import path from 'path';
 import { componentSettingsMap } from './componentSettingsMap';
 
 export const getTemplate = async (fileName, insertionData) => {
-    const { root, config: {templatesFolder, placeholders} } = componentSettingsMap;
+    const {
+        root,
+        config: { templatesFolder, placeholders },
+    } = componentSettingsMap;
 
     const defaultTemplatesFolder = path.resolve(process.argv[1], '../../templates');
     const templatesPath = (await fs.existsSync(path.join(root, templatesFolder)))

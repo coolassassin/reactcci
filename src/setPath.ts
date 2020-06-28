@@ -1,16 +1,21 @@
 import { getQuestionsSettings } from './getQuestionsSettings';
 import fs from 'fs';
 import path from 'path';
-import chalk from "chalk";
+import chalk from 'chalk';
 import Prompt from 'prompts';
 import { isDirectory } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
-import {getProjectRootPath} from "./getProjectRootPath";
+import { getProjectRootPath } from './getProjectRootPath';
 
-export const setPath = async (initialPath: string = '') => {
-    const { root, project, config: {folderPath} } = componentSettingsMap;
+export const setPath = async () => {
+    const {
+        root,
+        project,
+        config: { folderPath },
+        commandLineFlags: { dist },
+    } = componentSettingsMap;
 
-    let projectRootPath = initialPath;
+    let projectRootPath = dist;
     if (!projectRootPath) {
         if (Array.isArray(folderPath)) {
             const availablePaths = folderPath.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
@@ -63,7 +68,7 @@ export const setPath = async (initialPath: string = '') => {
                 name: 'folder',
                 message: `Select destination folder for component`,
                 hint: 'Select using arrows and press Enter',
-                choices: choices.map(choice => ({...choice, description: chalk.yellow(choice.description)})),
+                choices: choices.map((choice) => ({ ...choice, description: chalk.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,
             },
             getQuestionsSettings()

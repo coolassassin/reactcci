@@ -6,7 +6,7 @@ type FileOption = {
 type AfterCreationCommand = {
     extensions?: string[];
     cmd: string;
-}
+};
 
 export type Setting = {
     root: string;
@@ -20,12 +20,16 @@ export type Setting = {
         };
         placeholders: { [key in string]: (data: any) => string };
         afterCreation?: {
-            [key in string]: AfterCreationCommand
-        }
+            [key in string]: AfterCreationCommand;
+        };
     };
     project: string;
     componentName: string;
     projectRootPath: string;
     resultPath: string;
     fileList: { [key in string]: { name: string; file: string; type?: string } };
+    commandLineFlags: {
+        name: string;
+        dist: string;
+    };
 };

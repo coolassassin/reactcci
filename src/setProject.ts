@@ -8,7 +8,16 @@ import { componentSettingsMap } from './componentSettingsMap';
 
 export const setProject = async () => {
     let project = '';
-    const { root, config: {multiProject, folderPath} } = componentSettingsMap;
+    const {
+        root,
+        config: { multiProject, folderPath },
+        commandLineFlags: { dist },
+    } = componentSettingsMap;
+
+    if (dist) {
+        componentSettingsMap.project = project;
+        return;
+    }
 
     if (multiProject) {
         const projectList = await fs.promises.readdir(path.resolve(root)).then((items) => {

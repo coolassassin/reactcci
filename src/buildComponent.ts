@@ -43,7 +43,7 @@ export const buildComponent = async () => {
         console.log(`\nFolder: ${chalk.yellow(path.join(project, projectRootPath, resultPath))}`);
     }
 
-    if (config.skipFinalStep || await getFinalAgreement()) {
+    if (config.skipFinalStep || (await getFinalAgreement())) {
         await generateFiles();
         await processAfterGeneration();
         console.log(chalk.green('\nComponent is created!!! \\(•◡ •)/ '));
