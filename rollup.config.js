@@ -15,5 +15,5 @@ export default {
         babel({ extensions: ['.ts', '.js'], exclude: './node_modules/**' }),
         hashbang(),
     ],
-    external: ['path', 'fs', 'child_process', 'chalk', 'prompts', 'commander'],
+    external: ['path', 'fs', 'child_process', 'kleur', 'prompts', 'commander'],
 };

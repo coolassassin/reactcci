@@ -1,5 +1,5 @@
 import Prompt from 'prompts';
-import chalk from 'chalk';
+import kleur from 'kleur';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 
@@ -29,14 +29,14 @@ export const setComponentName = async () => {
         }
 
         if (componentName.length === 0) {
-            console.log(chalk.yellow('Component name must have at least one character.\nExample: DocumentModal'));
+            console.log(kleur.yellow('Component name must have at least one character.\nExample: DocumentModal'));
             res = '';
             continue;
         }
 
         if (/[^\w\d-_]/g.test(componentName)) {
             console.log(
-                chalk.yellow(
+                kleur.yellow(
                     'Component name must contain only letters, numbers, dashes or underscores.\nExample: DocumentModal'
                 )
             );

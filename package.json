@@ -17,8 +17,8 @@
     "prettier": "prettier --write src/*.ts index.ts"
   },
   "dependencies": {
-    "chalk": "^4.0.0",
     "commander": "^5.1.0",
+    "kleur": "^4.0.2",
     "prompts": "^2.3.2"
   },
   "devDependencies": {

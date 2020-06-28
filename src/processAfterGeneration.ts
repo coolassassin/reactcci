@@ -1,5 +1,5 @@
 import path from 'path';
-import chalk from 'chalk';
+import kleur from 'kleur';
 import childProcess from 'child_process';
 import { componentSettingsMap } from './componentSettingsMap';
 
@@ -28,12 +28,12 @@ export const processAfterGeneration = async () => {
                         }
                         const filePath = path.join(finalFolder, file.name);
                         childProcess.execSync(command.cmd.replace('[filename]', filePath));
-                        console.log(`  ${chalk.green('√')} ${type}`);
+                        console.log(`  ${kleur.green('√')} ${type}`);
                     }
                 } catch (e) {
                     console.error(
-                        chalk.red(
-                            `Unexpected error during processing ${chalk.yellow(file.name)} with ${chalk.yellow(
+                        kleur.red(
+                            `Unexpected error during processing ${kleur.yellow(file.name)} with ${kleur.yellow(
                                 type
                             )} command`
                         )

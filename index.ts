@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import chalk from 'chalk';
+import kleur from 'kleur';
 import { setPath } from './src/setPath';
 import { setConfig } from './src/setConfig';
 import { setProject } from './src/setProject';
@@ -22,7 +22,7 @@ import { processCommandLineFlags } from './src/processCommandLineFlags';
 
         await buildComponent();
     } catch (e) {
-        console.error(chalk.red('Unexpected error'), e);
+        console.error(kleur.red('Unexpected error'), e);
         process.exit();
     }
 })();

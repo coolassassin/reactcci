@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import chalk from 'chalk';
+import kleur from 'kleur';
 import Prompt from 'prompts';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory } from './helpers';
@@ -21,7 +21,7 @@ export const setProject = async () => {
 
     if (commandLineFlags.project) {
         project = commandLineFlags.project;
-        console.log(`${chalk.green('√')} Selected project ${chalk.gray(`»`)} ${project}`);
+        console.log(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
     }
 
     if (!project && multiProject) {
@@ -38,7 +38,7 @@ export const setProject = async () => {
 
         if (projectList.length === 0) {
             console.error(
-                `${chalk.red('There is no projects with the following path:\n')}${chalk.yellow(
+                `${kleur.red('There is no projects with the following path:\n')}${kleur.yellow(
                     Array.isArray(folderPath) ? folderPath.join('\n') : folderPath
                 )}`
             );
@@ -46,7 +46,7 @@ export const setProject = async () => {
         }
 
         if (projectList.length === 1) {
-            console.log(`Creating component for ${chalk.yellow(projectList[0])} project`);
+            console.log(`Creating component for ${kleur.yellow(projectList[0])} project`);
             componentSettingsMap.project = projectList[0];
             return;
         }
@@ -72,7 +72,7 @@ export const setProject = async () => {
         componentSettingsMap.project = project;
     } else {
         console.error(
-            chalk.red(`Error: There is no folder for components in ${chalk.yellow(project)} project`),
+            kleur.red(`Error: There is no folder for components in ${kleur.yellow(project)} project`),
             folderPath
         );
         process.exit();

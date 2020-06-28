@@ -1,7 +1,7 @@
 import { getQuestionsSettings } from './getQuestionsSettings';
 import fs from 'fs';
 import path from 'path';
-import chalk from 'chalk';
+import kleur from 'kleur';
 import Prompt from 'prompts';
 import { isDirectory } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
@@ -68,7 +68,7 @@ export const setPath = async () => {
                 name: 'folder',
                 message: `Select destination folder for component`,
                 hint: 'Select using arrows and press Enter',
-                choices: choices.map((choice) => ({ ...choice, description: chalk.yellow(choice.description) })),
+                choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,
             },
             getQuestionsSettings()

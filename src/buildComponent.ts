@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import kleur from 'kleur';
 import path from 'path';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getTemplates } from './getTemplates';
@@ -29,24 +29,24 @@ export const buildComponent = async () => {
     componentSettingsMap.fileList = fileList;
 
     if (!config.skipFinalStep) {
-        console.log(`\nCreating component ${chalk.yellow(componentName)}`);
+        console.log(`\nCreating component ${kleur.yellow(componentName)}`);
         console.log(
             `\nFile list:\n${Object.entries(fileList)
                 .map(
                     ([tmp, options]) =>
-                        `- ${tmp}${options.type ? ` (${chalk.yellow(options.type)})` : ''}${chalk.gray(
+                        `- ${tmp}${options.type ? ` (${kleur.yellow(options.type)})` : ''}${kleur.gray(
                             ` - ${options.name}`
                         )}`
                 )
                 .join('\n')}`
         );
-        console.log(`\nFolder: ${chalk.yellow(path.join(project, projectRootPath, resultPath))}`);
+        console.log(`\nFolder: ${kleur.yellow(path.join(project, projectRootPath, resultPath))}`);
     }
 
     if (config.skipFinalStep || (await getFinalAgreement())) {
         await generateFiles();
         await processAfterGeneration();
-        console.log(chalk.green('\nComponent is created!!! \\(•◡ •)/ '));
+        console.log(kleur.green('\nComponent is created!!! \\(•◡ •)/ '));
     } else {
         console.log("No? Let's build another one! (◉ ◡ ◉ )");
     }
