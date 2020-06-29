@@ -19,7 +19,7 @@ If the package has been installed globally, run it simply by `reactcci`
 
 If it is the local package type `npx reactcci` or `yarn reactcci`
 
-## Setup
+## Path
 By default, components will be added into `src/` folder. To change this, you can set up your own config or run it with the flag:  
 ```reactcci --dest src/app/components```
 
@@ -63,25 +63,46 @@ module.exports = {
 };
 ```
 
-| Parameter | Description | Default value |
-|---|---|---|
-| `folderPath` | `string` or array of `string` | `src/` |
-| `templatesFolder` | Path to your own components templates | `templates` |
-| `multiProject` | Allow you to set up config for mono-repository with several projects | `false` |
-| `skipFinalStep` | Allow you to switch off the last checking step | `false` |
-| `templates` | Object which describes the structure of your component. You are able to set up `name` for your files. Filename of template in template folder or array of files to be able to select variant. You are able to make it optional and make it switched off by default. | Example of setup above |
-| `placeholders` | List of placeholders which you can use to build your own component template | Example of setup above |
-| `afterCreation` | Object with scripts to process you file after creation | - |
+### Parameters
 
-### After creation script example
-```javascript
-{
-    ...config,
-    afterCreation: {                
-        prettier: {
-            extensions: ['.ts', '.tsx'], // optional
-            cmd: 'prettier --write [filename]'
+- `folderPath`  
+Default: `src/`  
+`string` or array of `string`  
+- `templatesFolder`  
+Default: `templates`  
+Path to your own components templates
+- `multiProject`  
+Default: `false`  
+Allow you to set up config for mono-repository with several projects
+- `skipFinalStep`  
+Default: `false`  
+Allow you to switch off the last checking step  
+- `templates`  
+Default: Example of setup above  
+Object which describes the structure of your component. 
+You are able to set up `name` for your files. 
+Filename of template in template folder or array of files to be able to select variant. 
+You are able to make it optional and make it switched off by default.
+- `placeholders`  
+Default: Example of setup above  
+List of placeholders which you can use to build your own component template
+- `afterCreation`  
+Default: `undefined`  
+Object with scripts to process you file after creation  
+Example:  
+    ```javascript
+    {
+        ...config,
+        afterCreation: {                
+            prettier: {
+                extensions: ['.ts', '.tsx'], // optional
+                cmd: 'prettier --write [filename]'
+            }
         }
     }
-}
-```
+    ```
+  
+## Commands
+`--dest`, `-d` - to set destination path  
+`--name`, `-n` - to set component name  
+`--project`, `-p` - to set project

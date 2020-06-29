@@ -57,6 +57,9 @@
     "generate",
     "interactve",
     "multi project",
-    "configurable"
+    "configurable",
+    "gen",
+    "yeoman",
+    "plop"
   ]
 }
