@@ -7,6 +7,22 @@ import { isDirectory } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 
+const makePathShort = (path: string): string => {
+    return path
+        .replace(/\\$/, '')
+        .split('\\')
+        .reduce((acc: string[], value, index, arr) => {
+            if (index < 1 || index > arr.length - 4) {
+                if (index === arr.length - 3) {
+                    acc.push('...');
+                }
+                acc.push(value);
+            }
+            return acc;
+        }, [])
+        .join('\\');
+};
+
 export const setPath = async () => {
     const {
         root,
@@ -47,37 +63,48 @@ export const setPath = async () => {
                       {
                           title: '< Back',
                           value: -1,
-                          description: path.join(project, projectRootPath, relativePath, '../'),
+                          description: makePathShort(path.join(project, projectRootPath, relativePath, '../')),
                       },
                   ]
                 : []),
             {
                 title: '>> Here <<',
-                value: null,
+                value: 1,
                 description: path.join(project, projectRootPath, relativePath),
             },
             ...folders.map((f) => ({
                 title: f,
                 value: f,
-                description: path.join(project, projectRootPath, relativePath, f),
+                description: makePathShort(path.join(project, projectRootPath, relativePath, f)),
             })),
         ];
+
         const { folder } = await Prompt(
             {
-                type: 'select',
+                type: 'autocomplete',
                 name: 'folder',
                 message: `Select destination folder for component`,
                 hint: 'Select using arrows and press Enter',
                 choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,
+                suggest: (text, choices) => {
+                    const filteredChoices = choices.filter(
+                        (choice, index) =>
+                            index < (isRoot ? 1 : 2) ||
+                            choice.title.toLocaleLowerCase().includes(text.toLocaleLowerCase())
+                    );
+                    return Promise.resolve(filteredChoices);
+                },
             },
             getQuestionsSettings()
         );
 
-        if (folder) {
-            relativePath = path.join(relativePath, folder === -1 ? '../' : folder);
-        } else {
+        if (folder === 1) {
             resultPath = relativePath;
+        } else if (folder === -1) {
+            relativePath = path.join(relativePath, '../');
+        } else {
+            relativePath = path.join(relativePath, folder);
         }
     }
 
