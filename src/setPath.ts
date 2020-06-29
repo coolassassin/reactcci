@@ -28,10 +28,10 @@ export const setPath = async () => {
         root,
         project,
         config: { folderPath },
-        commandLineFlags: { dist },
+        commandLineFlags: { dest },
     } = componentSettingsMap;
 
-    let projectRootPath = dist;
+    let projectRootPath = dest;
     if (!projectRootPath) {
         if (Array.isArray(folderPath)) {
             const availablePaths = folderPath.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));

@@ -14,7 +14,7 @@ export const setProject = async () => {
         commandLineFlags,
     } = componentSettingsMap;
 
-    if (commandLineFlags.dist) {
+    if (commandLineFlags.dest) {
         componentSettingsMap.project = project;
         return;
     }

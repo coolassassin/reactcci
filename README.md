@@ -21,7 +21,7 @@ If it is the local package type `npx reactcci` or `yarn reactcci`
 
 ## Setup
 By default, components will be added into `src/` folder. To change this, you can set up your own config or run it with the flag:  
-```reactcci --dist src/app/components```
+```reactcci --dest src/app/components```
 
 Also, you can type `reactcci --help` to see all available commands.
 

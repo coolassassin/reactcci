@@ -1,3 +1,7 @@
+## 1.0.4
+* Added folder search feature
+* `dist` flag renamed to `dest`
+
 ## 1.0.3
 * Added `name` and `project` command line flags
 * Replaced `chalk` to `kleur` because kleur is already used inside prompts
