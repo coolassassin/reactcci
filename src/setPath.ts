@@ -8,9 +8,12 @@ import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 
 const makePathShort = (path: string): string => {
-    return path
-        .replace(/\\$/, '')
-        .split('\\')
+    const sourcePath = path.replace(/\\$/, '');
+    const pathArray = sourcePath.split('\\');
+    if (pathArray.length <= 4) {
+        return sourcePath;
+    }
+    return pathArray
         .reduce((acc: string[], value, index, arr) => {
             if (index < 1 || index > arr.length - 4) {
                 if (index === arr.length - 3) {
@@ -70,7 +73,7 @@ export const setPath = async () => {
             {
                 title: '>> Here <<',
                 value: 1,
-                description: path.join(project, projectRootPath, relativePath),
+                description: makePathShort(path.join(project, projectRootPath, relativePath)),
             },
             ...folders.map((f) => ({
                 title: f,

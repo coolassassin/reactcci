@@ -1,3 +1,6 @@
+## 1.0.5
+* Fixed folder path cutter
+
 ## 1.0.4
 * Added folder search feature
 * `dist` flag renamed to `dest`
