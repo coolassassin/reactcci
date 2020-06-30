@@ -1,3 +1,6 @@
+## 1.0.6
+* Fixed size of package
+
 ## 1.0.5
 * Fixed folder path cutter
 
