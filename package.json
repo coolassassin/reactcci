@@ -38,7 +38,6 @@
   "files": [
     "defaultConfig.js",
     "package.json",
-    "yarn.lock",
     "templates",
     "build",
     "README.md"
