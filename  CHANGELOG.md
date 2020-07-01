@@ -1,3 +1,6 @@
+## 1.1.0
+* Added configuration mode
+
 ## 1.0.6
 * Fixed size of package
 
