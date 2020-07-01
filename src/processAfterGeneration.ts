@@ -27,7 +27,7 @@ export const processAfterGeneration = async () => {
                             console.log(`\nProcessing ${file.name}`);
                         }
                         const filePath = path.join(finalFolder, file.name);
-                        childProcess.execSync(command.cmd.replace('[filename]', filePath));
+                        childProcess.execSync(command.cmd.replace('[filepath]', filePath));
                         console.log(`  ${kleur.green('√')} ${type}`);
                     }
                 } catch (e) {

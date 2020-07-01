@@ -1,8 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { componentSettingsMap } from './componentSettingsMap';
-
-const CONFIG_FILE_NAME = 'rcci.config.js';
+import { CONFIG_FILE_NAME } from './constants';
 
 export const setConfig = async () => {
     const { root } = componentSettingsMap;

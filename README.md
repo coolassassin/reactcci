@@ -25,6 +25,13 @@ By default, components will be added into `src/` folder. To change this, you can
 
 Also, you can type `reactcci --help` to see all available commands.
 
+## Quick start
+CLI allows you to build your application without any configuration, 
+but to set up your config quickly you are able to execute next command:  
+`reactcci --init`  
+This command runs configuration mode, 
+which allow you to generate config and template folder without any manual manipulations.
+
 ## Config
 To set up your config, you need to create `rcci.config.js`  
 The default config has the next structure:
@@ -96,13 +103,14 @@ Example:
         afterCreation: {                
             prettier: {
                 extensions: ['.ts', '.tsx'], // optional
-                cmd: 'prettier --write [filename]'
+                cmd: 'prettier --write [filepath]'
             }
         }
     }
     ```
   
 ## Commands
+`--init` - to generate config file and template folder  
 `--dest`, `-d` - to set destination path  
 `--name`, `-n` - to set component name  
 `--project`, `-p` - to set project

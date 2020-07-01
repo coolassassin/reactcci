@@ -29,6 +29,7 @@ export type Setting = {
     resultPath: string;
     fileList: { [key in string]: { name: string; file: string; type?: string } };
     commandLineFlags: {
+        init: boolean;
         dest: string;
         name: string;
         project: string;

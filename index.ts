@@ -4,6 +4,7 @@ import kleur from 'kleur';
 import { setPath } from './src/setPath';
 import { setConfig } from './src/setConfig';
 import { setProject } from './src/setProject';
+import { initialize } from './src/initialize';
 import { checkConfig } from './src/checkConfig';
 import { setComponentName } from './src/setComponentName';
 import { buildComponent } from './src/buildComponent';
@@ -14,6 +15,12 @@ import { processCommandLineFlags } from './src/processCommandLineFlags';
     try {
         componentSettingsMap.root = process.cwd();
         processCommandLineFlags();
+
+        if (componentSettingsMap.commandLineFlags.init) {
+            await initialize();
+            return;
+        }
+
         await setConfig();
         await checkConfig();
         await setProject();
