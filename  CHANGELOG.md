@@ -1,3 +1,6 @@
+## 1.1.1
+* Fixed afterCreation script check
+
 ## 1.1.0
 * Added configuration mode
 

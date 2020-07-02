@@ -21,7 +21,7 @@ export const checkConfig = async () => {
                 );
                 stopProgram();
             }
-            if (!command.cmd.includes('[filename]')) {
+            if (!command.cmd.includes('[filepath]')) {
                 console.error(kleur.red(`Wrong "cmd" option for afterCreation script ${kleur.yellow(type)}`));
                 stopProgram();
             }
