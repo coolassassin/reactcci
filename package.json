@@ -14,7 +14,8 @@
     "build": "rollup -c",
     "typecheck": "tsc --noEmit",
     "run-build": "node build/cli.js",
-    "prettier": "prettier --write src/*.ts index.ts"
+    "prettier": "prettier --write src/*.ts index.ts",
+    "test": "jest"
   },
   "dependencies": {
     "commander": "^5.1.0",
@@ -28,8 +29,11 @@
     "@babel/preset-typescript": "^7.10.1",
     "@rollup/plugin-babel": "^5.0.3",
     "@rollup/plugin-node-resolve": "^8.0.1",
+    "@types/jest": "^26.0.3",
     "@types/node": "^14.0.13",
+    "babel-jest": "^26.1.0",
     "babelrc-rollup": "^3.0.0",
+    "jest": "^26.1.0",
     "prettier": "^2.0.5",
     "rollup": "^2.7.5",
     "rollup-plugin-hashbang": "^2.2.2",
