@@ -6,10 +6,10 @@ Setup your config once to build your app as quick as it possible.
 
 ## Installation
 To install via npm:  
-```npm install reactcci```  
+```npm install --save-dev reactcci```  
 
 To install via yarn:  
-```yarn add reactcci```
+```yarn add --dev reactcci```
 
 Also, you are able to install it globally:  
 ```npm install reactcci -g```
