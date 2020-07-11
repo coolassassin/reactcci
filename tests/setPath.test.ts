@@ -28,6 +28,9 @@ jest.mock('fs', () => {
     return {
         existsSync: () => true,
         promises: {
+            stat: () => {
+                return Promise.resolve({});
+            },
             readdir: () => {
                 return Promise.resolve(['folder1']);
             }
