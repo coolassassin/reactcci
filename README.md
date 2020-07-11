@@ -19,18 +19,18 @@ If the package has been installed globally, run it simply by `reactcci`
 
 If it is the local package type `npx reactcci` or `yarn reactcci`
 
-## Path
-By default, components will be added into `src/` folder. To change this, you can set up your own config or run it with the flag:  
-```reactcci --dest src/app/components```
-
-Also, you can type `reactcci --help` to see all available commands.
-
 ## Quick start
 CLI allows you to build your application without any configuration, 
 but to set up your config quickly you are able to execute next command:  
 `reactcci --init`  
 This command runs configuration mode, 
 which allow you to generate config and template folder without any manual manipulations.
+
+## Path
+By default, components will be added into `src/` folder. To change this, you can set up your own config or run it with the flag:  
+```reactcci --dest src/app/components```
+
+Also, you can type `reactcci --help` to see all available commands.
 
 ## Config
 To set up your config, you need to create `rcci.config.js`  
