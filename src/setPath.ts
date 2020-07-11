@@ -38,7 +38,11 @@ export const setPath = async () => {
     if (!projectRootPath) {
         if (Array.isArray(folderPath)) {
             const availablePaths = folderPath.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
-            if (availablePaths.length === 1) {
+            if (availablePaths.length === 0) {
+                console.error(kleur.red(`Error: There is no any folder for components from the list below`));
+                console.error(kleur.yellow(folderPath.map((f) => path.resolve(root, project, f)).join('\n')));
+                process.exit();
+            } else if (availablePaths.length === 1) {
                 projectRootPath = availablePaths[0];
             } else {
                 projectRootPath = await getProjectRootPath(availablePaths);
@@ -50,6 +54,14 @@ export const setPath = async () => {
     let relativePath = '.\\';
     let resultPath: string | null = null;
     while (resultPath === null) {
+        const currentFolder = path.resolve(project, projectRootPath, relativePath);
+        try {
+            await fs.promises.stat(currentFolder);
+        } catch (e) {
+            console.error(kleur.red(`Error: There is no folder for components`), kleur.yellow(currentFolder));
+            process.exit();
+        }
+
         const folders = (
             await fs.promises.readdir(path.resolve(project, projectRootPath, relativePath))
         ).filter((item) => isDirectory(path.resolve(project, projectRootPath, relativePath, item)));
