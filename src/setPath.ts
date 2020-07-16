@@ -51,7 +51,7 @@ export const setPath = async () => {
             projectRootPath = folderPath;
         }
     }
-    let relativePath = '.\\';
+    let relativePath = '.';
     let resultPath: string | null = null;
     while (resultPath === null) {
         const currentFolder = path.resolve(project, projectRootPath, relativePath);
@@ -59,6 +59,7 @@ export const setPath = async () => {
             await fs.promises.stat(currentFolder);
         } catch (e) {
             console.error(kleur.red(`Error: There is no folder for components`), kleur.yellow(currentFolder));
+            console.error(e);
             process.exit();
         }
 
@@ -70,8 +71,7 @@ export const setPath = async () => {
             resultPath = path.join(relativePath);
             continue;
         }
-
-        const isRoot = relativePath === '.\\';
+        const isRoot = ['.','./', '.\\'].includes(relativePath);
         const choices = [
             ...(!isRoot
                 ? [
