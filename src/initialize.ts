@@ -7,7 +7,7 @@ import { getQuestionsSettings } from './getQuestionsSettings';
 import kleur from 'kleur';
 
 export const initialize = async () => {
-    const { root } = componentSettingsMap;
+    const { root, moduleRoot } = componentSettingsMap;
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
     if (fs.existsSync(localConfigPath)) {
         const { agree } = await Prompt(
@@ -57,7 +57,7 @@ export const initialize = async () => {
         ).templateFolderName;
     }
 
-    const defaultConfigPath = path.resolve(process.argv[1], '../../defaultConfig.js');
+    const defaultConfigPath = path.resolve(moduleRoot, 'defaultConfig.js');
     const defaultConfig = (await fs.promises.readFile(defaultConfigPath)).toString();
     await fs.promises.writeFile(
         path.join(root, CONFIG_FILE_NAME),
@@ -70,7 +70,7 @@ export const initialize = async () => {
         if (!fs.existsSync(templateFolderPath)) {
             await fs.promises.mkdir(templateFolderPath);
         }
-        const defaultTempleFolder = path.resolve(process.argv[1], '../../templates');
+        const defaultTempleFolder = path.resolve(moduleRoot, 'templates');
         const templateNames = await fs.promises.readdir(defaultTempleFolder);
         console.log('Templates generated:');
         for (const templateName of templateNames) {

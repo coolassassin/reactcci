@@ -1,3 +1,6 @@
+## 1.1.4
+* Fixed linux path resolving in initialize mode
+
 ## 1.1.3
 * Fixed linux path resolving
 

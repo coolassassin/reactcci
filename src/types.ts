@@ -10,6 +10,7 @@ type AfterCreationCommand = {
 
 export type Setting = {
     root: string;
+    moduleRoot: string;
     config: {
         multiProject: boolean;
         skipFinalStep: boolean;

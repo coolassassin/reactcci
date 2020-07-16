@@ -71,7 +71,7 @@ export const setPath = async () => {
             resultPath = path.join(relativePath);
             continue;
         }
-        const isRoot = ['.','./', '.\\'].includes(relativePath);
+        const isRoot = ['.', './', '.\\'].includes(relativePath);
         const choices = [
             ...(!isRoot
                 ? [

@@ -10,10 +10,13 @@ import { setComponentName } from './src/setComponentName';
 import { buildComponent } from './src/buildComponent';
 import { componentSettingsMap } from './src/componentSettingsMap';
 import { processCommandLineFlags } from './src/processCommandLineFlags';
+import { getModuleRootPath } from './src/getModuleRootPath';
 
 (async () => {
     try {
         componentSettingsMap.root = process.cwd();
+        componentSettingsMap.moduleRoot = getModuleRootPath();
+
         processCommandLineFlags();
 
         if (componentSettingsMap.commandLineFlags.init) {

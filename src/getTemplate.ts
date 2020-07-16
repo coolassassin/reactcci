@@ -5,10 +5,11 @@ import { componentSettingsMap } from './componentSettingsMap';
 export const getTemplate = async (fileName, insertionData) => {
     const {
         root,
+        moduleRoot,
         config: { templatesFolder, placeholders },
     } = componentSettingsMap;
 
-    const defaultTemplatesFolder = path.resolve(process.argv[1], '../../templates');
+    const defaultTemplatesFolder = path.resolve(moduleRoot, 'templates');
     const templatesPath = (await fs.existsSync(path.join(root, templatesFolder)))
         ? path.resolve(root, templatesFolder)
         : defaultTemplatesFolder;
