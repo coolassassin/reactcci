@@ -1,6 +1,6 @@
 {
   "name": "reactcci",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "main": "index.ts",
   "repository": "git@github.com:coolassassin/reactcci.git",
   "author": "coolassassin <coolstreetassassin@gmail.com>",
