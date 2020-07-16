@@ -1,3 +1,9 @@
+## 1.1.3
+* Fixed linux path resolving
+
+## 1.1.2
+* Fixed folderPath processing
+
 ## 1.1.1
 * Fixed afterCreation script check
 
