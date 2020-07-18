@@ -1,3 +1,6 @@
+## 1.1.5
+* Added template subfolder feature
+
 ## 1.1.4
 * Fixed linux path resolving in initialize mode
 

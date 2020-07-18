@@ -20,7 +20,7 @@ module.exports = {
             optional: true
         },
         test: {
-            name: '[name].test.tsx',
+            name: '[name].test.tsx', /*'__tests__/[name].test.tsx' to put tests into subfolder*/
             optional: true,
             default: false
         },
