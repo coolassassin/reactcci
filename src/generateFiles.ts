@@ -19,6 +19,20 @@ export const generateFiles = async () => {
 
     for (const [, options] of Object.entries(fileList)) {
         const template = options.file ? (await getTemplate(options.file, dataForTemplate)) ?? '' : '';
-        await fs.promises.writeFile(path.join(folder, options.name), template);
+        const pathParts = path
+            .join(options.name)
+            .split(path.sep)
+            .filter((part) => part);
+        const fileName = pathParts[pathParts.length - 1];
+        const subFolders = pathParts.slice(0, pathParts.length - 1);
+        if (subFolders.length > 0) {
+            for (let index = 0; index < subFolders.length; index++) {
+                const currentFolder = path.join(folder, ...subFolders.slice(0, index + 1));
+                if (!fs.existsSync(currentFolder)) {
+                    await fs.promises.mkdir(currentFolder);
+                }
+            }
+        }
+        await fs.promises.writeFile(path.join(folder, ...subFolders, fileName), template);
     }
 };
