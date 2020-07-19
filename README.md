@@ -108,6 +108,35 @@ Example:
         }
     }
     ```
+
+## Multi-template
+If you need to generate something else, not components only, you are able to set up array of templates. Example bellow:
+```javascript
+{
+    ...config,
+    templates: [
+        {
+            name: 'component', // will be added to default folderPath folder
+            files: {
+                index: {
+                    name: 'index.ts',
+                    file: 'component.ts'
+                }
+            }
+        },
+        {
+            name: 'service',
+            folderPath: 'services/', // will be added by the specific path
+            files: {
+                index: {
+                    name: 'index.ts',
+                    file: 'service.ts'
+                }
+            }
+        }
+    ]
+}
+```
   
 ## Commands
 `--init` - to generate config file and template folder  
