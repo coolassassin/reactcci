@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 import { getTemplate } from './getTemplate';
 import { componentSettingsMap } from './componentSettingsMap';
 
@@ -14,7 +15,7 @@ export const generateFiles = async () => {
     const dataForTemplate = {
         project,
         componentName,
-        files: fileList,
+        files: fileList
     };
 
     for (const [, options] of Object.entries(fileList)) {

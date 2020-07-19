@@ -1,4 +1,5 @@
 import { program } from 'commander';
+
 import { componentSettingsMap } from './componentSettingsMap';
 import { Setting } from './types';
 

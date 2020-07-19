@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+
 import { componentSettingsMap } from './componentSettingsMap';
 import { CONFIG_FILE_NAME } from './constants';
 

@@ -1,10 +1,12 @@
+import Prompt from 'prompts';
+import kleur from 'kleur';
+
 import fs from 'fs';
 import path from 'path';
-import Prompt from 'prompts';
+
 import { CONFIG_FILE_NAME } from './constants';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
-import kleur from 'kleur';
 
 export const initialize = async () => {
     const { root, moduleRoot } = componentSettingsMap;
@@ -19,7 +21,7 @@ export const initialize = async () => {
                     .yellow(CONFIG_FILE_NAME)} is detected! Would you like to reset it?`,
                 initial: true,
                 active: 'Yes',
-                inactive: 'No',
+                inactive: 'No'
             },
             getQuestionsSettings()
         );
@@ -37,7 +39,7 @@ export const initialize = async () => {
             message: 'Would you like to create template folder to set them up?',
             initial: true,
             active: 'Yes',
-            inactive: 'No',
+            inactive: 'No'
         },
         getQuestionsSettings()
     );
@@ -50,7 +52,7 @@ export const initialize = async () => {
                     type: 'text',
                     name: 'templateFolderName',
                     message: 'What is a template folder name?',
-                    initial: templateFolderName,
+                    initial: templateFolderName
                 },
                 getQuestionsSettings()
             )

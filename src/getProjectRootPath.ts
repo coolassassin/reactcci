@@ -1,4 +1,5 @@
 import Prompt from 'prompts';
+
 import { getQuestionsSettings } from './getQuestionsSettings';
 
 export const getProjectRootPath = async (paths) => {
@@ -14,9 +15,9 @@ export const getProjectRootPath = async (paths) => {
                     .reverse()
                     .find((p) => p),
                 value: path,
-                description: path,
+                description: path
             })),
-            initial: 0,
+            initial: 0
         },
         getQuestionsSettings()
     );

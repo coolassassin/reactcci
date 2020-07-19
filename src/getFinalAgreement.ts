@@ -1,4 +1,5 @@
 import Prompt from 'prompts';
+
 import { getQuestionsSettings } from './getQuestionsSettings';
 
 export const getFinalAgreement = async () => {
@@ -9,7 +10,7 @@ export const getFinalAgreement = async () => {
             message: 'Is everything correct?',
             initial: true,
             active: 'Yes',
-            inactive: 'No',
+            inactive: 'No'
         },
         getQuestionsSettings()
     );

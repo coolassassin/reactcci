@@ -1,6 +1,8 @@
-import path from 'path';
 import kleur from 'kleur';
+
+import path from 'path';
 import childProcess from 'child_process';
+
 import { componentSettingsMap } from './componentSettingsMap';
 
 export const processAfterGeneration = async () => {
@@ -11,7 +13,7 @@ export const processAfterGeneration = async () => {
         projectRootPath,
         componentName,
         fileList,
-        config: { afterCreation },
+        config: { afterCreation }
     } = componentSettingsMap;
 
     const finalFolder = path.join(root, project, projectRootPath, resultPath, componentName);

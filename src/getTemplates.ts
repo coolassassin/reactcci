@@ -1,5 +1,6 @@
-import { getQuestionsSettings } from './getQuestionsSettings';
 import Prompt from 'prompts';
+
+import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 
 export const getTemplates = async () => {
@@ -25,7 +26,7 @@ export const getTemplates = async () => {
                         .map(([name, options]) => {
                             const { default: selected = true } = options;
                             return { title: name, value: name, selected };
-                        }),
+                        })
                 },
                 getQuestionsSettings()
             )
@@ -36,6 +37,6 @@ export const getTemplates = async () => {
         ...Object.entries(config.templates)
             .filter(([, options]) => !options.optional)
             .map(([name]) => name),
-        ...optionalTemplateNames,
+        ...optionalTemplateNames
     ];
 };

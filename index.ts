@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import kleur from 'kleur';
+
 import { setPath } from './src/setPath';
 import { setConfig } from './src/setConfig';
 import { setProject } from './src/setProject';

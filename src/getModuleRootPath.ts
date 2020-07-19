@@ -1,4 +1,5 @@
 import path from 'path';
+
 import { MODULE_NAME } from './constants';
 
 export const getModuleRootPath = () => {

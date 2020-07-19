@@ -1,6 +1,7 @@
 import Prompt from 'prompts';
-import { getQuestionsSettings } from './getQuestionsSettings';
 import kleur from 'kleur';
+
+import { getQuestionsSettings } from './getQuestionsSettings';
 
 export const getTemplateFile = async (name, files) => {
     const { file } = await Prompt(
@@ -10,7 +11,7 @@ export const getTemplateFile = async (name, files) => {
             message: `Select type of ${kleur.reset().yellow(name)} file`,
             hint: 'Select using arrows and press Enter',
             choices: files.map((file) => ({ title: file.description, value: file })),
-            initial: 0,
+            initial: 0
         },
         getQuestionsSettings()
     );

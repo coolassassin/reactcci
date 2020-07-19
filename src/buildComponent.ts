@@ -1,5 +1,7 @@
 import kleur from 'kleur';
+
 import path from 'path';
+
 import { componentSettingsMap } from './componentSettingsMap';
 import { getTemplates } from './getTemplates';
 import { generateFiles } from './generateFiles';

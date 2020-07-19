@@ -1,8 +1,10 @@
-import { getQuestionsSettings } from './getQuestionsSettings';
-import fs from 'fs';
-import path from 'path';
 import kleur from 'kleur';
 import Prompt from 'prompts';
+
+import fs from 'fs';
+import path from 'path';
+
+import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
@@ -31,7 +33,7 @@ export const setPath = async () => {
         root,
         project,
         config: { folderPath },
-        commandLineFlags: { dest },
+        commandLineFlags: { dest }
     } = componentSettingsMap;
 
     let projectRootPath = dest;
@@ -78,20 +80,20 @@ export const setPath = async () => {
                       {
                           title: '< Back',
                           value: -1,
-                          description: makePathShort(path.join(project, projectRootPath, relativePath, '../')),
-                      },
+                          description: makePathShort(path.join(project, projectRootPath, relativePath, '../'))
+                      }
                   ]
                 : []),
             {
                 title: '>> Here <<',
                 value: 1,
-                description: makePathShort(path.join(project, projectRootPath, relativePath)),
+                description: makePathShort(path.join(project, projectRootPath, relativePath))
             },
             ...folders.map((f) => ({
                 title: f,
                 value: f,
-                description: makePathShort(path.join(project, projectRootPath, relativePath, f)),
-            })),
+                description: makePathShort(path.join(project, projectRootPath, relativePath, f))
+            }))
         ];
 
         const { folder } = await Prompt(
@@ -109,7 +111,7 @@ export const setPath = async () => {
                             choice.title.toLocaleLowerCase().includes(text.toLocaleLowerCase())
                     );
                     return Promise.resolve(filteredChoices);
-                },
+                }
             },
             getQuestionsSettings()
         );

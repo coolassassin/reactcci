@@ -1,12 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+
 import { componentSettingsMap } from './componentSettingsMap';
 
 export const getTemplate = async (fileName, insertionData) => {
     const {
         root,
         moduleRoot,
-        config: { templatesFolder, placeholders },
+        config: { templatesFolder, placeholders }
     } = componentSettingsMap;
 
     const defaultTemplatesFolder = path.resolve(moduleRoot, 'templates');

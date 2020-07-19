@@ -1,9 +1,10 @@
 import kleur from 'kleur';
+
 import { componentSettingsMap } from './componentSettingsMap';
 
 export const checkConfig = async () => {
     const {
-        config: { afterCreation },
+        config: { afterCreation }
     } = componentSettingsMap;
     const stopProgram = () => {
         process.exit(1);

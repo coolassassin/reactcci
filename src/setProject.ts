@@ -1,7 +1,9 @@
-import fs from 'fs';
-import path from 'path';
 import kleur from 'kleur';
 import Prompt from 'prompts';
+
+import fs from 'fs';
+import path from 'path';
+
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
@@ -11,7 +13,7 @@ export const setProject = async () => {
     const {
         root,
         config: { multiProject, folderPath },
-        commandLineFlags,
+        commandLineFlags
     } = componentSettingsMap;
 
     if (commandLineFlags.dest || !multiProject) {
@@ -57,7 +59,7 @@ export const setProject = async () => {
                 name: 'selectedProject',
                 message: 'Please, select the project',
                 choices: projectList.map((p) => ({ title: p, value: p })),
-                initial: 0,
+                initial: 0
             },
             getQuestionsSettings()
         );

@@ -1,5 +1,6 @@
 import Prompt from 'prompts';
 import kleur from 'kleur';
+
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 
@@ -17,7 +18,7 @@ export const setComponentName = async () => {
                     {
                         type: 'text',
                         name: 'componentName',
-                        message: 'What is the component name? (ExampleComponentName)',
+                        message: 'What is the component name? (ExampleComponentName)'
                     },
                     getQuestionsSettings()
                 )
