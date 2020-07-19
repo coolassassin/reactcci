@@ -9,9 +9,10 @@ import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
 import { Setting } from './types';
+import { capitalizeName } from './helpers';
 
 export const buildComponent = async () => {
-    const { config, project, componentName, projectRootPath, resultPath } = componentSettingsMap;
+    const { config, project, componentName, projectRootPath, resultPath, templateName } = componentSettingsMap;
 
     const templateNames = await getTemplates();
 
@@ -31,7 +32,7 @@ export const buildComponent = async () => {
     componentSettingsMap.fileList = fileList;
 
     if (!config.skipFinalStep) {
-        console.log(`\nCreating component ${kleur.yellow(componentName)}`);
+        console.log(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
         console.log(
             `\nFile list:\n${Object.entries(fileList)
                 .map(
@@ -48,7 +49,7 @@ export const buildComponent = async () => {
     if (config.skipFinalStep || (await getFinalAgreement())) {
         await generateFiles();
         await processAfterGeneration();
-        console.log(kleur.green('\nComponent is created!!! \\(•◡ •)/ '));
+        console.log(kleur.green(`\n${capitalizeName(templateName)} is created!!! \\(•◡ •)/ `));
     } else {
         console.log("No? Let's build another one! (◉ ◡ ◉ )");
     }

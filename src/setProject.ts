@@ -13,7 +13,8 @@ export const setProject = async () => {
     const {
         root,
         config: { multiProject, folderPath },
-        commandLineFlags
+        commandLineFlags,
+        templateName
     } = componentSettingsMap;
 
     if (commandLineFlags.dest || !multiProject) {
@@ -48,7 +49,7 @@ export const setProject = async () => {
         }
 
         if (projectList.length === 1) {
-            console.log(`Creating component for ${kleur.yellow(projectList[0])} project`);
+            console.log(`Creating ${templateName} for ${kleur.yellow(projectList[0])} project`);
             componentSettingsMap.project = projectList[0];
             return;
         }
@@ -74,7 +75,7 @@ export const setProject = async () => {
         componentSettingsMap.project = project;
     } else {
         console.error(
-            kleur.red(`Error: There is no folder for components in ${kleur.yellow(project)} project`),
+            kleur.red(`Error: There is no folder for ${templateName} in ${kleur.yellow(project)} project`),
             folderPath
         );
         process.exit();

@@ -4,11 +4,22 @@ import { componentSettingsMap } from './componentSettingsMap';
 
 export const checkConfig = async () => {
     const {
-        config: { afterCreation }
+        config: { templates, afterCreation }
     } = componentSettingsMap;
     const stopProgram = () => {
         process.exit(1);
     };
+
+    if (Array.isArray(templates)) {
+        if (templates.some((tmp) => !tmp.name)) {
+            console.error(kleur.red(`Template name must be declared`));
+            stopProgram();
+        }
+        if (templates.some((tmp) => templates.filter((t) => t.name === tmp.name).length > 1)) {
+            console.error(kleur.red(`Template name must be unique, please revise config file`));
+            stopProgram();
+        }
+    }
 
     if (afterCreation) {
         for (const [type, command] of Object.entries(afterCreation)) {

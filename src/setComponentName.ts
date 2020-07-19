@@ -3,9 +3,12 @@ import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
+import { capitalizeName } from './helpers';
 
 export const setComponentName = async () => {
-    let res = componentSettingsMap.commandLineFlags.name;
+    const { commandLineFlags, templateName } = componentSettingsMap;
+
+    let res = commandLineFlags.name;
 
     do {
         let componentName = '';
@@ -18,7 +21,7 @@ export const setComponentName = async () => {
                     {
                         type: 'text',
                         name: 'componentName',
-                        message: 'What is the component name? (ExampleComponentName)'
+                        message: `What is the ${templateName} name? (ExampleName)`
                     },
                     getQuestionsSettings()
                 )
@@ -30,7 +33,11 @@ export const setComponentName = async () => {
         }
 
         if (componentName.length === 0) {
-            console.log(kleur.yellow('Component name must have at least one character.\nExample: DocumentModal'));
+            console.log(
+                kleur.yellow(
+                    `${capitalizeName(templateName)} name must have at least one character.\nExample: DocumentModal`
+                )
+            );
             res = '';
             continue;
         }
@@ -38,7 +45,9 @@ export const setComponentName = async () => {
         if (/[^\w\d-_]/g.test(componentName)) {
             console.log(
                 kleur.yellow(
-                    'Component name must contain only letters, numbers, dashes or underscores.\nExample: DocumentModal'
+                    `${capitalizeName(
+                        templateName
+                    )} name must contain only letters, numbers, dashes or underscores.\nExample: DocumentModal`
                 )
             );
             res = '';

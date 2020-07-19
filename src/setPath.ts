@@ -32,6 +32,7 @@ export const setPath = async () => {
     const {
         root,
         project,
+        templateName,
         config: { folderPath },
         commandLineFlags: { dest }
     } = componentSettingsMap;
@@ -41,7 +42,7 @@ export const setPath = async () => {
         if (Array.isArray(folderPath)) {
             const availablePaths = folderPath.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
             if (availablePaths.length === 0) {
-                console.error(kleur.red(`Error: There is no any folder for components from the list below`));
+                console.error(kleur.red(`Error: There is no any folder for ${templateName} from the list below`));
                 console.error(kleur.yellow(folderPath.map((f) => path.resolve(root, project, f)).join('\n')));
                 process.exit();
             } else if (availablePaths.length === 1) {
@@ -60,7 +61,7 @@ export const setPath = async () => {
         try {
             await fs.promises.stat(currentFolder);
         } catch (e) {
-            console.error(kleur.red(`Error: There is no folder for components`), kleur.yellow(currentFolder));
+            console.error(kleur.red(`Error: There is no folder for ${templateName}`), kleur.yellow(currentFolder));
             console.error(e);
             process.exit();
         }
@@ -100,7 +101,7 @@ export const setPath = async () => {
             {
                 type: 'autocomplete',
                 name: 'folder',
-                message: `Select destination folder for component`,
+                message: `Select destination folder for ${templateName}`,
                 hint: 'Select using arrows and press Enter',
                 choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,

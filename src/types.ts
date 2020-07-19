@@ -8,6 +8,16 @@ type AfterCreationCommand = {
     cmd: string;
 };
 
+export type TemplateDescriptionObject = {
+    [key in string]: { name: string; file?: string | FileOption[]; optional?: boolean; default?: boolean };
+};
+
+type MultiTemplate = {
+    name: string;
+    folderPath?: string;
+    files: TemplateDescriptionObject;
+}[];
+
 export type Setting = {
     root: string;
     moduleRoot: string;
@@ -16,9 +26,7 @@ export type Setting = {
         skipFinalStep: boolean;
         folderPath: string;
         templatesFolder: string;
-        templates: {
-            [key in string]: { name: string; file?: string | FileOption[]; optional?: boolean; default?: boolean };
-        };
+        templates: TemplateDescriptionObject | MultiTemplate;
         placeholders: { [key in string]: (data: any) => string };
         afterCreation?: {
             [key in string]: AfterCreationCommand;
@@ -26,6 +34,7 @@ export type Setting = {
     };
     project: string;
     componentName: string;
+    templateName: string;
     projectRootPath: string;
     resultPath: string;
     fileList: { [key in string]: { name: string; file: string; type?: string } };

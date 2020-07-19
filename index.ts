@@ -12,6 +12,7 @@ import { buildComponent } from './src/buildComponent';
 import { componentSettingsMap } from './src/componentSettingsMap';
 import { processCommandLineFlags } from './src/processCommandLineFlags';
 import { getModuleRootPath } from './src/getModuleRootPath';
+import { setComponentTemplate } from './src/setComponentTemplate';
 
 (async () => {
     try {
@@ -27,6 +28,7 @@ import { getModuleRootPath } from './src/getModuleRootPath';
 
         await setConfig();
         await checkConfig();
+        await setComponentTemplate();
         await setProject();
         await setPath();
         await setComponentName();

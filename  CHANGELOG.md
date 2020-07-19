@@ -1,3 +1,6 @@
+## 1.2.0
+* Added multi-template feature
+
 ## 1.1.5
 * Added template subfolder feature
 
