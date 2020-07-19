@@ -10,9 +10,11 @@ const prepareFolderPath = (path: string): string => {
 
 export const setConfig = async () => {
     const { root } = componentSettingsMap;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     let res = require('../defaultConfig.js');
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
     if (fs.existsSync(localConfigPath)) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const manualConfig = require(localConfigPath);
         res = Object.assign(res, manualConfig);
         if (Array.isArray(res.folderPath)) {

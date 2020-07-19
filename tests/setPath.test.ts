@@ -1,7 +1,9 @@
 import prompts from 'prompts';
+
+import path from 'path';
+
 import { setPath } from '../src/setPath';
 import { componentSettingsMap } from '../src/componentSettingsMap';
-import path from 'path';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
@@ -9,20 +11,20 @@ jest.mock('../src/componentSettingsMap', () => {
             root: process.cwd(),
             project: '',
             config: {
-                folderPath: 'tests',
+                folderPath: 'tests'
             },
             commandLineFlags: {
-                dest: '',
-            },
-        },
+                dest: ''
+            }
+        }
     };
 });
 
 jest.mock('../src/helpers', () => {
     return {
         isDirectory: () => true
-    }
-})
+    };
+});
 
 jest.mock('fs', () => {
     return {
@@ -35,8 +37,8 @@ jest.mock('fs', () => {
                 return Promise.resolve(['folder1']);
             }
         }
-    }
-})
+    };
+});
 
 const anyFolderName = 'TestComponent';
 

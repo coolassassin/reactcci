@@ -46,6 +46,7 @@
         'import/namespace': 'off',
         'prettier/prettier': 'warn',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/array-type': 'warn',
         '@typescript-eslint/explicit-member-accessibility': [
             'warn',

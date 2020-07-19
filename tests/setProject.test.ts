@@ -1,4 +1,5 @@
 import prompts from 'prompts';
+
 import { setProject } from '../src/setProject';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 
@@ -9,31 +10,31 @@ jest.mock('../src/componentSettingsMap', () => {
             project: '',
             config: {
                 multiProject: true,
-                folderPath: 'Folder1',
+                folderPath: 'Folder1'
             },
             commandLineFlags: {
-                dest: '',
-            },
-        },
+                dest: ''
+            }
+        }
     };
 });
 
 jest.mock('../src/helpers', () => {
     return {
         isDirectory: () => true
-    }
-})
+    };
+});
 
 jest.mock('fs', () => {
     return {
-        existsSync: p => !p.includes('NONEXISTENT_FOLDER'),
+        existsSync: (p) => !p.includes('NONEXISTENT_FOLDER'),
         promises: {
             readdir: () => {
                 return Promise.resolve(['Folder1']);
             }
         }
-    }
-})
+    };
+});
 
 describe('setProject', () => {
     let exitMock = jest.fn();
@@ -44,12 +45,12 @@ describe('setProject', () => {
         exitMock = jest.fn();
         global.console = { ...realConsole, error: jest.fn(), log: jest.fn() } as any;
         global.process = { ...realProcess, exit: exitMock } as any;
-    })
+    });
 
     afterEach(() => {
         global.process = realProcess;
         global.console = realConsole;
-    })
+    });
 
     it('default project', async () => {
         prompts.inject(['Folder1']);
