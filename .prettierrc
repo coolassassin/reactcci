@@ -4,6 +4,7 @@
     "semi": true,
     "jsxBracketSameLine": false,
     "printWidth": 120,
+    "trailingComma": "none",
     "overrides": [
         {
             "files": "*.scss",
