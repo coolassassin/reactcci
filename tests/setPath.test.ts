@@ -44,7 +44,10 @@ const anyFolderName = 'TestComponent';
 
 const getPath = () => {
     const { projectRootPath, resultPath } = componentSettingsMap;
-    return path.join(projectRootPath, resultPath).replace(/\\$/g, '').replace(/\\/g, '/');
+    return path
+        .join(projectRootPath, resultPath)
+        .replace(/[\\/]$/g, '')
+        .replace(/\\/g, '/');
 };
 
 describe('setPath', () => {

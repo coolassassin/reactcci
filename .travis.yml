@@ -1,0 +1,9 @@
+language: node_js
+cache: yarn
+node_js:
+    - 12
+    - 10
+script:
+    - yarn typecheck
+    - yarn test
+    - yarn build

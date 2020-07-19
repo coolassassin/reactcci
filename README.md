@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/coolassassin/reactcci.svg?branch=master)](https://travis-ci.org/github/coolassassin/reactcci)
 # React create component interactive CLI
 CLI which allows you to build your React application with your own file structure and make your components interactively without typing any paths.
 Setup your config once to build your app as quick as it possible.
