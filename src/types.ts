@@ -24,7 +24,7 @@ export type Setting = {
     config: {
         multiProject: boolean;
         skipFinalStep: boolean;
-        folderPath: string;
+        folderPath: string | string[];
         templatesFolder: string;
         templates: TemplateDescriptionObject | MultiTemplate;
         placeholders: { [key in string]: (data: any) => string };

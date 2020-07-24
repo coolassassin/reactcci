@@ -2,12 +2,14 @@ import prompts from 'prompts';
 
 import { setProject } from '../src/setProject';
 import { componentSettingsMap } from '../src/componentSettingsMap';
+import * as helpers from '../src/helpers';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
             root: process.cwd(),
             project: '',
+            templateName: 'component',
             config: {
                 multiProject: true,
                 folderPath: 'Folder1'
@@ -19,32 +21,30 @@ jest.mock('../src/componentSettingsMap', () => {
     };
 });
 
-jest.mock('../src/helpers', () => {
-    return {
-        isDirectory: () => true
-    };
-});
-
 jest.mock('fs', () => {
     return {
         existsSync: (p) => !p.includes('NONEXISTENT_FOLDER'),
         promises: {
             readdir: () => {
-                return Promise.resolve(['Folder1']);
+                return Promise.resolve(['Folder1', 'Folder2']);
             }
         }
     };
 });
 
 describe('setProject', () => {
-    let exitMock = jest.fn();
+    const exitMock = jest.fn();
     const realProcess = process;
     const realConsole = console;
 
     beforeEach(() => {
-        exitMock = jest.fn();
-        global.console = { ...realConsole, error: jest.fn(), log: jest.fn() } as any;
+        jest.clearAllMocks();
+        global.console = { ...realConsole, error: jest.fn() } as any;
         global.process = { ...realProcess, exit: exitMock } as any;
+        componentSettingsMap.commandLineFlags.dest = '';
+        componentSettingsMap.commandLineFlags.project = '';
+        componentSettingsMap.config.folderPath = 'Folder1';
+        (helpers.isDirectory as any) = jest.fn(() => true);
     });
 
     afterEach(() => {
@@ -55,7 +55,6 @@ describe('setProject', () => {
     it('default project', async () => {
         prompts.inject(['Folder1']);
         await setProject();
-
         expect(componentSettingsMap.project).toBe('Folder1');
     });
 
@@ -70,5 +69,24 @@ describe('setProject', () => {
         await setProject();
         expect(exitMock).toHaveBeenCalledTimes(0);
         expect(componentSettingsMap.project).toBe('Folder1');
+    });
+
+    it('several projects', async () => {
+        componentSettingsMap.config.folderPath = ['Folder1', 'Folder2'];
+        prompts.inject(['Folder1']);
+        await setProject();
+        expect(componentSettingsMap.project).toBe('Folder1');
+    });
+
+    it('command line destinations', async () => {
+        componentSettingsMap.commandLineFlags.dest = 'src/';
+        await setProject();
+        expect(componentSettingsMap.project).toBe('');
+    });
+
+    it('command line destinations', async () => {
+        (helpers.isDirectory as any) = jest.fn(() => false);
+        await setProject();
+        expect(exitMock).toBeCalled();
     });
 });

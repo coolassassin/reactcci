@@ -9,9 +9,9 @@ import { isDirectory } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 
-const makePathShort = (path: string): string => {
-    const sourcePath = path.replace(/\\$/, '');
-    const pathArray = sourcePath.split('\\');
+export const makePathShort = (path: string): string => {
+    const sourcePath = path.replace(/[\\/]$/, '').replace(/\\/g, '/');
+    const pathArray = sourcePath.split('/');
     if (pathArray.length <= 4) {
         return sourcePath;
     }
@@ -25,7 +25,14 @@ const makePathShort = (path: string): string => {
             }
             return acc;
         }, [])
-        .join('\\');
+        .join('/');
+};
+
+export const filterChoicesByText = (choices: { title: string }[], text: string, isRoot: boolean) => {
+    return choices.filter(
+        (choice, index) =>
+            index < (isRoot ? 1 : 2) || choice.title.toLocaleLowerCase().includes(text.toLocaleLowerCase())
+    );
 };
 
 export const setPath = async () => {
@@ -45,6 +52,7 @@ export const setPath = async () => {
                 console.error(kleur.red(`Error: There is no any folder for ${templateName} from the list below`));
                 console.error(kleur.yellow(folderPath.map((f) => path.resolve(root, project, f)).join('\n')));
                 process.exit();
+                return;
             } else if (availablePaths.length === 1) {
                 projectRootPath = availablePaths[0];
             } else {
@@ -106,12 +114,7 @@ export const setPath = async () => {
                 choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,
                 suggest: (text, choices) => {
-                    const filteredChoices = choices.filter(
-                        (choice, index) =>
-                            index < (isRoot ? 1 : 2) ||
-                            choice.title.toLocaleLowerCase().includes(text.toLocaleLowerCase())
-                    );
-                    return Promise.resolve(filteredChoices);
+                    return Promise.resolve(filterChoicesByText(choices, text, isRoot));
                 }
             },
             getQuestionsSettings()

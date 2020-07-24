@@ -2,8 +2,9 @@ import prompts from 'prompts';
 
 import path from 'path';
 
-import { setPath } from '../src/setPath';
+import { filterChoicesByText, makePathShort, setPath } from '../src/setPath';
 import { componentSettingsMap } from '../src/componentSettingsMap';
+import { getProjectRootPath } from '../src/getProjectRootPath';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
@@ -28,15 +29,27 @@ jest.mock('../src/helpers', () => {
 
 jest.mock('fs', () => {
     return {
-        existsSync: () => true,
+        existsSync: (path: string) => !path.endsWith('nonExistentFolder'),
         promises: {
-            stat: () => {
+            stat: (path: string) => {
+                if (path.endsWith('nonExistentFolder')) {
+                    return Promise.reject();
+                }
                 return Promise.resolve({});
             },
-            readdir: () => {
-                return Promise.resolve(['folder1']);
+            readdir: (path: string) => {
+                if (path.endsWith('emptyFolder')) {
+                    return Promise.resolve([]);
+                }
+                return Promise.resolve(['folder1', 'folder2']);
             }
         }
+    };
+});
+
+jest.mock('../src/getProjectRootPath', () => {
+    return {
+        getProjectRootPath: jest.fn(() => 'tests')
     };
 });
 
@@ -51,6 +64,18 @@ const getPath = () => {
 };
 
 describe('setPath', () => {
+    const exitMock = jest.fn();
+    const consoleErrorMock = jest.fn();
+    const realProcess = process;
+    const realConsole = console;
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        global.console = { ...realConsole, error: consoleErrorMock } as any;
+        global.process = { ...realProcess, exit: exitMock } as any;
+        componentSettingsMap.commandLineFlags.dest = '';
+    });
+
     it('default path', async () => {
         prompts.inject([1]);
         await setPath();
@@ -80,5 +105,66 @@ describe('setPath', () => {
         await setPath();
 
         expect(getPath()).toBe(MANUAL_PATH);
+    });
+
+    it('empty folder', async () => {
+        const pathToEmptyFolder = 'some/path/to/emptyFolder';
+        componentSettingsMap.commandLineFlags.dest = pathToEmptyFolder;
+        await setPath();
+        expect(getPath()).toBe(pathToEmptyFolder);
+    });
+
+    it('folder is not exists', async () => {
+        const nonExistentFolder = '/src/nonExistentFolder';
+        componentSettingsMap.commandLineFlags.dest = nonExistentFolder;
+        prompts.inject([1]);
+        await setPath();
+        expect(exitMock).toBeCalledTimes(1);
+    });
+
+    it('multi-path choice', async () => {
+        componentSettingsMap.config.folderPath = ['test1', 'test2'];
+        prompts.inject([1]);
+        await setPath();
+        expect(getProjectRootPath).toBeCalledTimes(1);
+    });
+
+    it('multi-path only one', async () => {
+        componentSettingsMap.config.folderPath = ['test1', 'nonExistentFolder'];
+        prompts.inject([1]);
+        await setPath();
+        expect(getProjectRootPath).toBeCalledTimes(0);
+    });
+
+    it('multi-path no one', async () => {
+        componentSettingsMap.config.folderPath = ['nonExistentFolder', 'nonExistentFolder'];
+        prompts.inject([1]);
+        await setPath();
+        expect(exitMock).toBeCalledTimes(1);
+    });
+
+    it.each([
+        ['a', 'a'],
+        ['a/b', 'a/b'],
+        ['a/b/c', 'a/b/c'],
+        ['a/b/c/d', 'a/b/c/d'],
+        ['a/b/c/d/e', 'a/.../c/d/e'],
+        ['a/b/c/d/e/f', 'a/.../d/e/f']
+    ])('makePathShort: %s shorted to %s', (value, expected) => {
+        expect(makePathShort(value)).toBe(expected);
+    });
+
+    it('filterChoicesByText', () => {
+        const mapStringsToTitles = (str: string[]) => str.map((s) => ({ title: s }));
+        expect(
+            filterChoicesByText(mapStringsToTitles(['>> Here <<', 'folder', 'item', 'folder2']), 'item', true)
+        ).toEqual(mapStringsToTitles(['>> Here <<', 'item']));
+        expect(
+            filterChoicesByText(
+                mapStringsToTitles(['< Back', '>> Here <<', 'folder', 'item', 'folder2']),
+                'item',
+                false
+            )
+        ).toEqual(mapStringsToTitles(['< Back', '>> Here <<', 'item']));
     });
 });

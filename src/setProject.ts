@@ -46,6 +46,7 @@ export const setProject = async () => {
                 )}`
             );
             process.exit();
+            return;
         }
 
         if (projectList.length === 1) {
