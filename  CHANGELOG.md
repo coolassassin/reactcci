@@ -1,3 +1,6 @@
+## 1.2.1
+* Fixed shorting POSIX paths
+
 ## 1.2.0
 * Added multi-template feature
 
@@ -5,10 +8,10 @@
 * Added template subfolder feature
 
 ## 1.1.4
-* Fixed linux path resolving in initialize mode
+* Fixed POSIX path resolving in initialize mode
 
 ## 1.1.3
-* Fixed linux path resolving
+* Fixed POSIX path resolving
 
 ## 1.1.2
 * Fixed folderPath processing
