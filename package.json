@@ -71,6 +71,10 @@
     "multi project",
     "configurable",
     "gen",
-    "react create component"
+    "scaffolding",
+    "make",
+    "tool",
+    "dev", 
+    "build"
   ]
 }
