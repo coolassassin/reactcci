@@ -9,7 +9,7 @@ import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
 import { Setting } from './types';
-import { capitalizeName } from './helpers';
+import { capitalizeName, writeToConsole } from './helpers';
 
 export const buildComponent = async () => {
     const { config, project, componentName, projectRootPath, resultPath, templateName } = componentSettingsMap;
@@ -32,8 +32,8 @@ export const buildComponent = async () => {
     componentSettingsMap.fileList = fileList;
 
     if (!config.skipFinalStep) {
-        console.log(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
-        console.log(
+        writeToConsole(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
+        writeToConsole(
             `\nFile list:\n${Object.entries(fileList)
                 .map(
                     ([tmp, options]) =>
@@ -43,14 +43,14 @@ export const buildComponent = async () => {
                 )
                 .join('\n')}`
         );
-        console.log(`\nFolder: ${kleur.yellow(path.join(project, projectRootPath, resultPath))}`);
+        writeToConsole(`\nFolder: ${kleur.yellow(path.join(project, projectRootPath, resultPath))}`);
     }
 
     if (config.skipFinalStep || (await getFinalAgreement())) {
         await generateFiles();
         await processAfterGeneration();
-        console.log(kleur.green(`\n${capitalizeName(templateName)} is created!!! \\(•◡ •)/ `));
+        writeToConsole(kleur.green(`\n${capitalizeName(templateName)} is created!!! \\(•◡ •)/ `));
     } else {
-        console.log("No? Let's build another one! (◉ ◡ ◉ )");
+        writeToConsole("No? Let's build another one! (◉ ◡ ◉ )");
     }
 };

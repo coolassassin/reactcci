@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { isDirectory } from './helpers';
+import { isDirectory, writeToConsole } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 
 export const setProject = async () => {
@@ -24,7 +24,7 @@ export const setProject = async () => {
 
     if (commandLineFlags.project) {
         project = commandLineFlags.project;
-        console.log(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
+        writeToConsole(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
     }
 
     if (!project && multiProject) {
@@ -50,7 +50,7 @@ export const setProject = async () => {
         }
 
         if (projectList.length === 1) {
-            console.log(`Creating ${templateName} for ${kleur.yellow(projectList[0])} project`);
+            writeToConsole(`Creating ${templateName} for ${kleur.yellow(projectList[0])} project`);
             componentSettingsMap.project = projectList[0];
             return;
         }

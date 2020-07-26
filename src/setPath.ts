@@ -5,28 +5,9 @@ import fs from 'fs';
 import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { isDirectory } from './helpers';
+import { isDirectory, makePathShort } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
-
-export const makePathShort = (path: string): string => {
-    const sourcePath = path.replace(/[\\/]$/, '').replace(/\\/g, '/');
-    const pathArray = sourcePath.split('/');
-    if (pathArray.length <= 4) {
-        return sourcePath;
-    }
-    return pathArray
-        .reduce((acc: string[], value, index, arr) => {
-            if (index < 1 || index > arr.length - 4) {
-                if (index === arr.length - 3) {
-                    acc.push('...');
-                }
-                acc.push(value);
-            }
-            return acc;
-        }, [])
-        .join('/');
-};
 
 export const filterChoicesByText = (choices: { title: string }[], text: string, isRoot: boolean) => {
     return choices.filter(

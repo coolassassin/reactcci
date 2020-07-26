@@ -2,9 +2,10 @@ import prompts from 'prompts';
 
 import path from 'path';
 
-import { filterChoicesByText, makePathShort, setPath } from '../src/setPath';
+import { filterChoicesByText, setPath } from '../src/setPath';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 import { getProjectRootPath } from '../src/getProjectRootPath';
+import * as helpers from '../src/helpers';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
@@ -18,12 +19,6 @@ jest.mock('../src/componentSettingsMap', () => {
                 dest: ''
             }
         }
-    };
-});
-
-jest.mock('../src/helpers', () => {
-    return {
-        isDirectory: () => true
     };
 });
 
@@ -68,6 +63,8 @@ describe('setPath', () => {
     const consoleErrorMock = jest.fn();
     const realProcess = process;
     const realConsole = console;
+
+    (helpers.isDirectory as any) = jest.fn(() => true);
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -141,17 +138,6 @@ describe('setPath', () => {
         prompts.inject([1]);
         await setPath();
         expect(exitMock).toBeCalledTimes(1);
-    });
-
-    it.each([
-        ['a', 'a'],
-        ['a/b', 'a/b'],
-        ['a/b/c', 'a/b/c'],
-        ['a/b/c/d', 'a/b/c/d'],
-        ['a/b/c/d/e', 'a/.../c/d/e'],
-        ['a/b/c/d/e/f', 'a/.../d/e/f']
-    ])('makePathShort: %s shorted to %s', (value, expected) => {
-        expect(makePathShort(value)).toBe(expected);
     });
 
     it('filterChoicesByText', () => {

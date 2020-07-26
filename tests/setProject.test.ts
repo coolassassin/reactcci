@@ -40,7 +40,7 @@ describe('setProject', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         global.console = { ...realConsole, error: jest.fn() } as any;
-        global.process = { ...realProcess, exit: exitMock } as any;
+        global.process = { ...realProcess, exit: exitMock, stdout: { ...realProcess.stdout, write: jest.fn() } } as any;
         componentSettingsMap.commandLineFlags.dest = '';
         componentSettingsMap.commandLineFlags.project = '';
         componentSettingsMap.config.folderPath = 'Folder1';

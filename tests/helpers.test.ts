@@ -1,4 +1,4 @@
-import { capitalizeName, isDirectory } from '../src/helpers';
+import { capitalizeName, isDirectory, makePathShort } from '../src/helpers';
 
 jest.mock('fs', () => {
     return {
@@ -15,5 +15,16 @@ describe('helpers', () => {
 
     it('isDirectory', () => {
         expect(isDirectory('test')).toBe(true);
+    });
+
+    it.each([
+        ['a', 'a'],
+        ['a/b', 'a/b'],
+        ['a/b/c', 'a/b/c'],
+        ['a/b/c/d', 'a/b/c/d'],
+        ['a/b/c/d/e', 'a/.../c/d/e'],
+        ['a/b/c/d/e/f', 'a/.../d/e/f']
+    ])('makePathShort: %s shorted to %s', (value, expected) => {
+        expect(makePathShort(value)).toBe(expected);
     });
 });

@@ -3,7 +3,7 @@ import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
-import { capitalizeName } from './helpers';
+import { capitalizeName, writeToConsole } from './helpers';
 
 export const setComponentName = async () => {
     const { commandLineFlags, templateName } = componentSettingsMap;
@@ -33,7 +33,7 @@ export const setComponentName = async () => {
         }
 
         if (componentName.length === 0) {
-            console.log(
+            writeToConsole(
                 kleur.yellow(
                     `${capitalizeName(templateName)} name must have at least one character.\nExample: DocumentModal`
                 )
@@ -43,7 +43,7 @@ export const setComponentName = async () => {
         }
 
         if (/[^\w\d-_]/g.test(componentName)) {
-            console.log(
+            writeToConsole(
                 kleur.yellow(
                     `${capitalizeName(
                         templateName

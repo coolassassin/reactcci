@@ -7,6 +7,7 @@ import path from 'path';
 import { CONFIG_FILE_NAME } from './constants';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
+import { writeToConsole } from './helpers';
 
 export const initialize = async () => {
     const { root, moduleRoot } = componentSettingsMap;
@@ -31,7 +32,7 @@ export const initialize = async () => {
         }
     }
 
-    console.log(`${kleur.gray('By default, CLI use basic templates to create component.')}`);
+    writeToConsole(`${kleur.gray('By default, CLI use basic templates to create component.')}`);
     const { templatesAgreement } = await Prompt(
         {
             type: 'toggle',
@@ -65,7 +66,7 @@ export const initialize = async () => {
         path.join(root, CONFIG_FILE_NAME),
         defaultConfig.replace(/(templatesFolder: ')(\w*?)(',)/g, `$1${templateFolderName}$3`)
     );
-    console.log(`Config file ${kleur.yellow(CONFIG_FILE_NAME)} is created.`);
+    writeToConsole(`Config file ${kleur.yellow(CONFIG_FILE_NAME)} is created.`);
 
     if (templatesAgreement) {
         const templateFolderPath = path.resolve(root, templateFolderName);
@@ -74,11 +75,11 @@ export const initialize = async () => {
         }
         const defaultTempleFolder = path.resolve(moduleRoot, 'templates');
         const templateNames = await fs.promises.readdir(defaultTempleFolder);
-        console.log('Templates generated:');
+        writeToConsole('Templates generated:');
         for (const templateName of templateNames) {
             const tmp = (await fs.promises.readFile(path.join(defaultTempleFolder, templateName))).toString();
             await fs.promises.writeFile(path.join(templateFolderPath, templateName), tmp);
-            console.log(` - ${templateFolderName}/${templateName}`);
+            writeToConsole(` - ${templateFolderName}/${templateName}`);
         }
     }
 

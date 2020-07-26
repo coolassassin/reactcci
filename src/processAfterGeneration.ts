@@ -4,6 +4,7 @@ import path from 'path';
 import childProcess from 'child_process';
 
 import { componentSettingsMap } from './componentSettingsMap';
+import { writeToConsole } from './helpers';
 
 export const processAfterGeneration = async () => {
     const {
@@ -26,11 +27,11 @@ export const processAfterGeneration = async () => {
                     if (!command.extensions || command.extensions.some((ext) => file.name.endsWith(ext))) {
                         if (!processed) {
                             processed = true;
-                            console.log(`\nProcessing ${file.name}`);
+                            writeToConsole(`\nProcessing ${file.name}`);
                         }
                         const filePath = path.join(finalFolder, file.name);
                         childProcess.execSync(command.cmd.replace('[filepath]', filePath));
-                        console.log(`  ${kleur.green('√')} ${type}`);
+                        writeToConsole(`  ${kleur.green('√')} ${type}`);
                     }
                 } catch (e) {
                     console.error(
