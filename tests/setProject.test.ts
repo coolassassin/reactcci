@@ -84,9 +84,15 @@ describe('setProject', () => {
         expect(componentSettingsMap.project).toBe('');
     });
 
-    it('command line destinations', async () => {
+    it('no projects exception', async () => {
         (helpers.isDirectory as any) = jest.fn(() => false);
         await setProject();
         expect(exitMock).toBeCalled();
+    });
+
+    it('only one project match to folderPath', async () => {
+        (helpers.isDirectory as any) = jest.fn((pathStr: string) => pathStr.includes('Folder1'));
+        await setProject();
+        expect(componentSettingsMap.project).toBe('Folder1');
     });
 });
