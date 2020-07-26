@@ -8,7 +8,7 @@ import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { Setting } from './types';
+import { Setting, TemplateDescription } from './types';
 import { capitalizeName, writeToConsole } from './helpers';
 
 export const buildComponent = async () => {
@@ -19,7 +19,7 @@ export const buildComponent = async () => {
     const fileList: Setting['fileList'] = {};
 
     for (const templateName of templateNames) {
-        const { name, file } = config.templates[templateName];
+        const { name, file } = config.templates[templateName] as TemplateDescription;
         const fileName = name.replace('[name]', componentName);
         if (Array.isArray(file)) {
             const selectedFile = await getTemplateFile(templateName, file);

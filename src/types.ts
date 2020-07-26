@@ -1,4 +1,4 @@
-type FileOption = {
+export type FileOption = {
     name: string;
     description: string;
 };
@@ -8,8 +8,10 @@ type AfterCreationCommand = {
     cmd: string;
 };
 
+export type TemplateDescription = { name: string; file?: string | FileOption[]; optional?: boolean; default?: boolean };
+
 export type TemplateDescriptionObject = {
-    [key in string]: { name: string; file?: string | FileOption[]; optional?: boolean; default?: boolean };
+    [key in string]: TemplateDescription;
 };
 
 type MultiTemplate = {

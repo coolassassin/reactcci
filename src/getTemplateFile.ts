@@ -2,8 +2,9 @@ import Prompt from 'prompts';
 import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
+import { FileOption } from './types';
 
-export const getTemplateFile = async (name, files) => {
+export const getTemplateFile = async (name: string, files: FileOption[]) => {
     const { file } = await Prompt(
         {
             type: 'select',

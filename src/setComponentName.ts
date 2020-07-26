@@ -30,6 +30,7 @@ export const setComponentName = async () => {
 
         if (typeof componentName === 'undefined') {
             process.exit();
+            return;
         }
 
         if (componentName.length === 0) {

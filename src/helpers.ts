@@ -5,7 +5,7 @@ export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
 export const capitalizeName = (value: string) => value.replace(/^./g, value[0].toUpperCase());
 
 export const makePathShort = (path: string): string => {
-    const sourcePath = path.replace(/[\\/]$/, '').replace(/\\/g, '/');
+    const sourcePath = path.replace(/[\\/]$/, '');
     const pathArray = sourcePath.split('/');
     if (pathArray.length <= 4) {
         return sourcePath;
