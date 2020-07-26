@@ -29,6 +29,7 @@ export const initialize = async () => {
 
         if (!agree) {
             process.exit();
+            return;
         }
     }
 
