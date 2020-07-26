@@ -4,6 +4,8 @@ Setup your config once to build your app as quick as it possible.
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
+[![Build Status](https://travis-ci.org/coolassassin/reactcci.svg?branch=master)](https://travis-ci.org/github/coolassassin/reactcci)
+
 ## Installation
 To install via npm:  
 ```npm install --save-dev reactcci```  
@@ -143,5 +145,3 @@ If you need to generate something else, not components only, you are able to set
 `--dest`, `-d` - to set destination path  
 `--name`, `-n` - to set component name  
 `--project`, `-p` - to set project
-
-[![Build Status](https://travis-ci.org/coolassassin/reactcci.svg?branch=master)](https://travis-ci.org/github/coolassassin/reactcci)
