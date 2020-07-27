@@ -23,7 +23,8 @@ describe('helpers', () => {
         ['a/b/c', 'a/b/c'],
         ['a/b/c/d', 'a/b/c/d'],
         ['a/b/c/d/e', 'a/.../c/d/e'],
-        ['a/b/c/d/e/f', 'a/.../d/e/f']
+        ['a/b/c/d/e/f', 'a/.../d/e/f'],
+        ['a\\b\\c\\d\\e\\f', 'a/.../d/e/f']
     ])('makePathShort: %s shorted to %s', (value, expected) => {
         expect(makePathShort(value)).toBe(expected);
     });
