@@ -3,6 +3,7 @@
   "version": "1.2.5",
   "main": "index.ts",
   "repository": "git@github.com:coolassassin/reactcci.git",
+  "description": "React Create Component CLI",
   "author": "coolassassin <coolstreetassassin@gmail.com>",
   "license": "MIT",
   "preferGlobal": true,
