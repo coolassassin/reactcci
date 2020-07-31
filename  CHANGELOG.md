@@ -1,3 +1,6 @@
+## 1.2.8
+* Fixed template folder name replacing 
+
 ## 1.2.1
 * Fixed shorting POSIX paths
 
