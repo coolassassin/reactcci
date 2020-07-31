@@ -65,7 +65,7 @@ export const initialize = async () => {
     const defaultConfig = (await fs.promises.readFile(defaultConfigPath)).toString();
     await fs.promises.writeFile(
         path.join(root, CONFIG_FILE_NAME),
-        defaultConfig.replace(/(templatesFolder: ')(\w*?)(',)/g, `$1${templateFolderName}$3`)
+        defaultConfig.replace(/(templatesFolder: ')(\w*?)(')/g, `$1${templateFolderName}$3`)
     );
     writeToConsole(`Config file ${kleur.yellow(CONFIG_FILE_NAME)} is created.`);
 
