@@ -27,8 +27,9 @@ module.exports = {
         }
     },
     placeholders: {
-        /* Placeholders to fill data in templates, #NAME# for example */ NAME: ({ componentName }) => componentName,
-        STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';` : '')
+        /* Placeholders to fill data in templates, #NAME# for example */
+        NAME: ({ componentName }) => componentName,
+        STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';\n` : '')
     }
     // afterCreation: {
     //     prettier: { /* Script name */

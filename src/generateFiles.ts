@@ -3,23 +3,33 @@ import path from 'path';
 
 import { getTemplate } from './getTemplate';
 import { componentSettingsMap } from './componentSettingsMap';
+import { getRelativePath, processPath } from './helpers';
+import { templatePlaceholdersData } from './types';
 
 export const generateFiles = async () => {
-    const { root, project, componentName, projectRootPath, resultPath, fileList } = componentSettingsMap;
+    const { root, project, componentName, projectRootPath, resultPath, fileList, templateName } = componentSettingsMap;
     const folder = path.join(root, project, projectRootPath, resultPath, componentName);
 
     if (!fs.existsSync(folder)) {
         await fs.promises.mkdir(folder);
     }
 
-    const dataForTemplate = {
+    const objectFolder = processPath(path.resolve(root, project, projectRootPath, resultPath, componentName));
+
+    const dataForTemplate: templatePlaceholdersData = {
         project,
-        componentName,
+        componentName, // backward compatibility name
+        objectName: componentName,
+        objectType: templateName,
+        pathToObject: processPath(path.join(project, projectRootPath)),
+        destinationFolder: processPath(resultPath),
+        objectFolder,
+        relativeObjectFolder: processPath(path.join(project, projectRootPath, resultPath, componentName)),
+        getRelativePath: (to: string) => getRelativePath(objectFolder, to),
         files: fileList
     };
 
     for (const [, options] of Object.entries(fileList)) {
-        const template = options.file ? (await getTemplate(options.file, dataForTemplate)) ?? '' : '';
         const pathParts = path
             .join(options.name)
             .split(path.sep)
@@ -33,7 +43,10 @@ export const generateFiles = async () => {
                     await fs.promises.mkdir(currentFolder);
                 }
             }
+            dataForTemplate.getRelativePath = (to: string) =>
+                getRelativePath(path.resolve(objectFolder, subFolders.join('/')), to);
         }
+        const template = options.file ? (await getTemplate(options.file, dataForTemplate)) ?? '' : '';
         await fs.promises.writeFile(path.join(folder, ...subFolders, fileName), template);
     }
 };

@@ -3,6 +3,7 @@ import fs from 'fs';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { CONFIG_FILE_NAME } from './constants';
+import { Setting } from './types';
 
 const prepareFolderPath = (path: string): string => {
     return `${path.replace(/(^\/|^\\|\/$|\\$)/g, '')}/`;
@@ -11,12 +12,12 @@ const prepareFolderPath = (path: string): string => {
 export const setConfig = async () => {
     const { root } = componentSettingsMap;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    let res = require('../defaultConfig.js');
+    let res: Setting['config'] = require('../defaultConfig.js');
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
     if (fs.existsSync(localConfigPath)) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const manualConfig = require(localConfigPath);
-        res = Object.assign(res, manualConfig);
+        const manualConfig: Setting['config'] = require(localConfigPath);
+        res = { ...res, ...manualConfig, placeholders: { ...res.placeholders, ...manualConfig.placeholders } };
         if (Array.isArray(res.folderPath)) {
             res.folderPath = res.folderPath.map((p) => prepareFolderPath(p));
         } else {
