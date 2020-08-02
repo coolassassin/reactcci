@@ -1,3 +1,6 @@
+## 1.3.0
+* Added extended template placeholders functionality
+
 ## 1.2.8
 * Fixed template folder name replacing 
 

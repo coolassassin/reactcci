@@ -139,6 +139,33 @@ If you need to generate something else, not components only, you are able to set
     ]
 }
 ```
+
+## Placeholders
+As you can see above, each placeholder is a function which get some data to build your own placeholder.
+Below, you can see the list of all available data and functions to create a new one.
+``` typescript
+type templatePlaceholdersData = {
+    project: string;
+    // Project name in multy-project mode
+    componentName: string;
+    objectName: string;
+    // componentName and objectName either is a name of the component or another object in multi-template mode
+    objectType: string;
+    // type of object which was selected by user. It is "component" by default.
+    pathToObject: string;
+    // path to objects folder. For example "src/components"
+    destinationFolder: string;
+    // relative path to folder of object which is being created
+    objectFolder: string;
+    // Absolute path to your object (component) folder
+    relativeObjectFolder: string;
+    // Relative path to your object (component) folder
+    getRelativePath: (to: string) => string;
+    // Function to get relative path to any another path. For example "../../src/helpers"
+    files: FilesList;
+    // Object of files which is being created
+};
+```
   
 ## Commands
 `--init` - to generate config file and template folder  

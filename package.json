@@ -3,7 +3,7 @@
   "version": "1.2.8",
   "main": "index.ts",
   "repository": "git@github.com:coolassassin/reactcci.git",
-  "description": "React Create Component CLI",
+  "description": "React Create Component CLI. Create React component avoiding making manual boilerplate.",
   "author": "coolassassin <coolstreetassassin@gmail.com>",
   "license": "MIT",
   "preferGlobal": true,
