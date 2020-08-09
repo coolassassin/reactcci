@@ -3,25 +3,27 @@ import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
-import { capitalizeName, writeToConsole } from './helpers';
+import { capitalizeName, processComponentNameString, writeToConsole } from './helpers';
+import { Setting } from './types';
 
-export const setComponentName = async () => {
+export const setComponentNames = async () => {
     const { commandLineFlags, templateName } = componentSettingsMap;
 
-    let res = commandLineFlags.name;
+    let res: Setting['componentNames'] = [commandLineFlags.name];
 
     do {
-        let componentName = '';
+        let componentName: Setting['componentNames'] | undefined = [''];
 
-        if (res) {
-            componentName = res;
+        if (res[0]) {
+            componentName = processComponentNameString(res[0]);
         } else {
             componentName = (
                 await Prompt(
                     {
                         type: 'text',
                         name: 'componentName',
-                        message: `What is the ${templateName} name? (ExampleName)`
+                        message: `What is the ${templateName} name? (ExampleName)`,
+                        format: (input: string) => processComponentNameString(input)
                     },
                     getQuestionsSettings()
                 )
@@ -33,17 +35,18 @@ export const setComponentName = async () => {
             return;
         }
 
-        if (componentName.length === 0) {
+        if (componentName.some((name) => name.length === 0)) {
             writeToConsole(
                 kleur.yellow(
                     `${capitalizeName(templateName)} name must have at least one character.\nExample: DocumentModal`
                 )
             );
-            res = '';
             continue;
         }
 
-        if (/[^\w\d-_]/g.test(componentName)) {
+        const componentNameRegularExpression = /[^\w\d-_]/g;
+
+        if (componentName.some((name) => componentNameRegularExpression.test(name))) {
             writeToConsole(
                 kleur.yellow(
                     `${capitalizeName(
@@ -51,12 +54,11 @@ export const setComponentName = async () => {
                     )} name must contain only letters, numbers, dashes or underscores.\nExample: DocumentModal`
                 )
             );
-            res = '';
             continue;
         }
 
         res = componentName;
-    } while (!res);
+    } while (!res[0]);
 
-    componentSettingsMap.componentName = res;
+    componentSettingsMap.componentNames = res;
 };

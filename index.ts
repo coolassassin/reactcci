@@ -7,7 +7,7 @@ import { setConfig } from './src/setConfig';
 import { setProject } from './src/setProject';
 import { initialize } from './src/initialize';
 import { checkConfig } from './src/checkConfig';
-import { setComponentName } from './src/setComponentName';
+import { setComponentNames } from './src/setComponentNames';
 import { buildComponent } from './src/buildComponent';
 import { componentSettingsMap } from './src/componentSettingsMap';
 import { processCommandLineFlags } from './src/processCommandLineFlags';
@@ -31,7 +31,7 @@ import { setComponentTemplate } from './src/setComponentTemplate';
         await setComponentTemplate();
         await setProject();
         await setPath();
-        await setComponentName();
+        await setComponentNames();
 
         await buildComponent();
     } catch (e) {

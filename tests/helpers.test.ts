@@ -1,4 +1,11 @@
-import { capitalizeName, isDirectory, makePathShort, processPath } from '../src/helpers';
+import {
+    capitalizeName,
+    isDirectory,
+    makePathShort,
+    processCommandLineArguments,
+    processComponentNameString,
+    processPath
+} from '../src/helpers';
 
 jest.mock('fs', () => {
     return {
@@ -38,5 +45,49 @@ describe('helpers', () => {
         ['a\\b\\c\\d\\e\\f', 'a/.../d/e/f']
     ])('makePathShort: %s shorted to %s', (value, expected) => {
         expect(makePathShort(value)).toBe(expected);
+    });
+
+    it.each([
+        [
+            ['test', 'test', 'test'],
+            ['test', 'test', 'test']
+        ],
+        [
+            ['test', '--test', 'test'],
+            ['test', '--test', 'test']
+        ],
+        [
+            ['test', '--name', 'test'],
+            ['test', '--name', 'test']
+        ],
+        [
+            ['test', '-n', 'test'],
+            ['test', '-n', 'test']
+        ],
+        [
+            ['test', '--name', 'test', 'test'],
+            ['test', '--name', 'test test']
+        ],
+        [
+            ['test', '-n', 'test', 'test'],
+            ['test', '-n', 'test test']
+        ],
+        [
+            ['test', '-n', 'test', 'test', '--test'],
+            ['test', '-n', 'test test', '--test']
+        ]
+    ])('processCommandLineArguments: %s processed to %s', (value, expected) => {
+        expect(processCommandLineArguments(value)).toEqual(expected);
+    });
+
+    it.each([
+        [undefined, undefined],
+        ['a', ['a']],
+        [' a ', ['a']],
+        ['a  a', ['a']],
+        ['a  b', ['a', 'b']],
+        ['  a  b c  ', ['a', 'b', 'c']]
+    ])('processComponentNameString: "%s" processed to %s', (value, expected) => {
+        expect(processComponentNameString(value)).toEqual(expected);
     });
 });

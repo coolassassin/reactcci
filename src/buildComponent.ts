@@ -8,41 +8,53 @@ import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { Setting, TemplateDescription } from './types';
+import { FilesList, TemplateDescription, Setting } from './types';
 import { capitalizeName, writeToConsole } from './helpers';
 
 export const buildComponent = async () => {
-    const { config, project, componentName, projectRootPath, resultPath, templateName } = componentSettingsMap;
+    const { config, project, componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
 
     const templateNames = await getTemplates();
 
-    const fileList: Setting['fileList'] = {};
+    const fileList: FilesList = {};
 
     for (const templateName of templateNames) {
         const { name, file } = config.templates[templateName] as TemplateDescription;
-        const fileName = name.replace('[name]', componentName);
         if (Array.isArray(file)) {
             const selectedFile = await getTemplateFile(templateName, file);
-            fileList[templateName] = { name: fileName, file: selectedFile.name, type: selectedFile.description };
+            fileList[templateName] = { name, file: selectedFile.name, type: selectedFile.description };
         } else {
-            fileList[templateName] = { name: fileName, file: file as string };
+            fileList[templateName] = { name, file: file as string };
         }
     }
 
-    componentSettingsMap.fileList = fileList;
+    const componentFileList: Setting['componentFileList'] = {};
+
+    for (const componentName of componentNames) {
+        componentFileList[componentName] = Object.fromEntries(
+            Object.entries(fileList).map(([tmpName, fileObject]) => [
+                tmpName,
+                { ...fileObject, name: fileObject.name.replace('[name]', componentName) }
+            ])
+        );
+    }
+
+    componentSettingsMap.componentFileList = componentFileList;
 
     if (!config.skipFinalStep) {
-        writeToConsole(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
-        writeToConsole(
-            `\nFile list:\n${Object.entries(fileList)
-                .map(
-                    ([tmp, options]) =>
-                        `- ${tmp}${options.type ? ` (${kleur.yellow(options.type)})` : ''}${kleur.gray(
-                            ` - ${options.name}`
-                        )}`
-                )
-                .join('\n')}`
-        );
+        for (const componentName of componentNames) {
+            writeToConsole(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
+            writeToConsole(
+                `Files:\n${Object.entries(componentFileList[componentName])
+                    .map(
+                        ([tmp, options]) =>
+                            `- ${tmp}${options.type ? ` (${kleur.yellow(options.type)})` : ''}${kleur.gray(
+                                ` - ${options.name}`
+                            )}`
+                    )
+                    .join('\n')}`
+            );
+        }
         writeToConsole(`\nFolder: ${kleur.yellow(path.join(project, projectRootPath, resultPath))}`);
     }
 

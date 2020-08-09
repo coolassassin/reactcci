@@ -20,7 +20,7 @@ type MultiTemplate = {
     files: TemplateDescriptionObject;
 }[];
 
-type FilesList = { [key in string]: { name: string; file: string; type?: string } };
+export type FilesList = { [key in string]: { name: string; file: string; type?: string } };
 
 export type Setting = {
     root: string;
@@ -37,11 +37,11 @@ export type Setting = {
         };
     };
     project: string;
-    componentName: string;
+    componentNames: string[];
     templateName: string;
     projectRootPath: string;
     resultPath: string;
-    fileList: FilesList;
+    componentFileList: { [key in string]: FilesList };
     commandLineFlags: {
         init: boolean;
         dest: string;

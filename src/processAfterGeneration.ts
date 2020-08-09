@@ -12,36 +12,39 @@ export const processAfterGeneration = async () => {
         project,
         resultPath,
         projectRootPath,
-        componentName,
-        fileList,
+        componentNames,
+        componentFileList,
         config: { afterCreation }
     } = componentSettingsMap;
-
-    const finalFolder = path.join(root, project, projectRootPath, resultPath, componentName);
-
     if (afterCreation) {
-        for (const [, file] of Object.entries(fileList)) {
-            let processed = false;
-            for (const [type, command] of Object.entries(afterCreation)) {
-                try {
-                    if (!command.extensions || command.extensions.some((ext) => file.name.endsWith(ext))) {
-                        if (!processed) {
-                            processed = true;
-                            writeToConsole(`\nProcessing ${file.name}`);
+        for (const [type, command] of Object.entries(afterCreation)) {
+            writeToConsole(`Executing ${kleur.yellow(type)} script:`);
+            for (const componentName of componentNames) {
+                if (componentNames.length > 1) {
+                    writeToConsole(`  ${componentName}`);
+                }
+                const fileList = componentFileList[componentName];
+                const finalFolder = path.join(root, project, projectRootPath, resultPath, componentName);
+
+                for (const [, file] of Object.entries(fileList)) {
+                    try {
+                        if (!command.extensions || command.extensions.some((ext) => file.name.endsWith(ext))) {
+                            const filePath = path.join(finalFolder, file.name);
+                            childProcess.execSync(command.cmd.replace('[filepath]', filePath));
+                            writeToConsole(
+                                `${componentNames.length > 1 ? '    ' : '  '}${kleur.green('√')} ${file.name}`
+                            );
                         }
-                        const filePath = path.join(finalFolder, file.name);
-                        childProcess.execSync(command.cmd.replace('[filepath]', filePath));
-                        writeToConsole(`  ${kleur.green('√')} ${type}`);
+                    } catch (e) {
+                        console.error(
+                            kleur.red(
+                                `Unexpected error during processing ${kleur.yellow(file.name)} with ${kleur.yellow(
+                                    type
+                                )} command`
+                            )
+                        );
+                        console.error(e);
                     }
-                } catch (e) {
-                    console.error(
-                        kleur.red(
-                            `Unexpected error during processing ${kleur.yellow(file.name)} with ${kleur.yellow(
-                                type
-                            )} command`
-                        )
-                    );
-                    console.error(e);
                 }
             }
         }

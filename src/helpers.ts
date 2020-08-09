@@ -39,3 +39,43 @@ export const getRelativePath = (from: string, to: string): string => {
     const destination = path.isAbsolute(to) ? processPath(to) : processPath(path.resolve(root, processPath(to)));
     return processPath(path.relative(from, destination));
 };
+
+export const processCommandLineArguments = (args: string[]): string[] => {
+    let isCollecting = false;
+    return args.reduce((acc: string[], value, index, arr) => {
+        if (['-n', '--name'].includes(arr[index - 1])) {
+            isCollecting = true;
+            acc.push(value);
+            return acc;
+        } else if (value.startsWith('-')) {
+            isCollecting = false;
+        }
+        if (isCollecting) {
+            acc[acc.length - 1] += ` ${value}`;
+            return acc;
+        }
+        acc.push(value);
+        return acc;
+    }, []);
+};
+
+export const processComponentNameString = (name: string | undefined): string[] | undefined => {
+    if (typeof name === 'undefined') {
+        return;
+    }
+
+    if (!name.includes(' ')) {
+        return [name];
+    }
+
+    return name
+        .trim()
+        .replace(/\s{1,}/g, ' ')
+        .split(' ')
+        .reduce((acc: string[], value) => {
+            if (!acc.some((v) => v === value)) {
+                acc.push(value);
+            }
+            return acc;
+        }, []);
+};

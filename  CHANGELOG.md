@@ -1,3 +1,6 @@
+## 1.4.0
+* Added multi-component creation feature
+
 ## 1.3.1
 * Added rcci shortcut
 
