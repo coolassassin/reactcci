@@ -1,3 +1,6 @@
+## 1.3.1
+* Added rcci shortcut
+
 ## 1.3.0
 * Added extended template placeholders functionality
 
