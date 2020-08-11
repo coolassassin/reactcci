@@ -35,8 +35,9 @@ export const generateFiles = async () => {
             destinationFolder: processPath(resultPath),
             objectFolder,
             relativeObjectFolder: processPath(path.join(project, projectRootPath, resultPath, componentName)),
+            files: fileList,
             getRelativePath: (to: string) => getRelativePath(objectFolder, to),
-            files: fileList
+            join: (...parts: string[]) => processPath(path.join(...parts))
         };
 
         for (const [, options] of Object.entries(fileList)) {

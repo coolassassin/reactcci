@@ -160,10 +160,12 @@ type templatePlaceholdersData = {
     // Absolute path to your object (component) folder
     relativeObjectFolder: string;
     // Relative path to your object (component) folder
-    getRelativePath: (to: string) => string;
-    // Function to get relative path to any another path. For example "../../src/helpers"
     files: FilesList;
     // Object of files which is being created
+    getRelativePath: (to: string) => string;
+    // Function to get relative path to any another path. For example "../../src/helpers"
+    join: (...parts: string) => string;
+    // Function to get joined parts of path. For example join(project, destinationFolder, componentName)
 };
 ```
   

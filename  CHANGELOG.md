@@ -1,3 +1,6 @@
+## 1.4.1
+* Added join function for placeholders
+
 ## 1.4.0
 * Added multi-component creation feature
 
