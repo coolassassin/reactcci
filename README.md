@@ -5,6 +5,9 @@ Setup your config once to build your app as quick as it possible.
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
 [![Build Status](https://travis-ci.org/coolassassin/reactcci.svg?branch=master)](https://travis-ci.org/github/coolassassin/reactcci)
+[![Build Status](https://img.shields.io/npm/dm/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
+[![Build Status](https://img.shields.io/npm/v/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
+
 
 ## Installation
 To install via npm:  
@@ -27,12 +30,6 @@ but to set up your config quickly you are able to execute next command:
 `rcci --init`  
 This command runs configuration mode, 
 which allow you to generate config and template folder without any manual manipulations.
-
-## Path
-By default, components will be added into `src/` folder. To change this, you can set up your own config or run it with the flag:  
-```rcci --dest src/app/components```
-
-Also, you can type `rcci --help` to see all available commands.
 
 ## Config
 To set up your config, you need to create `rcci.config.js`  

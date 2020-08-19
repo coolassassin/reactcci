@@ -3,7 +3,7 @@
   "version": "1.4.2",
   "main": "index.ts",
   "repository": "git@github.com:coolassassin/reactcci.git",
-  "description": "React Create Component CLI which allows you to build your React application interactively with your own file structure. Plug and play setup. (Also for Preact, React Native, Vue, Node.JS, ...)",
+  "description": "React Create Component CLI (Typescript, React Native, Vue)",
   "author": "coolassassin <coolstreetassassin@gmail.com>",
   "license": "MIT",
   "preferGlobal": true,
@@ -77,6 +77,8 @@
     "make",
     "tool",
     "dev",
-    "build"
+    "build",
+    "command-line",
+    "typescript"
   ]
 }
