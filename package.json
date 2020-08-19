@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "run-build": "node build/cli.js",
     "prettier": "prettier --write src/*.ts index.ts",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "yarn test --coverage --collectCoverageFrom=./src/**"
   },
   "dependencies": {
     "commander": "^5.1.0",
