@@ -1,9 +1,7 @@
 import React from 'react';
 #STYLE#
-type #NAME#Props = {};
+type Props = {};
 
-export const #NAME#: React.FC<#NAME#Props> = props => {
+export const #NAME#: React.FC<Props> = props => {
     return <div />;
 };
-
-#NAME#.displayName = '#NAME#';

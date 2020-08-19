@@ -4,7 +4,7 @@ module.exports = {
     folderPath: 'src/' /* Destination path or array of paths to create components */,
     templatesFolder: 'templates' /* Folder which contains templates */,
     templates: {
-        /* Component file structure declaration */
+        /* Component folder structure declaration */
         index: {
             name: 'index.ts',
             file: 'index.ts'
@@ -22,19 +22,14 @@ module.exports = {
         },
         test: {
             name: '[name].test.tsx' /*'__tests__/[name].test.tsx' to put tests into subfolder*/,
+            file: 'tst.tsx',
             optional: true,
             default: false
         }
     },
     placeholders: {
-        /* Placeholders to fill data in templates, #NAME# for example */
+        /* Template placeholders function, #NAME# in template will be replaced by component name */
         NAME: ({ componentName }) => componentName,
         STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';\n` : '')
     }
-    // afterCreation: {
-    //     prettier: { /* Script name */
-    //         extensions: ['.ts', '.tsx'],
-    //         cmd: 'prettier --write [filepath]' /* Script command */
-    //     }
-    // }
 };
