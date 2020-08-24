@@ -1,6 +1,8 @@
 # React create component interactive CLI
 CLI which allows you to build your React application with your own file structure and make your components interactively without typing any paths.
-Setup your config once to build your app as quick as it possible.
+Setup your config once to build your app as quick as it possible.  
+Works on `MacOS`, `Windows`, and `Linux`.  
+Supports `Typescript`, `React Native`, `Less`, `Sass` or any `CSS-in-JS` library, `Storybook`, any testing library.
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
@@ -8,6 +10,18 @@ Setup your config once to build your app as quick as it possible.
 [![Build Status](https://img.shields.io/npm/dm/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
 [![Build Status](https://img.shields.io/npm/v/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
 
+
+## Quick Overview
+Via yarn and interactive mode
+```
+$ yarn add -D reactcci
+$ yarn rcci
+```
+or via npm and flags
+```
+$ npm i -D reactcci
+$ npx rcci --project MyProject --name MyComponent --dest App/Footer
+```
 
 ## Installation
 To install via npm:  
@@ -29,7 +43,7 @@ CLI allows you to build your application without any configuration,
 but to set up your config quickly you are able to execute next command:  
 `rcci --init`  
 This command runs configuration mode, 
-which allow you to generate config and template folder without any manual manipulations.
+which allow you to generate config file and template folder without any manual manipulations.
 
 ## Config
 To set up your config, you need to create `rcci.config.js`  
@@ -56,6 +70,12 @@ module.exports = {
             name: '[name].module.css',
             optional: true
         },
+        stories: {
+            name: '[name].stories.tsx',
+            file: 'stories.tsx',
+            optional: true,
+            default: false
+        },
         test: {
             name: '[name].test.tsx',
             optional: true,
@@ -65,7 +85,9 @@ module.exports = {
     placeholders: {
         NAME: ({ componentName }) => componentName,
         STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';` : ''),
-    },
+        STORY_PATH: ({ join, project, destinationFolder, componentName }) =>
+            join(project, destinationFolder, componentName)
+    }
 };
 ```
 
@@ -107,6 +129,11 @@ Example:
         }
     }
     ```
+## Commands
+`--init` - to generate config file and template folder  
+`--dest`, `-d` - to set destination path  
+`--name`, `-n` - to set component name  
+`--project`, `-p` - to set project
 
 ## Multi-template
 If you need to generate something else, not components only, you are able to set up array of templates. Example bellow:
@@ -140,34 +167,17 @@ If you need to generate something else, not components only, you are able to set
 ## Placeholders
 As you can see above, each placeholder is a function which get some data to build your own placeholder.
 Below, you can see the list of all available data and functions to create a new one.
-``` typescript
-type templatePlaceholdersData = {
-    project: string;
-    // Project name in multy-project mode
-    componentName: string;
-    objectName: string;
-    // componentName and objectName either is a name of the component or another object in multi-template mode
-    objectType: string;
-    // type of object which was selected by user. It is "component" by default.
-    pathToObject: string;
-    // path to objects folder. For example "src/components"
-    destinationFolder: string;
-    // relative path to folder of object which is being created
-    objectFolder: string;
-    // Absolute path to your object (component) folder
-    relativeObjectFolder: string;
-    // Relative path to your object (component) folder
-    files: FilesList;
-    // Object of files which is being created
-    getRelativePath: (to: string) => string;
-    // Function to get relative path to any another path. For example "../../src/helpers"
-    join: (...parts: string) => string;
-    // Function to get joined parts of path. For example join(project, destinationFolder, componentName)
-};
-```
-  
-## Commands
-`--init` - to generate config file and template folder  
-`--dest`, `-d` - to set destination path  
-`--name`, `-n` - to set component name  
-`--project`, `-p` - to set project
+
+| Field | Description |
+|---|---|
+| `project` | Project name in multy-project mode |
+| `componentName`<br> `objectName` | Name of the component or another object in multi-template mode |
+| `objectType` | Type of object which was selected by user. It is `component` by default. |
+| `pathToObject` | path to objects folder <br> Example: `src/components` |
+| `destinationFolder` | relative path to folder of object which is being created<br>Example: `App/Header/Logo` |
+| `objectFolder` | Absolute path to your object (component) folder |
+| `relativeObjectFolder` | Relative path to your object (component) folder |
+| `files` | Object of files which is being created |
+| `getRelativePath(to: string)` | Function to get relative path to any another path<br>Example: `../../src/helpers` |
+| `join(...parts: string)` | Function to get joined parts of path. <br>Example:<br> `join(project, destinationFolder, componentName)` => `Project/Footer/Email` |
+

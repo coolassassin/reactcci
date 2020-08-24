@@ -20,6 +20,12 @@ module.exports = {
             name: '[name].module.css',
             optional: true
         },
+        stories: {
+            name: '[name].stories.tsx',
+            file: 'stories.tsx',
+            optional: true,
+            default: false
+        },
         test: {
             name: '[name].test.tsx' /*'__tests__/[name].test.tsx' to put tests into subfolder*/,
             file: 'tst.tsx',
@@ -30,6 +36,8 @@ module.exports = {
     placeholders: {
         /* Template placeholders function, #NAME# in template will be replaced by component name */
         NAME: ({ componentName }) => componentName,
-        STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';\n` : '')
+        STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';\n` : ''),
+        STORY_PATH: ({ join, project, destinationFolder, componentName }) =>
+            join(project, destinationFolder, componentName)
     }
 };
