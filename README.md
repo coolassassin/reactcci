@@ -1,8 +1,8 @@
 # React create component interactive CLI
 CLI which allows you to build your React application with your own file structure and make your components interactively without typing any paths.
 Setup your config once to build your app as quick as it possible.  
-Works on `MacOS`, `Windows`, and `Linux`.  
-Supports `Typescript`, `React Native`, `Less`, `Sass` or any `CSS-in-JS` library, `Storybook`, any testing library.
+Works on MacOS, Windows, and Linux.  
+Supports Typescript, React Native, Less, Sass or any CSS-in-JS library, Storybook, any testing library.
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
@@ -20,7 +20,7 @@ $ yarn rcci
 or via npm and flags
 ```
 $ npm i -D reactcci
-$ npx rcci --project MyProject --name MyComponent --dest App/Footer
+$ npx rcci --name Header Body Footer --dest src/App
 ```
 
 ## Installation
@@ -33,20 +33,10 @@ To install via yarn:
 Also, you are able to install it globally:  
 ```npm install reactcci -g```
 
-## Running
-If the package has been installed globally, run it simply by `reactcci` or `rcci`
-
-If it is the local package type `npx rcci` or `yarn rcci`
-
-## Quick start
-CLI allows you to build your application without any configuration, 
-but to set up your config quickly you are able to execute next command:  
-`rcci --init`  
-This command runs configuration mode, 
-which allow you to generate config file and template folder without any manual manipulations.
-
 ## Config
-To set up your config, you need to create `rcci.config.js`  
+To quick set up your own config and templates execute next command:  
+`rcci --init`  
+This command creates file `rcci.config.js` and template folder with basic template set.  
 The default config has the next structure:
 ```javascript
 module.exports = {
@@ -132,7 +122,7 @@ Example:
 ## Commands
 `--init` - to generate config file and template folder  
 `--dest`, `-d` - to set destination path  
-`--name`, `-n` - to set component name  
+`--name`, `-n` - to set component name or names of several components divided by space  
 `--project`, `-p` - to set project
 
 ## Multi-template

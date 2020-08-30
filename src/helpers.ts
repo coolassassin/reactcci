@@ -79,3 +79,17 @@ export const processComponentNameString = (name: string | undefined): string[] |
             return acc;
         }, []);
 };
+
+export const splitStringByCapitalLetter = (value?: string): string[] | undefined => {
+    if (!value || value.length === 0) {
+        return undefined;
+    }
+    return value.split('').reduce((acc: string[], letter) => {
+        if (acc.length === 0 || (letter === letter.toUpperCase() && /\w/.test(letter))) {
+            acc.push(letter);
+            return acc;
+        }
+        acc[acc.length - 1] += letter;
+        return acc;
+    }, []);
+};

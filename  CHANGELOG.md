@@ -1,3 +1,6 @@
+## 1.4.5
+* New improved path search
+
 ## 1.4.1
 * Added join function for placeholders
 

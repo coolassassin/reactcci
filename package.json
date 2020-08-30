@@ -3,7 +3,7 @@
     "version": "1.4.4",
     "main": "index.ts",
     "repository": "git@github.com:coolassassin/reactcci.git",
-    "description": "React and React Native create component CLI",
+    "description": "React component CLI",
     "author": "coolassassin <coolstreetassassin@gmail.com>",
     "license": "MIT",
     "preferGlobal": true,
@@ -65,6 +65,7 @@
         "node 12"
     ],
     "keywords": [
+        "react",
         "cli",
         "component",
         "scaffolding",
@@ -73,7 +74,6 @@
         "build",
         "command-line",
         "typescript",
-        "react",
         "create"
     ]
 }

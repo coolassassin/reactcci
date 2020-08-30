@@ -142,15 +142,21 @@ describe('setPath', () => {
 
     it('filterChoicesByText', () => {
         const mapStringsToTitles = (str: string[]) => str.map((s) => ({ title: s }));
+        expect(filterChoicesByText(mapStringsToTitles(['>> Here <<', 'folder', 'item', 'folder2']), '', true)).toEqual(
+            mapStringsToTitles(['>> Here <<', 'folder', 'item', 'folder2'])
+        );
         expect(
             filterChoicesByText(mapStringsToTitles(['>> Here <<', 'folder', 'item', 'folder2']), 'item', true)
-        ).toEqual(mapStringsToTitles(['>> Here <<', 'item']));
+        ).toEqual(mapStringsToTitles(['item']));
         expect(
             filterChoicesByText(
                 mapStringsToTitles(['< Back', '>> Here <<', 'folder', 'item', 'folder2']),
                 'item',
                 false
             )
-        ).toEqual(mapStringsToTitles(['< Back', '>> Here <<', 'item']));
+        ).toEqual(mapStringsToTitles(['item']));
+        expect(
+            filterChoicesByText(mapStringsToTitles(['< Back', '>> Here <<', 'folder', 'item', 'folder2']), 'b', false)
+        ).toEqual(mapStringsToTitles([]));
     });
 });

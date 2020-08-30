@@ -5,16 +5,25 @@ import fs from 'fs';
 import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { isDirectory, makePathShort } from './helpers';
+import { isDirectory, makePathShort, splitStringByCapitalLetter } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 
-export const filterChoicesByText = (choices: { title: string }[], text: string, isRoot: boolean) => {
-    return choices.filter(
-        (choice, index) =>
-            index < (isRoot ? 1 : 2) || choice.title.toLocaleLowerCase().includes(text.toLocaleLowerCase())
-    );
-};
+export const filterChoicesByText = (choices: { title: string }[], query: string, isRoot: boolean) =>
+    choices.filter((choice, index) => {
+        if (query === '') {
+            return true;
+        }
+        if (index === 0 || (!isRoot && index === 1)) {
+            return false;
+        }
+        return (
+            choice.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()) ||
+            splitStringByCapitalLetter(query)?.every((part) =>
+                splitStringByCapitalLetter(choice.title)?.some((substr) => substr.startsWith(part))
+            )
+        );
+    });
 
 export const setPath = async () => {
     const {
@@ -86,6 +95,7 @@ export const setPath = async () => {
             }))
         ];
 
+        let searching = false;
         const { folder } = await Prompt(
             {
                 type: 'autocomplete',
@@ -94,6 +104,15 @@ export const setPath = async () => {
                 hint: 'Select using arrows and press Enter',
                 choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,
+                onState() {
+                    if (this.input === '' && searching) {
+                        this.select = isRoot ? 0 : 1;
+                        searching = false;
+                    } else if (this.input !== '' && !searching) {
+                        this.select = 0;
+                        searching = true;
+                    }
+                },
                 suggest: (text, choices) => {
                     return Promise.resolve(filterChoicesByText(choices, text, isRoot));
                 }

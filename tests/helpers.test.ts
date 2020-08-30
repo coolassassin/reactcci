@@ -4,7 +4,8 @@ import {
     makePathShort,
     processCommandLineArguments,
     processComponentNameString,
-    processPath
+    processPath,
+    splitStringByCapitalLetter
 } from '../src/helpers';
 
 jest.mock('fs', () => {
@@ -89,5 +90,17 @@ describe('helpers', () => {
         ['  a  b c  ', ['a', 'b', 'c']]
     ])('processComponentNameString: "%s" processed to %s', (value, expected) => {
         expect(processComponentNameString(value)).toEqual(expected);
+    });
+
+    it.each([
+        [undefined, undefined],
+        ['', undefined],
+        ['a', ['a']],
+        [' a ', [' a ']],
+        ['B  b', ['B  b']],
+        ['TestValue', ['Test', 'Value']],
+        ['OneMoreTESTValue', ['One', 'More', 'T', 'E', 'S', 'T', 'Value']]
+    ])('processComponentNameString: "%s" processed to %s', (value, expected) => {
+        expect(splitStringByCapitalLetter(value)).toEqual(expected);
     });
 });
