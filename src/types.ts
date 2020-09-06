@@ -44,6 +44,7 @@ export type Setting = {
     componentFileList: { [key in string]: FilesList };
     commandLineFlags: {
         init: boolean;
+        update: boolean;
         dest: string;
         name: string;
         project: string;
