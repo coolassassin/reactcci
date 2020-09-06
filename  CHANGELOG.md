@@ -1,3 +1,6 @@
+## 1.5.0
+* Added update component feature
+
 ## 1.4.5
 * New improved path search
 

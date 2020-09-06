@@ -23,6 +23,10 @@ $ npm i -D reactcci
 $ npx rcci --name Header Body Footer --dest src/App
 ```
 
+## Update component mode
+Instead of creating component, you are able to update existent component using the `--update` or `-u` flag.
+Using these flags you can create new files for component (styles, stories, tests) or replace some existent.
+
 ## Installation
 To install via npm:  
 ```npm install --save-dev reactcci```  
