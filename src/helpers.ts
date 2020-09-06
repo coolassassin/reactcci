@@ -93,3 +93,7 @@ export const splitStringByCapitalLetter = (value?: string): string[] | undefined
         return acc;
     }, []);
 };
+
+export const generateFileName = (fileNameTemplate: string, objectName: string) => {
+    return fileNameTemplate.replace('[name]', objectName);
+};

@@ -3,18 +3,27 @@ import kleur from 'kleur';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { getTemplates } from './getTemplates';
+import { getTemplateNamesToCreate } from './getTemplateNamesToCreate';
 import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
 import { FilesList, TemplateDescription, Setting } from './types';
-import { capitalizeName, writeToConsole } from './helpers';
+import { capitalizeName, generateFileName, writeToConsole } from './helpers';
+import { getTemplateNamesToUpdate } from './getTemplateNamesToUpdate';
 
 export const buildComponent = async () => {
-    const { config, project, componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
+    const {
+        config,
+        project,
+        componentNames,
+        projectRootPath,
+        resultPath,
+        templateName,
+        commandLineFlags
+    } = componentSettingsMap;
 
-    const templateNames = await getTemplates();
+    const templateNames = commandLineFlags.update ? await getTemplateNamesToUpdate() : await getTemplateNamesToCreate();
 
     const fileList: FilesList = {};
 
@@ -34,7 +43,7 @@ export const buildComponent = async () => {
         componentFileList[componentName] = Object.fromEntries(
             Object.entries(fileList).map(([tmpName, fileObject]) => [
                 tmpName,
-                { ...fileObject, name: fileObject.name.replace('[name]', componentName) }
+                { ...fileObject, name: generateFileName(fileObject.name, componentName) }
             ])
         );
     }

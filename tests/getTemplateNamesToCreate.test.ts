@@ -1,6 +1,6 @@
 import prompts from 'prompts';
 
-import { getTemplates } from '../src/getTemplates';
+import { getTemplateNamesToCreate } from '../src/getTemplateNamesToCreate';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 
 jest.mock('../src/componentSettingsMap', () => {
@@ -25,7 +25,7 @@ describe('getFinalAgreement', () => {
                 file: 'index.ts'
             }
         };
-        const res = await getTemplates();
+        const res = await getTemplateNamesToCreate();
         expect(res).toEqual(['index']);
     });
 
@@ -42,7 +42,7 @@ describe('getFinalAgreement', () => {
             }
         };
         prompts.inject([[]]);
-        const res = await getTemplates();
+        const res = await getTemplateNamesToCreate();
         expect(res).toEqual(['file1']);
     });
 
@@ -59,7 +59,7 @@ describe('getFinalAgreement', () => {
             }
         };
         prompts.inject([['file2']]);
-        const res = await getTemplates();
+        const res = await getTemplateNamesToCreate();
         expect(res).toEqual(['file1', 'file2']);
     });
 });

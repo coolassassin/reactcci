@@ -9,6 +9,10 @@ import { Setting } from './types';
 export const setComponentNames = async () => {
     const { commandLineFlags, templateName } = componentSettingsMap;
 
+    if (commandLineFlags.update) {
+        return;
+    }
+
     let res: Setting['componentNames'] = [commandLineFlags.name];
 
     do {

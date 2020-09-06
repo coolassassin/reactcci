@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { isDirectory, makePathShort, splitStringByCapitalLetter } from './helpers';
+import { isDirectory, makePathShort, processPath, splitStringByCapitalLetter } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 
@@ -31,7 +31,7 @@ export const setPath = async () => {
         project,
         templateName,
         config: { folderPath },
-        commandLineFlags: { dest }
+        commandLineFlags: { dest, update }
     } = componentSettingsMap;
 
     let projectRootPath = dest;
@@ -73,34 +73,41 @@ export const setPath = async () => {
             continue;
         }
         const isRoot = ['.', './', '.\\'].includes(relativePath);
-        const choices = [
-            ...(!isRoot
-                ? [
-                      {
-                          title: '< Back',
-                          value: -1,
-                          description: makePathShort(path.join(project, projectRootPath, relativePath, '../'))
-                      }
-                  ]
-                : []),
-            {
-                title: '>> Here <<',
+
+        type Choice = {
+            title: string;
+            value: string | number;
+            description: string;
+        };
+
+        const choices: Choice[] = folders.map((f) => ({
+            title: f,
+            value: f,
+            description: makePathShort(path.join(project, projectRootPath, relativePath, f))
+        }));
+
+        if (!(update && isRoot)) {
+            choices.unshift({
+                title: update ? '>> This <<' : '>> Here <<',
                 value: 1,
                 description: makePathShort(path.join(project, projectRootPath, relativePath))
-            },
-            ...folders.map((f) => ({
-                title: f,
-                value: f,
-                description: makePathShort(path.join(project, projectRootPath, relativePath, f))
-            }))
-        ];
+            });
+        }
+
+        if (!isRoot) {
+            choices.unshift({
+                title: '< Back',
+                value: -1,
+                description: makePathShort(path.join(project, projectRootPath, relativePath, '../'))
+            });
+        }
 
         let searching = false;
         const { folder } = await Prompt(
             {
                 type: 'autocomplete',
                 name: 'folder',
-                message: `Select destination folder for ${templateName}`,
+                message: update ? `Select ${templateName} to update` : `Select destination folder for ${templateName}`,
                 hint: 'Select using arrows and press Enter',
                 choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                 initial: isRoot ? 0 : 1,
@@ -129,6 +136,11 @@ export const setPath = async () => {
         }
     }
 
-    componentSettingsMap.projectRootPath = projectRootPath;
-    componentSettingsMap.resultPath = resultPath;
+    componentSettingsMap.projectRootPath = processPath(projectRootPath);
+    componentSettingsMap.resultPath = processPath(resultPath);
+    if (update) {
+        const pathParts = componentSettingsMap.resultPath.split('/');
+        componentSettingsMap.resultPath = pathParts.slice(0, pathParts.length - 1).join('/');
+        componentSettingsMap.componentNames = [pathParts[pathParts.length - 1]];
+    }
 };
