@@ -18,15 +18,28 @@ export const processAfterGeneration = async () => {
     } = componentSettingsMap;
     if (afterCreation) {
         for (const [type, command] of Object.entries(afterCreation)) {
-            writeToConsole(`Executing ${kleur.yellow(type)} script:`);
+            let isFirstExecution = true;
             for (const componentName of componentNames) {
+                const fileList = Object.values(componentFileList[componentName]).filter((file) => file.selected);
+                const finalFolder = path.join(root, project, projectRootPath, resultPath, componentName);
+
+                if (
+                    command.extensions &&
+                    !command.extensions.some((ext) => fileList.some((file) => file.name.endsWith(ext)))
+                ) {
+                    break;
+                }
+
+                if (isFirstExecution) {
+                    writeToConsole(`Executing ${kleur.yellow(type)} script:`);
+                    isFirstExecution = false;
+                }
+
                 if (componentNames.length > 1) {
                     writeToConsole(`  ${componentName}`);
                 }
-                const fileList = componentFileList[componentName];
-                const finalFolder = path.join(root, project, projectRootPath, resultPath, componentName);
 
-                for (const [, file] of Object.entries(fileList)) {
+                for (const file of fileList) {
                     try {
                         if (!command.extensions || command.extensions.some((ext) => file.name.endsWith(ext))) {
                             const filePath = path.join(finalFolder, file.name);

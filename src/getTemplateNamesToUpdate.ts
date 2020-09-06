@@ -1,29 +1,25 @@
 import Prompt from 'prompts';
 import kleur from 'kleur';
 
-import fs from 'fs';
-import path from 'path';
-
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
 import { TemplateDescriptionObject } from './types';
-import { generateFileName } from './helpers';
+import { generateFileName, getIsFileAlreadyExists } from './helpers';
 
 export const getTemplateNamesToUpdate = async () => {
-    const { root, project, config, componentNames, projectRootPath, resultPath } = componentSettingsMap;
+    const { config, componentNames } = componentSettingsMap;
 
     const choices = Object.entries(config.templates as TemplateDescriptionObject).map(([tmpFileName, options]) => {
         const { default: isDefault = true, optional: isOptional = false, name } = options;
-        const folder = path.join(root, project, projectRootPath, resultPath, componentNames[0]);
         const fileName = generateFileName(name, componentNames[0]);
-        const isAlreadyExists = fs.existsSync(path.resolve(folder, fileName));
+        const isAlreadyExists = getIsFileAlreadyExists(name, componentNames[0]);
         return {
             title: `${tmpFileName}${kleur.reset(
                 ` (${isAlreadyExists ? 'Replace' : 'Create'}: ${kleur.yellow(fileName)})`
             )}`,
             value: tmpFileName,
-            selected: isOptional && isDefault && !isAlreadyExists,
+            selected: (isOptional && isDefault && !isAlreadyExists) || (!isOptional && !isAlreadyExists),
             exists: isAlreadyExists
         };
     });

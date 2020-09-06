@@ -97,3 +97,10 @@ export const splitStringByCapitalLetter = (value?: string): string[] | undefined
 export const generateFileName = (fileNameTemplate: string, objectName: string) => {
     return fileNameTemplate.replace('[name]', objectName);
 };
+
+export const getIsFileAlreadyExists = (fileNameTemplate: string, objectName: string) => {
+    const { root, project, projectRootPath, resultPath } = componentSettingsMap;
+    const folder = path.join(root, project, projectRootPath, resultPath, objectName);
+    const fileName = generateFileName(fileNameTemplate, objectName);
+    return fs.existsSync(path.resolve(folder, fileName));
+};

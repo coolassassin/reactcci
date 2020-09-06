@@ -8,8 +8,8 @@ import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { FilesList, TemplateDescription, Setting } from './types';
-import { capitalizeName, generateFileName, writeToConsole } from './helpers';
+import { FilesList, Setting, TemplateDescriptionObject } from './types';
+import { capitalizeName, generateFileName, getIsFileAlreadyExists, writeToConsole } from './helpers';
 import { getTemplateNamesToUpdate } from './getTemplateNamesToUpdate';
 
 export const buildComponent = async () => {
@@ -27,13 +27,18 @@ export const buildComponent = async () => {
 
     const fileList: FilesList = {};
 
-    for (const templateName of templateNames) {
-        const { name, file } = config.templates[templateName] as TemplateDescription;
-        if (Array.isArray(file)) {
+    for (const [templateName, { name, file }] of Object.entries(config.templates as TemplateDescriptionObject)) {
+        const isTemplateSelected = templateNames.includes(templateName);
+        if (Array.isArray(file) && isTemplateSelected) {
             const selectedFile = await getTemplateFile(templateName, file);
-            fileList[templateName] = { name, file: selectedFile.name, type: selectedFile.description };
+            fileList[templateName] = {
+                name,
+                file: selectedFile.name,
+                type: selectedFile.description,
+                selected: isTemplateSelected
+            };
         } else {
-            fileList[templateName] = { name, file: file as string };
+            fileList[templateName] = { name, file: file as string, selected: isTemplateSelected };
         }
     }
 
@@ -41,10 +46,17 @@ export const buildComponent = async () => {
 
     for (const componentName of componentNames) {
         componentFileList[componentName] = Object.fromEntries(
-            Object.entries(fileList).map(([tmpName, fileObject]) => [
-                tmpName,
-                { ...fileObject, name: generateFileName(fileObject.name, componentName) }
-            ])
+            Object.entries(fileList)
+                .filter(([, fileObject]) => {
+                    return fileObject.selected || getIsFileAlreadyExists(fileObject.name, componentName);
+                })
+                .map(([tmpName, fileObject]) => [
+                    tmpName,
+                    {
+                        ...fileObject,
+                        name: generateFileName(fileObject.name, componentName)
+                    }
+                ])
         );
     }
 
@@ -52,9 +64,14 @@ export const buildComponent = async () => {
 
     if (!config.skipFinalStep) {
         for (const componentName of componentNames) {
-            writeToConsole(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
+            if (commandLineFlags.update) {
+                writeToConsole(`\nUpdating ${templateName} ${kleur.yellow(componentName)}`);
+            } else {
+                writeToConsole(`\nCreating ${templateName} ${kleur.yellow(componentName)}`);
+            }
             writeToConsole(
                 `Files:\n${Object.entries(componentFileList[componentName])
+                    .filter(([, options]) => options.selected)
                     .map(
                         ([tmp, options]) =>
                             `- ${tmp}${options.type ? ` (${kleur.yellow(options.type)})` : ''}${kleur.gray(
@@ -70,7 +87,9 @@ export const buildComponent = async () => {
     if (config.skipFinalStep || (await getFinalAgreement())) {
         await generateFiles();
         await processAfterGeneration();
-        writeToConsole(kleur.green(`\n${capitalizeName(templateName)} is created!!! \\(•◡ •)/ `));
+        const verb = componentNames.length > 1 ? 's are ' : ` is `;
+        const action = commandLineFlags.update ? 'updated' : 'created';
+        writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));
     } else {
         writeToConsole("No? Let's build another one! (◉ ◡ ◉ )");
     }

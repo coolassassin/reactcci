@@ -20,7 +20,16 @@ type MultiTemplate = {
     files: TemplateDescriptionObject;
 }[];
 
-export type FilesList = { [key in string]: { name: string; file: string; type?: string } };
+export type FileDescription = {
+    name: string;
+    file: string;
+    selected: boolean;
+    type?: string;
+};
+
+export type FilesList = {
+    [key in string]: FileDescription;
+};
 
 export type Setting = {
     root: string;

@@ -40,9 +40,12 @@ export const generateFiles = async () => {
             join: (...parts: string[]) => processPath(path.join(...parts))
         };
 
-        for (const [, options] of Object.entries(fileList)) {
+        for (const fileOptions of Object.values(fileList)) {
+            if (!fileOptions.selected) {
+                continue;
+            }
             const pathParts = path
-                .join(options.name)
+                .join(fileOptions.name)
                 .split(path.sep)
                 .filter((part) => part);
             const fileName = pathParts[pathParts.length - 1];
@@ -57,7 +60,7 @@ export const generateFiles = async () => {
                 dataForTemplate.getRelativePath = (to: string) =>
                     getRelativePath(path.resolve(objectFolder, subFolders.join('/')), to);
             }
-            const template = options.file ? (await getTemplate(options.file, dataForTemplate)) ?? '' : '';
+            const template = fileOptions.file ? (await getTemplate(fileOptions.file, dataForTemplate)) ?? '' : '';
             await fs.promises.writeFile(path.join(folder, ...subFolders, fileName), template);
         }
     }
