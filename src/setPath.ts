@@ -62,6 +62,7 @@ export const setPath = async () => {
             console.error(kleur.red(`Error: There is no folder for ${templateName}`), kleur.yellow(currentFolder));
             console.error(e);
             process.exit();
+            return;
         }
 
         const folders = (

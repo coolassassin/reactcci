@@ -1,4 +1,5 @@
 import prompts from 'prompts';
+import mockFs from 'mock-fs';
 
 import path from 'path';
 
@@ -6,6 +7,7 @@ import { filterChoicesByText, setPath } from '../src/setPath';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 import { getProjectRootPath } from '../src/getProjectRootPath';
 import * as helpers from '../src/helpers';
+import { processPath } from '../src/helpers';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
@@ -13,7 +15,7 @@ jest.mock('../src/componentSettingsMap', () => {
             root: process.cwd(),
             project: '',
             config: {
-                folderPath: 'tests'
+                folderPath: 'src/'
             },
             commandLineFlags: {
                 dest: ''
@@ -22,33 +24,13 @@ jest.mock('../src/componentSettingsMap', () => {
     };
 });
 
-jest.mock('fs', () => {
-    return {
-        existsSync: (path: string) => !path.endsWith('nonExistentFolder'),
-        promises: {
-            stat: (path: string) => {
-                if (path.endsWith('nonExistentFolder')) {
-                    return Promise.reject();
-                }
-                return Promise.resolve({});
-            },
-            readdir: (path: string) => {
-                if (path.endsWith('emptyFolder')) {
-                    return Promise.resolve([]);
-                }
-                return Promise.resolve(['folder1', 'folder2']);
-            }
-        }
-    };
-});
+const emptyFolderPath = 'some/path/to/emptyFolder';
 
 jest.mock('../src/getProjectRootPath', () => {
     return {
-        getProjectRootPath: jest.fn(() => 'tests')
+        getProjectRootPath: jest.fn(() => 'src')
     };
 });
-
-const anyFolderName = 'TestComponent';
 
 const getPath = () => {
     const { projectRootPath, resultPath } = componentSettingsMap;
@@ -63,6 +45,19 @@ describe('setPath', () => {
     const consoleErrorMock = jest.fn();
     const realProcess = process;
     const realConsole = console;
+    const fsMockFolders = {
+        node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
+        src: {
+            folder1: {
+                Component1: {}
+            },
+            folder2: {
+                Component2: {}
+            },
+            manualPathFolder: {}
+        },
+        [emptyFolderPath]: {}
+    };
 
     (helpers.isDirectory as any) = jest.fn(() => true);
 
@@ -71,31 +66,38 @@ describe('setPath', () => {
         global.console = { ...realConsole, error: consoleErrorMock } as any;
         global.process = { ...realProcess, exit: exitMock } as any;
         componentSettingsMap.commandLineFlags.dest = '';
+        mockFs(fsMockFolders);
+    });
+
+    afterEach(() => {
+        mockFs.restore();
     });
 
     it('default path', async () => {
         prompts.inject([1]);
         await setPath();
 
-        expect(getPath()).toBe(componentSettingsMap.config.folderPath);
+        expect(getPath()).toBe(processPath(componentSettingsMap.config.folderPath as string));
     });
 
     it('first folder path', async () => {
+        const anyFolderName = Object.keys(fsMockFolders.src)[0];
         prompts.inject([anyFolderName, 1]);
         await setPath();
 
-        expect(getPath()).toBe(`${componentSettingsMap.config.folderPath}/${anyFolderName}`);
+        expect(getPath()).toBe(processPath(path.join(componentSettingsMap.config.folderPath as string, anyFolderName)));
     });
 
     it('first folder and back path', async () => {
+        const anyFolderName = Object.keys(fsMockFolders.src)[0];
         prompts.inject([anyFolderName, -1, 1]);
         await setPath();
 
-        expect(getPath()).toBe(componentSettingsMap.config.folderPath);
+        expect(getPath()).toBe(processPath(componentSettingsMap.config.folderPath as string));
     });
 
     it('manual set', async () => {
-        const MANUAL_PATH = 'RA/Static/Scripts';
+        const MANUAL_PATH = 'src/manualPathFolder';
         componentSettingsMap.commandLineFlags.dest = MANUAL_PATH;
 
         prompts.inject([1]);
@@ -105,32 +107,30 @@ describe('setPath', () => {
     });
 
     it('empty folder', async () => {
-        const pathToEmptyFolder = 'some/path/to/emptyFolder';
+        const pathToEmptyFolder = emptyFolderPath;
         componentSettingsMap.commandLineFlags.dest = pathToEmptyFolder;
         await setPath();
         expect(getPath()).toBe(pathToEmptyFolder);
     });
 
     it('folder is not exists', async () => {
-        const nonExistentFolder = '/src/nonExistentFolder';
-        componentSettingsMap.commandLineFlags.dest = nonExistentFolder;
-        prompts.inject([1]);
+        componentSettingsMap.commandLineFlags.dest = '/src/nonExistentFolder';
         await setPath();
         expect(exitMock).toBeCalledTimes(1);
     });
 
     it('multi-path choice', async () => {
-        componentSettingsMap.config.folderPath = ['test1', 'test2'];
+        componentSettingsMap.config.folderPath = ['src/folder1', 'src/folder2'];
         prompts.inject([1]);
         await setPath();
         expect(getProjectRootPath).toBeCalledTimes(1);
     });
 
     it('multi-path only one', async () => {
-        componentSettingsMap.config.folderPath = ['test1', 'nonExistentFolder'];
-        prompts.inject([1]);
+        componentSettingsMap.config.folderPath = ['src', 'nonExistentFolder'];
         await setPath();
         expect(getProjectRootPath).toBeCalledTimes(0);
+        expect(componentSettingsMap.projectRootPath).toBe('src');
     });
 
     it('multi-path no one', async () => {
