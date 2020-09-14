@@ -22,7 +22,7 @@ type MultiTemplate = {
 
 export type FileDescription = {
     name: string;
-    file: string;
+    file?: string;
     selected: boolean;
     type?: string;
 };
