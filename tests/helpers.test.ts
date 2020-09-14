@@ -1,5 +1,11 @@
+import mockFs from 'mock-fs';
+
+import path from 'path';
+
 import {
     capitalizeName,
+    getIsFileAlreadyExists,
+    getRelativePath,
     isDirectory,
     makePathShort,
     processCommandLineArguments,
@@ -8,21 +14,43 @@ import {
     splitStringByCapitalLetter
 } from '../src/helpers';
 
-jest.mock('fs', () => {
+jest.mock('../src/componentSettingsMap', () => {
     return {
-        lstatSync: () => ({
-            isDirectory: () => true
-        })
+        componentSettingsMap: {
+            root: process.cwd(),
+            project: '',
+            projectRootPath: 'src/',
+            resultPath: '.'
+        }
     };
 });
 
 describe('helpers', () => {
+    const fsMockFolders = {
+        node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
+        src: {
+            TestComponent: {
+                'index.ts': '',
+                'TestComponent.tsx': ''
+            }
+        },
+        emptyFolder: {}
+    };
+
+    beforeEach(() => {
+        mockFs(fsMockFolders);
+    });
+
+    afterEach(() => {
+        mockFs.restore();
+    });
+
     it('capitalizeName', () => {
         expect(capitalizeName('test')).toBe('Test');
     });
 
     it('isDirectory', () => {
-        expect(isDirectory('test')).toBe(true);
+        expect(isDirectory('emptyFolder')).toBe(true);
     });
 
     it.each([
@@ -102,5 +130,13 @@ describe('helpers', () => {
         ['OneMoreTESTValue', ['One', 'More', 'T', 'E', 'S', 'T', 'Value']]
     ])('processComponentNameString: "%s" processed to %s', (value, expected) => {
         expect(splitStringByCapitalLetter(value)).toEqual(expected);
+    });
+
+    it.each([
+        ['index.ts', true],
+        ['[name].tsx', true],
+        ['[name].module.css', false]
+    ])('getRelativePath: relative path from "%s" to "%s" is "%s"', (fileNameTemplate, expected) => {
+        expect(getIsFileAlreadyExists(fileNameTemplate, 'TestComponent')).toEqual(expected);
     });
 });
