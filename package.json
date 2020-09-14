@@ -1,12 +1,16 @@
 {
     "name": "reactcci",
     "version": "1.5.0",
-    "main": "index.ts",
-    "repository": "git@github.com:coolassassin/reactcci.git",
     "description": "React create component CLI",
     "author": "coolassassin <coolstreetassassin@gmail.com>",
     "license": "MIT",
-    "preferGlobal": true,
+    "main": "index.ts",
+    "repository": "git@github.com:coolassassin/reactcci.git",
+    "homepage": "https://github.com/coolassassin/reactcci",
+    "bugs": {
+        "url": "https://github.com/coolassassin/reactcci/issues",
+        "email": "coolstreetassassin@gmail.com"
+    },
     "bin": {
         "reactcci": "./build/cli.js",
         "rcci": "./build/cli.js"
@@ -66,14 +70,18 @@
     ],
     "keywords": [
         "react",
-        "cli",
         "component",
-        "scaffolding",
-        "dev",
+        "create",
+        "cli",
         "generate",
+        "configurable",
+        "gen",
+        "scaffolding",
+        "make",
+        "tool",
+        "dev",
         "build",
-        "command-line",
-        "typescript",
-        "create"
+        "create react component",
+        "rcci"
     ]
 }
