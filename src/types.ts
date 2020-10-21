@@ -56,6 +56,7 @@ export type Setting = {
         update: boolean;
         dest: string;
         name: string;
+        template: string;
         project: string;
     };
 };

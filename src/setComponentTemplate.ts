@@ -1,15 +1,24 @@
 import Prompt from 'prompts';
+import kleur from 'kleur';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
 
 export const setComponentTemplate = async () => {
     const {
-        config: { templates }
+        config: { templates },
+        commandLineFlags: { template }
     } = componentSettingsMap;
 
     if (Array.isArray(templates)) {
-        if (templates.length === 1) {
+        if (template) {
+            if (!templates.map((tmp) => tmp.name).includes(template)) {
+                console.error(kleur.red(`Error: There is no ${template} template`));
+                process.exit();
+                return;
+            }
+            componentSettingsMap.templateName = template;
+        } else if (templates.length === 1) {
             componentSettingsMap.templateName = templates[0].name;
         } else {
             const { templateName } = await Prompt(
@@ -25,6 +34,7 @@ export const setComponentTemplate = async () => {
             );
             componentSettingsMap.templateName = templateName;
         }
+
         const selectedTemplate = templates.find((tmp) => tmp.name === componentSettingsMap.templateName);
         if (selectedTemplate) {
             componentSettingsMap.config.templates = selectedTemplate.files;

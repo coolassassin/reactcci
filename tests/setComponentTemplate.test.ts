@@ -8,13 +8,23 @@ jest.mock('../src/componentSettingsMap', () => {
         componentSettingsMap: {
             config: {
                 templates: {}
+            },
+            commandLineFlags: {
+                template: ''
             }
         }
     };
 });
 
 describe('getFinalAgreement', () => {
+    const exitMock = jest.fn();
+    const realProcess = process;
+    const realConsole = console;
+
     beforeEach(() => {
+        jest.clearAllMocks();
+        global.console = { ...realConsole, error: jest.fn() } as any;
+        global.process = { ...realProcess, exit: exitMock } as any;
         componentSettingsMap.config.templates = {};
     });
 
@@ -61,5 +71,29 @@ describe('getFinalAgreement', () => {
         await setComponentTemplate();
         expect(componentSettingsMap.templateName).toBe('service');
         expect(componentSettingsMap.config.folderPath).toBe('src/components/');
+    });
+
+    it('config with array and wrong commandline flag', async () => {
+        componentSettingsMap.commandLineFlags.template = 'cmp';
+        componentSettingsMap.config.templates = [
+            {
+                name: 'component',
+                files: {}
+            }
+        ];
+        await setComponentTemplate();
+        expect(exitMock).toBeCalled();
+    });
+
+    it('config with array and right commandline flag', async () => {
+        componentSettingsMap.commandLineFlags.template = 'component';
+        componentSettingsMap.config.templates = [
+            {
+                name: 'component',
+                files: {}
+            }
+        ];
+        await setComponentTemplate();
+        expect(componentSettingsMap.templateName).toBe('component');
     });
 });

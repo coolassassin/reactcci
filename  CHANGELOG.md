@@ -1,3 +1,6 @@
+## 1.5.2
+* Added template command line flag
+
 ## 1.5.0
 * Added update component feature
 
