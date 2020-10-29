@@ -3,7 +3,7 @@ import path from 'path';
 
 import { getTemplate } from './getTemplate';
 import { componentSettingsMap } from './componentSettingsMap';
-import { getRelativePath, processPath } from './helpers';
+import { getRelativePath, processPath, processObjectName } from './helpers';
 import { templatePlaceholdersData } from './types';
 
 export const generateFiles = async () => {
@@ -18,7 +18,7 @@ export const generateFiles = async () => {
     } = componentSettingsMap;
     for (const componentName of componentNames) {
         const fileList = componentFileList[componentName];
-        const folder = path.join(root, project, projectRootPath, resultPath, componentName);
+        const folder = path.join(root, project, projectRootPath, resultPath, processObjectName(componentName, true));
 
         if (!fs.existsSync(folder)) {
             await fs.promises.mkdir(folder);

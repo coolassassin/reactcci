@@ -13,6 +13,7 @@ jest.mock('../src/componentSettingsMap', () => {
         componentSettingsMap: {
             root: process.cwd(),
             project: '',
+            config: {} as any,
             projectRootPath: 'src/',
             resultPath: '.',
             componentNames: ['Comp1', 'Comp2'],

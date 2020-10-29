@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
+import { ProcessFileAndFolderName } from './types';
 
 export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
 
@@ -94,8 +95,23 @@ export const splitStringByCapitalLetter = (value?: string): string[] | undefined
     }, []);
 };
 
+export const getObjectNameParts = (name: string): string[] => {
+    return name
+        .replace(/([A-Z])/g, '-$1')
+        .replace(/[^a-zA-Z0-9]/g, '-')
+        .split('-')
+        .filter((l) => l);
+};
+
+export const processObjectName = (name: string, isFolder = false): string => {
+    const {
+        config: { processFileAndFolderName }
+    } = componentSettingsMap;
+    return processFileAndFolderName ? processFileAndFolderName(name, getObjectNameParts(name), isFolder) : name;
+};
+
 export const generateFileName = (fileNameTemplate: string, objectName: string) => {
-    return fileNameTemplate.replace('[name]', objectName);
+    return fileNameTemplate.replace('[name]', processObjectName(objectName));
 };
 
 export const getIsFileAlreadyExists = (fileNameTemplate: string, objectName: string) => {

@@ -1,8 +1,14 @@
 # React create component interactive CLI
-The CLI helps you to build your React application with your own file structure and to make your components interactively.  
-Setup your config once to build your app as quick as it possible.  
+CLI to create or edit **React** or **React Native** components with your own structure  
 
-Works on MacOS, Windows, and Linux.
+- **Multiplatform**: Works on MacOS, Windows, and Linux.
+- **Plug and play**: Zero config for CRA
+- **Easy to config**: interactive configuration and simple templating
+- **Works with anything**: Typescript, Storybook, Redux, Jest, ...
+- **Lightweight**: *< 30kb + 3 small libraries*
+- **Fast search**: very fast selecting place for new component by dynamic search
+- **A lot by one command**: very fast searching place for new component
+- **Created for React**: better than **plop**, **hygen** or any scaffolding library, because it's for React
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
@@ -50,6 +56,16 @@ Allows you to switch off last checking step
 Default: `false`  
 - `templates`  
 Object with structure of your component
+- `processFileAndFolderName(name, parts, isFolder)`  
+Function which allows you to remap your component folder name or filename into something else  
+Example:   
+    ```javascript
+    {
+        ...config,
+        processFileAndFolderName: (name, parts, isFolder) => 
+            isFolder ? name : parts.map((part) => part.toLowerCase()).join('-')
+    }
+    ```
 - `placeholders`  
 List of placeholders which you can use to build your own component template  
 Default:  

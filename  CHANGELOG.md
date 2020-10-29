@@ -1,3 +1,6 @@
+## 1.5.3
+* Added files and folder name processing feature
+
 ## 1.5.2
 * Added template command line flag
 

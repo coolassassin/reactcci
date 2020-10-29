@@ -31,6 +31,8 @@ export type FilesList = {
     [key in string]: FileDescription;
 };
 
+export type ProcessFileAndFolderName = (name?: string, parts?: string[], isFolder?: boolean) => string;
+
 export type Setting = {
     root: string;
     moduleRoot: string;
@@ -41,6 +43,7 @@ export type Setting = {
         templatesFolder: string;
         templates: TemplateDescriptionObject | MultiTemplate;
         placeholders: { [key in string]: (data: any) => string };
+        processFileAndFolderName?: ProcessFileAndFolderName;
         afterCreation?: {
             [key in string]: AfterCreationCommand;
         };

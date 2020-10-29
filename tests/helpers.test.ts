@@ -5,7 +5,7 @@ import path from 'path';
 import {
     capitalizeName,
     getIsFileAlreadyExists,
-    getRelativePath,
+    getObjectNameParts,
     isDirectory,
     makePathShort,
     processCommandLineArguments,
@@ -19,6 +19,7 @@ jest.mock('../src/componentSettingsMap', () => {
         componentSettingsMap: {
             root: process.cwd(),
             project: '',
+            config: {},
             projectRootPath: 'src/',
             resultPath: '.'
         }
@@ -136,7 +137,16 @@ describe('helpers', () => {
         ['index.ts', true],
         ['[name].tsx', true],
         ['[name].module.css', false]
-    ])('getRelativePath: relative path from "%s" to "%s" is "%s"', (fileNameTemplate, expected) => {
+    ])('getIsFileAlreadyExists: is file exists "%s" ? %s', (fileNameTemplate, expected) => {
         expect(getIsFileAlreadyExists(fileNameTemplate, 'TestComponent')).toEqual(expected);
+    });
+
+    it.each([
+        ['TestComponent', ['Test', 'Component']],
+        ['test-component', ['test', 'component']],
+        ['_test__Component__', ['test', 'Component']],
+        ['test-component123', ['test', 'component123']]
+    ])('getObjectNameParts: parts from "%s" mast be "%s"', (name, expected) => {
+        expect(getObjectNameParts(name)).toEqual(expected);
     });
 });
