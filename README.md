@@ -7,7 +7,7 @@ CLI to create or edit **React** or **React Native** components with your own str
 - **Works with anything**: Typescript, Storybook, Redux, Jest, ...
 - **Lightweight**: *< 30kb + 3 small libraries*
 - **Fast search**: very fast selecting place for new component by dynamic search
-- **A lot by one command**: very fast searching place for new component
+- **A lot by one command**: ton of files by multi-creation feature
 - **Created for React**: better than **plop**, **hygen** or any scaffolding library, because it's for React
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
