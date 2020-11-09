@@ -21,11 +21,7 @@ import { setComponentTemplate } from './src/setComponentTemplate';
 
         processCommandLineFlags();
 
-        if (componentSettingsMap.commandLineFlags.init) {
-            await initialize();
-            return;
-        }
-
+        await initialize();
         await setConfig();
         await checkConfig();
         await setComponentTemplate();

@@ -1,3 +1,6 @@
+## 1.6.0
+* Removed initialization flag with initialization on first run
+
 ## 1.5.3
 * Added files and folder name processing feature
 

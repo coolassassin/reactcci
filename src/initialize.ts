@@ -13,32 +13,36 @@ export const initialize = async () => {
     const { root, moduleRoot } = componentSettingsMap;
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
     if (fs.existsSync(localConfigPath)) {
-        const { agree } = await Prompt(
-            {
-                type: 'toggle',
-                name: 'agree',
-                message: `Configuration file ${kleur
-                    .reset()
-                    .yellow(CONFIG_FILE_NAME)} is detected! Would you like to reset it?`,
-                initial: true,
-                active: 'Yes',
-                inactive: 'No'
-            },
-            getQuestionsSettings()
-        );
-
-        if (!agree) {
-            process.exit();
-            return;
-        }
+        return;
     }
 
-    writeToConsole(`${kleur.gray('By default, CLI use basic templates to create component.')}`);
+    writeToConsole(`Hello!\nWe haven't find configuration file (${kleur.yellow(CONFIG_FILE_NAME)}).`);
+    writeToConsole("It seems like a first run, doesn't it?");
+
+    const { agree } = await Prompt(
+        {
+            type: 'toggle',
+            name: 'agree',
+            message: `Would you like to start configuration? It will be quick!`,
+            initial: true,
+            active: 'Yes',
+            inactive: 'No'
+        },
+        getQuestionsSettings()
+    );
+
+    if (!agree) {
+        writeToConsole('See you next time!');
+        process.exit();
+        return;
+    }
+
+    writeToConsole(`${kleur.gray('By default, CLI use basic templates to create a component.')}`);
     const { templatesAgreement } = await Prompt(
         {
             type: 'toggle',
             name: 'templatesAgreement',
-            message: 'Would you like to create template folder to set them up?',
+            message: 'Would you like to create a template folder to set them up?',
             initial: true,
             active: 'Yes',
             inactive: 'No'
@@ -76,7 +80,7 @@ export const initialize = async () => {
         }
         const defaultTempleFolder = path.resolve(moduleRoot, 'templates');
         const templateNames = await fs.promises.readdir(defaultTempleFolder);
-        writeToConsole('Templates generated:');
+        writeToConsole('Generated templates:');
         for (const templateName of templateNames) {
             const tmp = (await fs.promises.readFile(path.join(defaultTempleFolder, templateName))).toString();
             await fs.promises.writeFile(path.join(templateFolderPath, templateName), tmp);
@@ -84,5 +88,27 @@ export const initialize = async () => {
         }
     }
 
-    process.exit();
+    writeToConsole(kleur.green(`Well done! Configuration is finished!`));
+
+    const { firstComponentAgreement } = await Prompt(
+        {
+            type: 'toggle',
+            name: 'firstComponentAgreement',
+            message: `Would you like to create your first component?`,
+            initial: true,
+            active: 'Yes',
+            inactive: 'No'
+        },
+        getQuestionsSettings()
+    );
+
+    if (!firstComponentAgreement) {
+        writeToConsole('Well, see you next time!');
+        writeToConsole(`You can set up everything you need in the ${kleur.yellow(CONFIG_FILE_NAME)} file.`);
+        writeToConsole('After configuration just run me again (◉ ◡ ◉ )');
+        process.exit();
+        return;
+    }
+
+    return;
 };

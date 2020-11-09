@@ -37,8 +37,8 @@ To install via yarn:
 ```yarn add --dev reactcci```
 
 ## Config
-To set up config and templates execute next command:  
-`npx rcci --init`  
+On first run CLI will ask you about automatic configuration. Just run a command:  
+`npx rcci`  
 This command creates file `rcci.config.js` and template folder with basic template set.  
 
 Config file contains next parameters:  
@@ -115,7 +115,6 @@ Below, you can see the list of all available data and functions to create a new 
 
 
 ## Commands
-`--init` - to generate config file and template folder  
 `--update`, `-u` - to update existent component  
 `--dest`, `-d` - to set destination path  
 `--name`, `-n` - to set a component name or names  
