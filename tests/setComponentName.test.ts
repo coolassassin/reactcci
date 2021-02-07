@@ -3,6 +3,8 @@ import prompts from 'prompts';
 import { setComponentNames } from '../src/setComponentNames';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 
+import { mockProcess } from './testUtils';
+
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
@@ -15,11 +17,9 @@ jest.mock('../src/componentSettingsMap', () => {
 });
 
 describe('setComponentName', () => {
-    const exitMock = jest.fn();
-    const realProcess = process;
+    const { exitMock } = mockProcess();
 
     beforeEach(() => {
-        global.process = { ...realProcess, exit: exitMock, stdout: { ...realProcess.stdout, write: jest.fn() } } as any;
         componentSettingsMap.commandLineFlags.name = '';
     });
 

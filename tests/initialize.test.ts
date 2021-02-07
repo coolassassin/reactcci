@@ -7,6 +7,8 @@ import path from 'path';
 import { initialize } from '../src/initialize';
 import * as consts from '../src/constants';
 
+import { mockProcess } from './testUtils';
+
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
@@ -19,9 +21,7 @@ jest.mock('../src/componentSettingsMap', () => {
 });
 
 describe('initialize', () => {
-    const exitMock = jest.fn();
     const mkdirSpy = jest.spyOn(fs.promises, 'mkdir');
-    const realProcess = process;
     const configFileName = consts.CONFIG_FILE_NAME;
     const existentConfigName = 'existent.config.js';
     const fsMockFolders = {
@@ -32,11 +32,16 @@ describe('initialize', () => {
         [existentConfigName]: ''
     };
 
+    mockProcess();
+
     beforeEach(() => {
         jest.clearAllMocks();
         (consts.CONFIG_FILE_NAME as any) = configFileName;
-        global.process = { ...realProcess, exit: exitMock, stdout: { ...realProcess.stdout, write: jest.fn() } } as any;
         mockFs(fsMockFolders);
+    });
+
+    afterAll(() => {
+        mockFs.restore();
     });
 
     it('config exists, skip everything', async () => {

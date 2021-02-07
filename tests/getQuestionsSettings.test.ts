@@ -1,13 +1,9 @@
 import { getQuestionsSettings } from '../src/getQuestionsSettings';
 
-describe('getQuestionsSettings', () => {
-    const exitMock = jest.fn();
-    const realProcess = process;
+import { mockProcess } from './testUtils';
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-        global.process = { ...realProcess, exit: exitMock } as any;
-    });
+describe('getQuestionsSettings', () => {
+    const { exitMock } = mockProcess();
 
     it('onCancel call', async () => {
         const settings = getQuestionsSettings();

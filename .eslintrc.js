@@ -58,6 +58,7 @@
         ],
         '@typescript-eslint/prefer-for-of': 'warn',
         '@typescript-eslint/prefer-function-type': 'warn',
+        '@typescript-eslint/ban-types': 'off',
         'no-trailing-spaces': 'warn',
         'prefer-const': 'warn',
         'comma-dangle': ['warn', 'never'],

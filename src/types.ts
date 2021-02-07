@@ -76,3 +76,9 @@ export type templatePlaceholdersData = {
     getRelativePath: (to: string) => string;
     join: (...parts: string[]) => string;
 };
+
+type DeepPartial<T> = {
+    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
+export type PartialSetting = DeepPartial<Setting>;

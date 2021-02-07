@@ -4,6 +4,8 @@ import { setProject } from '../src/setProject';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 import * as helpers from '../src/helpers';
 
+import { mockConsole, mockProcess } from './testUtils';
+
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
@@ -33,23 +35,15 @@ jest.mock('fs', () => {
 });
 
 describe('setProject', () => {
-    const exitMock = jest.fn();
-    const realProcess = process;
-    const realConsole = console;
+    const { exitMock } = mockProcess();
+    mockConsole();
 
     beforeEach(() => {
         jest.clearAllMocks();
-        global.console = { ...realConsole, error: jest.fn() } as any;
-        global.process = { ...realProcess, exit: exitMock, stdout: { ...realProcess.stdout, write: jest.fn() } } as any;
         componentSettingsMap.commandLineFlags.dest = '';
         componentSettingsMap.commandLineFlags.project = '';
         componentSettingsMap.config.folderPath = 'Folder1';
         (helpers.isDirectory as any) = jest.fn(() => true);
-    });
-
-    afterEach(() => {
-        global.process = realProcess;
-        global.console = realConsole;
     });
 
     it('default project', async () => {

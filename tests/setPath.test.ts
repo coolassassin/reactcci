@@ -8,6 +8,9 @@ import { componentSettingsMap } from '../src/componentSettingsMap';
 import { getProjectRootPath } from '../src/getProjectRootPath';
 import * as helpers from '../src/helpers';
 import { processPath } from '../src/helpers';
+import { PartialSetting } from '../src/types';
+
+import { mockConsole, mockProcess } from './testUtils';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
@@ -19,8 +22,9 @@ jest.mock('../src/componentSettingsMap', () => {
             },
             commandLineFlags: {
                 dest: ''
-            }
-        }
+            },
+            templateName: 'component'
+        } as PartialSetting
     };
 });
 
@@ -41,10 +45,6 @@ const getPath = () => {
 };
 
 describe('setPath', () => {
-    const exitMock = jest.fn();
-    const consoleErrorMock = jest.fn();
-    const realProcess = process;
-    const realConsole = console;
     const fsMockFolders = {
         node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
         src: {
@@ -61,10 +61,11 @@ describe('setPath', () => {
 
     (helpers.isDirectory as any) = jest.fn(() => true);
 
+    const { exitMock } = mockProcess();
+    mockConsole();
+
     beforeEach(() => {
         jest.clearAllMocks();
-        global.console = { ...realConsole, error: consoleErrorMock } as any;
-        global.process = { ...realProcess, exit: exitMock } as any;
         componentSettingsMap.commandLineFlags.dest = '';
         mockFs(fsMockFolders);
     });

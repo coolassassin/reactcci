@@ -12,7 +12,7 @@ CLI to create or edit **React** or **React Native** components with your own str
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
-[![Build Status](https://travis-ci.org/coolassassin/reactcci.svg?branch=master)](https://travis-ci.org/github/coolassassin/reactcci)
+[![Tests Status](https://github.com/coolassassin/reactcci/workflows/tests/badge.svg)](https://github.com/coolassassin/reactcci)
 [![Build Status](https://img.shields.io/npm/dm/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
 [![Build Status](https://img.shields.io/npm/v/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcoolassassin%2Freactcci.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcoolassassin%2Freactcci?ref=badge_shield)

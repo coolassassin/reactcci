@@ -3,6 +3,8 @@ import prompts from 'prompts';
 import { setComponentTemplate } from '../src/setComponentTemplate';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 
+import { mockConsole, mockProcess } from './testUtils';
+
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
@@ -17,14 +19,10 @@ jest.mock('../src/componentSettingsMap', () => {
 });
 
 describe('getFinalAgreement', () => {
-    const exitMock = jest.fn();
-    const realProcess = process;
-    const realConsole = console;
+    const { exitMock } = mockProcess();
+    mockConsole();
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        global.console = { ...realConsole, error: jest.fn() } as any;
-        global.process = { ...realProcess, exit: exitMock } as any;
         componentSettingsMap.config.templates = {};
     });
 
