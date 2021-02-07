@@ -8,6 +8,10 @@ import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory, writeToConsole } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 
+const typeAboutSelectedProject = (project) => {
+    writeToConsole(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
+};
+
 export const setProject = async () => {
     let project = '';
     const {
@@ -17,6 +21,11 @@ export const setProject = async () => {
         templateName
     } = componentSettingsMap;
 
+    if (componentSettingsMap.project) {
+        typeAboutSelectedProject(componentSettingsMap.project);
+        return;
+    }
+
     if (commandLineFlags.dest || !multiProject) {
         componentSettingsMap.project = '';
         return;
@@ -24,7 +33,7 @@ export const setProject = async () => {
 
     if (commandLineFlags.project) {
         project = commandLineFlags.project;
-        writeToConsole(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
+        typeAboutSelectedProject(project);
     }
 
     if (!project && multiProject) {

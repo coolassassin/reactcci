@@ -2,14 +2,18 @@ import prompts from 'prompts';
 
 import { getTemplateNamesToCreate } from '../src/getTemplateNamesToCreate';
 import { componentSettingsMap } from '../src/componentSettingsMap';
+import { PartialSetting } from '../src/types';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
             config: {
                 templates: {}
+            },
+            commandLineFlags: {
+                files: ''
             }
-        }
+        } as PartialSetting
     };
 });
 

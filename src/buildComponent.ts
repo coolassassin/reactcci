@@ -84,7 +84,7 @@ export const buildComponent = async () => {
         writeToConsole(`\nFolder: ${kleur.yellow(path.join(project, projectRootPath, resultPath))}`);
     }
 
-    if (config.skipFinalStep || (await getFinalAgreement())) {
+    if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
         await generateFiles();
         await processAfterGeneration();
         const verb = componentNames.length > 1 ? 's are ' : ` is `;

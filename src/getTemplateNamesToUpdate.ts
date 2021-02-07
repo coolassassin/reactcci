@@ -8,7 +8,23 @@ import { TemplateDescriptionObject } from './types';
 import { generateFileName, getIsFileAlreadyExists } from './helpers';
 
 export const getTemplateNamesToUpdate = async () => {
-    const { config, componentNames } = componentSettingsMap;
+    const { config, componentNames, commandLineFlags } = componentSettingsMap;
+
+    if (commandLineFlags.files) {
+        const fileTemplates = commandLineFlags.files.split(' ');
+        const undefinedFileTemplates = fileTemplates.filter(
+            (tmp) => !Object.prototype.hasOwnProperty.call(config.templates, tmp)
+        );
+
+        if (undefinedFileTemplates.length > 0) {
+            console.error('Error: Undefined file templates:');
+            console.error(undefinedFileTemplates.join('\n'));
+            process.exit();
+            return;
+        }
+
+        return fileTemplates;
+    }
 
     const choices = Object.entries(config.templates as TemplateDescriptionObject).map(([tmpFileName, options]) => {
         const { default: isDefault = true, optional: isOptional = false, name } = options;

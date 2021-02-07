@@ -44,7 +44,7 @@ export const getRelativePath = (from: string, to: string): string => {
 export const processCommandLineArguments = (args: string[]): string[] => {
     let isCollecting = false;
     return args.reduce((acc: string[], value, index, arr) => {
-        if (['-n', '--name'].includes(arr[index - 1])) {
+        if (['-n', '--name', '-f', '--files'].includes(arr[index - 1])) {
             isCollecting = true;
             acc.push(value);
             return acc;

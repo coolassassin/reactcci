@@ -56,10 +56,13 @@ export type Setting = {
     componentFileList: { [key in string]: FilesList };
     commandLineFlags: {
         update: boolean;
+        skipSearch: boolean;
+        sls: boolean;
         dest: string;
         name: string;
         template: string;
         project: string;
+        files: string;
     };
 };
 

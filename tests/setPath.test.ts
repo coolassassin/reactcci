@@ -66,6 +66,8 @@ describe('setPath', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        delete componentSettingsMap.resultPath;
+        delete componentSettingsMap.projectRootPath;
         componentSettingsMap.commandLineFlags.dest = '';
         mockFs(fsMockFolders);
     });

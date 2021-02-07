@@ -40,6 +40,7 @@ describe('setProject', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        delete componentSettingsMap.project;
         componentSettingsMap.commandLineFlags.dest = '';
         componentSettingsMap.commandLineFlags.project = '';
         componentSettingsMap.config.folderPath = 'Folder1';
