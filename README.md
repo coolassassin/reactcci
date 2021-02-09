@@ -9,7 +9,7 @@ CLI to create or edit **React** or **React Native** components with your own str
 - **A lot by one command**: ton of files by multi-creation feature
 - **Created for React**: better than **plop**, **hygen** or any scaffolding library, because it's for React
 - **Multiplatform**: Works on MacOS, Windows, and Linux.
-- ⭐ [**Webstorm integration**](https://raw.githubusercontent.com/coolassassin/reactcci/master/docs/webstormIntegration.md) ⭐
+- ⭐ [**Webstorm integration**](https://github.com/coolassassin/reactcci/blob/master/docs/webstormIntegration.md) ⭐
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
