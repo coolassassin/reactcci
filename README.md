@@ -115,11 +115,14 @@ Below, you can see the list of all available data and functions to create a new 
 | `join(...parts: string)` | Function to get joined parts of path. <br>Example:<br> `join(project, destinationFolder, componentName)` => `Project/Footer/Email` |
 
 
-## Commands
+## Arguments
 `--update`, `-u` - to update existent component  
 `--dest`, `-d` - to set destination path  
+`--skip-search`, `-s` - to skip interactive folder selection  
 `--name`, `-n` - to set a component name or names  
+`--files`, `-s` - to set files to create or update, instead interactive selection  
 `--project`, `-p` - to set project in multi-project mode  
+`--sls` - skip last agreement step
 
 ## Multi-template
 If you need to generate something else, not components only, you are able to set up array of templates.  
