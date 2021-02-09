@@ -1,3 +1,9 @@
+## 1.7.0
+* Added smart destination path parsing
+* Added `--skip-search`, `-s` flags to turn of interactive selection with `--dest` flag
+* Added `--files`, `-f` flags to set optional files to skip interactive selection step
+* Added `--sls` flag to skip last step like `skipFinalStep` config 
+
 ## 1.6.0
 * Removed initialization flag with initialization on first run
 
