@@ -1,3 +1,6 @@
+## 1.7.3
+* Fix root destination parsing issue
+
 ## 1.7.0
 * Added smart destination path parsing
 * Added `--skip-search`, `-s` flags to turn of interactive selection with `--dest` flag

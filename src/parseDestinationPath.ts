@@ -10,7 +10,7 @@ export const parseDestinationPath = async () => {
     const {
         root,
         config: { folderPath, multiProject },
-        commandLineFlags: { dest, update, skipSearch }
+        commandLineFlags: { dest }
     } = componentSettingsMap;
 
     if (!dest) {
@@ -42,7 +42,9 @@ export const parseDestinationPath = async () => {
         relativePath = pathParts.join(path.sep);
     }
 
-    const potentialFolders = (typeof folderPath === 'string' ? [folderPath] : folderPath).map((f) => path.join(f));
+    const potentialFolders = (typeof folderPath === 'string' ? [folderPath] : folderPath).map((f) =>
+        path.join(f).replace(/[\\/]$/, '')
+    );
     const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
     const currentProjectRootPath = availableFolders.find((folder) => relativePath.startsWith(folder));
 
