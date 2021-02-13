@@ -5,17 +5,14 @@ import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
 import { TemplateDescriptionObject } from './types';
-import { generateFileName, getIsFileAlreadyExists } from './helpers';
+import { generateFileName, getFileTemplates, getIsFileAlreadyExists } from './helpers';
 
 export const getTemplateNamesToUpdate = async () => {
     const { config, componentNames, commandLineFlags } = componentSettingsMap;
 
-    if (commandLineFlags.files) {
-        const fileTemplates = commandLineFlags.files.split(' ');
-        const undefinedFileTemplates = fileTemplates.filter(
-            (tmp) => !Object.prototype.hasOwnProperty.call(config.templates, tmp)
-        );
+    const { fileTemplates, undefinedFileTemplates } = getFileTemplates();
 
+    if (commandLineFlags.files) {
         if (undefinedFileTemplates.length > 0) {
             console.error('Error: Undefined file templates:');
             console.error(undefinedFileTemplates.join('\n'));

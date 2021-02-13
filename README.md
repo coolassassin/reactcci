@@ -116,13 +116,22 @@ Below, you can see the list of all available data and functions to create a new 
 
 
 ## Arguments
-`--update`, `-u` - to update existent component  
-`--dest`, `-d` - to set destination path  
-`--skip-search`, `-s` - to skip interactive folder selection  
-`--name`, `-n` - to set a component name or names  
-`--files`, `-s` - to set files to create or update, instead interactive selection  
-`--project`, `-p` - to set project in multi-project mode  
-`--sls` - skip last agreement step
+- `--update`, `-u`  
+    To activate update mode to add new files to component or to replace existing  
+- `--dest`, `-d`  
+    To set absolute or destination path to create or update component  
+- `--skip-search`, `-s`  
+    To skip interactive folder selection to use `dest` argument as is  
+- `--name`, `-n`  
+    To set component name or names divided by space to create several  
+- `--files`, `-f`  
+    To set files to create or update, instead interactive selection  
+    Example: `--files style test component[1]`  
+    Will create optional files like `style` and `test` and will select second type of component by index
+- `--project`, `-p`  
+    To set project in multi-project mode  
+- `--sls`  
+    To skip last agreement step like `skipFinalStep` in config file
 
 ## Multi-template
 If you need to generate something else, not components only, you are able to set up array of templates.  

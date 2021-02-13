@@ -1,5 +1,3 @@
-import { Setting } from '../src/types';
-
 export const mockProcess = () => {
     const exitMock = jest.fn();
     const stdoutWrite = jest.fn();

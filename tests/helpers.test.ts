@@ -2,8 +2,12 @@ import mockFs from 'mock-fs';
 
 import path from 'path';
 
+import defaultConfig from '../defaultConfig';
+import { componentSettingsMap } from '../src/componentSettingsMap';
 import {
     capitalizeName,
+    getFileIndexForTemplate,
+    getFileTemplates,
     getIsFileAlreadyExists,
     getObjectNameParts,
     isDirectory,
@@ -39,6 +43,8 @@ describe('helpers', () => {
     };
 
     beforeEach(() => {
+        (componentSettingsMap.commandLineFlags as any) = undefined;
+        (componentSettingsMap.config as any) = defaultConfig;
         mockFs(fsMockFolders);
     });
 
@@ -148,5 +154,28 @@ describe('helpers', () => {
         ['test-component123', ['test', 'component123']]
     ])('getObjectNameParts: parts from "%s" mast be "%s"', (name, expected) => {
         expect(getObjectNameParts(name)).toEqual(expected);
+    });
+
+    it.each([
+        ['style test component bug', ['style', 'test', 'bug'], false, ['bug']],
+        ['bug style component test', ['bug', 'style', 'component', 'test'], true, ['bug']],
+        ['bug[123] component test', ['bug', 'component', 'test'], true, ['bug']],
+        ['bug component[1] test', ['bug', 'component', 'test'], true, ['bug']],
+        ['no', ['no'], false, []]
+    ])('getFileTemplates: %s must be converted to %s', (str, templates, withRequired, unexpected) => {
+        (componentSettingsMap.commandLineFlags as any) = { files: str };
+        const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates(withRequired);
+        expect(fileTemplates).toEqual(templates);
+        expect(undefinedFileTemplates).toEqual(unexpected);
+        expect(requiredTemplateNames).toEqual(['index', 'component']);
+    });
+
+    it.each([
+        ['style test component[0] bug', 'component', 0],
+        ['style test component bug[123]', 'bug', 123],
+        ['style test component bug[123]', 'test', undefined],
+        ['style test component[abd] bug', 'component', undefined]
+    ])('getFileIndexForTemplate: "%s" for %s must be %d', (str, template, index) => {
+        expect(getFileIndexForTemplate(str, template)).toBe(index);
     });
 });

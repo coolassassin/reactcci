@@ -120,3 +120,41 @@ export const getIsFileAlreadyExists = (fileNameTemplate: string, objectName: str
     const fileName = generateFileName(fileNameTemplate, objectName);
     return fs.existsSync(path.resolve(folder, fileName));
 };
+
+export const getFileTemplates = (withRequired = false) => {
+    const {
+        config,
+        commandLineFlags: { files }
+    } = componentSettingsMap;
+
+    const requiredTemplateNames = Object.entries(config.templates)
+        .filter(([, options]) => !options.optional)
+        .map(([name]) => name);
+
+    let fileTemplates = files.replace(/\[\d*?]/g, '').split(' ');
+
+    if (!withRequired) {
+        fileTemplates = fileTemplates.filter((tmp) => !requiredTemplateNames.includes(tmp));
+    }
+
+    const undefinedFileTemplates = fileTemplates.filter(
+        (tmp) => !Object.prototype.hasOwnProperty.call(config.templates, tmp) && tmp !== 'no'
+    );
+
+    return {
+        fileTemplates,
+        undefinedFileTemplates,
+        requiredTemplateNames
+    };
+};
+
+export const getFileIndexForTemplate = (files: string, template: string): number | undefined => {
+    const names = files.split(' ');
+    const elementIndex = names.findIndex(
+        (name) => name.startsWith(`${template}[`) && /\[\d+?]/.test(name.replace(template, ''))
+    );
+    if (elementIndex === -1) {
+        return;
+    }
+    return parseInt((/\d+/.exec(names[elementIndex]) ?? ['0'])[0], 10);
+};

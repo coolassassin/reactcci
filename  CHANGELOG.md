@@ -1,3 +1,6 @@
+## 1.7.4
+* File type selection by command line flag
+
 ## 1.7.3
 * Fix root destination parsing issue
 
