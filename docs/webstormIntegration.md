@@ -1,5 +1,20 @@
 # Webstorm integration
-Using [reactcci](https://github.com/coolassassin/reactcci) with Webstorm or any another product by [JetBrains](https://www.jetbrains.com) you are able to create External Tool to make scaffolding with reactcci more easier.  
+Using [reactcci](https://github.com/coolassassin/reactcci) with Webstorm or any another product by [JetBrains](https://www.jetbrains.com) you are able to create [External Tools](https://www.jetbrains.com/help/webstorm/configuring-third-party-tools.html#web-browsers) to make scaffolding with reactcci more easier.
+## Quick setup
+You can set up configuration manually, but you can download settings file instead.  
+Open folder according to your operating system:  
+- **macOS**: *~/Library/Application Support/JetBrains/[product][version]/tools*  
+- **Linux**: *~/.config/JetBrains/[product][version]/tools*  
+- **Windows**: *%APPDATA%/JetBrains/[product][version]/tools*  
+
+For more information read [the article](https://www.jetbrains.com/help/webstorm/configuring-project-and-ide-settings.html#restore-defaults).
+
+After that, download [**config file**](https://github.com/coolassassin/reactcci/raw/master/docs/reactcci.xml) and place in this folder like this:  
+*.../JetBrains/Webstorm2021.3/tools/reactcci.xml*
+
+After that click on components' folder with right mouse button and in new "reactcci" menu choose what you need 
+
+## Manual setup
 Make few simple steps to set up a new tool:  
 1. Open Settings in menu `File -> Settings` (`Ctrl+Alt+S`, `⌘+Alt+S`)
 2. Open External Tools menu `Tools -> External Tools`

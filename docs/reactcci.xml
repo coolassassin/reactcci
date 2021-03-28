@@ -1,0 +1,37 @@
+<toolSet name="reactcci">
+  <tool name="Create new component" description="Create new component using reactcci" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="false" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="node" />
+      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js --dest &quot;$FileDir$&quot; --name $Prompt$ --files component[0] -s --sls" />
+      <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
+    </exec>
+  </tool>
+  <tool name="Create new component with styles" description="Create new component with styles using reactcci" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="false" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="node" />
+      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js --dest &quot;$FileDir$&quot; --name $Prompt$ --files component[0] style -s --sls" />
+      <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
+    </exec>
+  </tool>
+  <tool name="Update component: add styles" description="Update component with styles using reactcci" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="false" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="node" />
+      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js -u --dest &quot;$FileDir$&quot; --files style -s --sls" />
+      <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
+    </exec>
+  </tool>
+  <tool name="Update component: add test" description="Update component with test using reactcci" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="false" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="node" />
+      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js -u --dest &quot;$FileDir$&quot; --files test -s --sls" />
+      <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
+    </exec>
+  </tool>
+  <tool name="Update component: add story" description="Update component with story using reactcci" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="false" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="node" />
+      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js -u --dest &quot;$FileDir$&quot; --files test -s --sls" />
+      <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
+    </exec>
+  </tool>
+</toolSet>

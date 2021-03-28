@@ -9,13 +9,14 @@ CLI to create or edit **React** or **React Native** components with your own str
 - **A lot by one command**: ton of files by multi-creation feature
 - **Created for React**: better than **plop**, **hygen** or any scaffolding library, because it's for React
 - **Multiplatform**: Works on MacOS, Windows, and Linux.
+- ⭐ [**VSCode Extension**](https://marketplace.visualstudio.com/items?itemName=KamenskikhDmitriy.vs-rcci) ⭐
 - ⭐ [**Webstorm integration**](https://github.com/coolassassin/reactcci/blob/master/docs/webstormIntegration.md) ⭐
 
 ![Example](https://raw.githubusercontent.com/coolassassin/reactcci/master/readme-example.gif)
 
 [![Tests Status](https://github.com/coolassassin/reactcci/workflows/tests/badge.svg)](https://github.com/coolassassin/reactcci)
 [![Build Status](https://img.shields.io/npm/dm/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
-[![Build Status](https://img.shields.io/npm/v/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
+[![Version](https://img.shields.io/npm/v/reactcci.svg?style=flat)](https://www.npmjs.com/package/reactcci)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcoolassassin%2Freactcci.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcoolassassin%2Freactcci?ref=badge_shield)
 
 ## Quick Overview
