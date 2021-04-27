@@ -1,3 +1,6 @@
+## 1.7.6
+* New string types for processFileAndFolderName parameter
+
 ## 1.7.4
 * File type selection by command line flag
 

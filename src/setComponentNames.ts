@@ -3,7 +3,7 @@ import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
-import { capitalizeName, processComponentNameString, writeToConsole } from './helpers';
+import { capitalizeName, mapNameToCase, processComponentNameString, writeToConsole } from './helpers';
 import { Setting } from './types';
 
 export const setComponentNames = async () => {
@@ -64,5 +64,5 @@ export const setComponentNames = async () => {
         res = componentName;
     } while (!res[0]);
 
-    componentSettingsMap.componentNames = res;
+    componentSettingsMap.componentNames = res.map((name) => mapNameToCase(name, 'PascalCase'));
 };

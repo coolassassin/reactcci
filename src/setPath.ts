@@ -5,7 +5,14 @@ import fs from 'fs';
 import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { isDirectory, makePathShort, processPath, splitStringByCapitalLetter, writeToConsole } from './helpers';
+import {
+    isDirectory,
+    makePathShort,
+    processObjectName,
+    processPath,
+    splitStringByCapitalLetter,
+    writeToConsole
+} from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 
@@ -155,6 +162,6 @@ export const setPath = async () => {
     if (update) {
         const pathParts = componentSettingsMap.resultPath.split('/');
         componentSettingsMap.resultPath = pathParts.slice(0, pathParts.length - 1).join('/');
-        componentSettingsMap.componentNames = [pathParts[pathParts.length - 1]];
+        componentSettingsMap.componentNames = [processObjectName(pathParts[pathParts.length - 1], true, true)];
     }
 };

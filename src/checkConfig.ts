@@ -1,10 +1,11 @@
 import kleur from 'kleur';
 
 import { componentSettingsMap } from './componentSettingsMap';
+import { TypingCases } from './types';
 
 export const checkConfig = async () => {
     const {
-        config: { templates, afterCreation }
+        config: { templates, afterCreation, processFileAndFolderName }
     } = componentSettingsMap;
     const stopProgram = () => {
         process.exit(1);
@@ -17,6 +18,20 @@ export const checkConfig = async () => {
         }
         if (templates.some((tmp) => templates.filter((t) => t.name === tmp.name).length > 1)) {
             console.error(kleur.red(`Template name must be unique, please revise config file`));
+            stopProgram();
+        }
+    }
+
+    if (processFileAndFolderName && typeof processFileAndFolderName !== 'function') {
+        const cases: TypingCases[] = ['camelCase', 'PascalCase', 'snake_case', 'dash-case'];
+
+        if (!cases.some((c) => c === processFileAndFolderName)) {
+            console.error(
+                kleur.red(
+                    `Unknown config type in "processFileAndFolderName" field: ${kleur.yellow(processFileAndFolderName)}`
+                )
+            );
+            console.error(`Available cases:\n- ${cases.join('\n- ')}`);
             stopProgram();
         }
     }

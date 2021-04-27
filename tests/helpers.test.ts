@@ -12,11 +12,13 @@ import {
     getObjectNameParts,
     isDirectory,
     makePathShort,
+    mapNameToCase,
     processCommandLineArguments,
     processComponentNameString,
     processPath,
     splitStringByCapitalLetter
 } from '../src/helpers';
+import { TypingCases } from '../src/types';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
@@ -154,6 +156,23 @@ describe('helpers', () => {
         ['test-component123', ['test', 'component123']]
     ])('getObjectNameParts: parts from "%s" mast be "%s"', (name, expected) => {
         expect(getObjectNameParts(name)).toEqual(expected);
+    });
+
+    const allCases: [TypingCases, string][] = [
+        ['camelCase', 'testComponent'],
+        ['PascalCase', 'TestComponent'],
+        ['dash-case', 'test-component'],
+        ['snake_case', 'test_component']
+    ];
+
+    it.each(
+        allCases
+            .map((currentCase) => {
+                return allCases.map((c) => [currentCase[1], ...c]);
+            })
+            .reduce((acc, val) => [...acc, ...val], []) // flat (for nodejs 10)
+    )('mapNameToCase: value "%s" in "%s" case must be like "%s"', (name, toCase, expected) => {
+        expect(mapNameToCase(name, toCase as TypingCases)).toEqual(expected);
     });
 
     it.each([

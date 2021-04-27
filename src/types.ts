@@ -31,7 +31,9 @@ export type FilesList = {
     [key in string]: FileDescription;
 };
 
-export type ProcessFileAndFolderName = (name?: string, parts?: string[], isFolder?: boolean) => string;
+export type TypingCases = 'camelCase' | 'PascalCase' | 'snake_case' | 'dash-case';
+
+export type ProcessFileAndFolderName = ((name?: string, parts?: string[], isFolder?: boolean) => string) | TypingCases;
 
 export type Setting = {
     root: string;

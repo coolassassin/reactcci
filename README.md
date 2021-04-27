@@ -58,9 +58,17 @@ Allows you to switch off last checking step
 Default: `false`  
 - `templates`  
 Object with structure of your component
-- `processFileAndFolderName(name, parts, isFolder)`  
-Function which allows you to remap your component folder name or filename into something else  
-Example:   
+- `processFileAndFolderName`  
+  String or function which allows you to remap your component name to folder-name and file-name prefix  
+  Default: `PascalCase`  
+  Types: 
+  - `camelCase`
+  - `PascalCase`
+  - `snake_case`
+  - `dash-case` 
+  - `(name: string, parts: string[], isFolder: boolean) => string`  
+    
+  Example:
     ```javascript
     {
         ...config,

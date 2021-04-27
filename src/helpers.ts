@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { ProcessFileAndFolderName } from './types';
+import { TypingCases } from './types';
 
 export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
 
@@ -103,11 +103,39 @@ export const getObjectNameParts = (name: string): string[] => {
         .filter((l) => l);
 };
 
-export const processObjectName = (name: string, isFolder = false): string => {
+export const processObjectName = (name: string, isFolder = false, toComponent = false): string => {
     const {
         config: { processFileAndFolderName }
     } = componentSettingsMap;
-    return processFileAndFolderName ? processFileAndFolderName(name, getObjectNameParts(name), isFolder) : name;
+
+    if (processFileAndFolderName) {
+        if (toComponent) {
+            return mapNameToCase(name, 'PascalCase');
+        }
+
+        if (typeof processFileAndFolderName === 'function') {
+            return processFileAndFolderName(name, getObjectNameParts(name), isFolder);
+        } else {
+            return mapNameToCase(name, processFileAndFolderName);
+        }
+    }
+
+    return name;
+};
+
+export const mapNameToCase = (name: string, mapCase: TypingCases): string => {
+    const lowerCaseParts = getObjectNameParts(name).map((part) => part.toLocaleLowerCase());
+
+    switch (mapCase) {
+        case 'camelCase':
+            return lowerCaseParts.map((part, index) => (index === 0 ? part : capitalizeName(part))).join('');
+        case 'PascalCase':
+            return lowerCaseParts.map(capitalizeName).join('');
+        case 'dash-case':
+            return lowerCaseParts.join('-');
+        case 'snake_case':
+            return lowerCaseParts.join('_');
+    }
 };
 
 export const generateFileName = (fileNameTemplate: string, objectName: string) => {
