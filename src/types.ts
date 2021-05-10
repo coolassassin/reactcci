@@ -78,6 +78,8 @@ export type templatePlaceholdersData = {
     destinationFolder: string;
     objectFolder: string;
     relativeObjectFolder: string;
+    filePrefix: string;
+    folderName: string;
     files: FilesList;
     getRelativePath: (to: string) => string;
     join: (...parts: string[]) => string;
