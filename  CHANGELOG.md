@@ -1,3 +1,12 @@
+## 1.8.0
+* fixed resolving placeholders. Avoid unnecessary executions
+* afterCreation filepath resolving fix
+* new placeholder variables (filePrefix, folderName)
+* fixed xml-settings for webstorm
+* fixed filename processing for multiple placeholder uses
+* fixed processing for snake_case and dash-case
+* new command-line flag for vs-rcci
+
 ## 1.7.6
 * New string types for processFileAndFolderName parameter
 

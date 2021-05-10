@@ -119,6 +119,8 @@ Below, you can see the list of all available data and functions to create a new 
 | `destinationFolder` | relative path to folder of object which is being created<br>Example: `App/Header/Logo` |
 | `objectFolder` | Absolute path to your object (component) folder |
 | `relativeObjectFolder` | Relative path to your object (component) folder |
+| `filePrefix` | processed object(component) name for filename |
+| `folderName` | processed object(component) name for folder |
 | `files` | Object of files which is being created |
 | `getRelativePath(to: string)` | Function to get relative path to any another path<br>Example: `../../src/helpers` |
 | `join(...parts: string)` | Function to get joined parts of path. <br>Example:<br> `join(project, destinationFolder, componentName)` => `Project/Footer/Email` |
