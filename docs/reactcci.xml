@@ -30,7 +30,7 @@
   <tool name="Update component: add story" description="Update component with story using reactcci" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="false" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
     <exec>
       <option name="COMMAND" value="node" />
-      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js -u --dest &quot;$FileDir$&quot; --files test -s --sls" />
+      <option name="PARAMETERS" value="./node_modules/reactcci/build/cli.js -u --dest &quot;$FileDir$&quot; --files stories -s --sls" />
       <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
     </exec>
   </tool>
