@@ -4,7 +4,7 @@ import path from 'path';
 import childProcess from 'child_process';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { writeToConsole } from './helpers';
+import { processObjectName, writeToConsole } from './helpers';
 
 export const processAfterGeneration = async () => {
     const {
@@ -21,7 +21,13 @@ export const processAfterGeneration = async () => {
             let isFirstExecution = true;
             for (const componentName of componentNames) {
                 const fileList = Object.values(componentFileList[componentName]).filter((file) => file.selected);
-                const finalFolder = path.join(root, project, projectRootPath, resultPath, componentName);
+                const finalFolder = path.join(
+                    root,
+                    project,
+                    projectRootPath,
+                    resultPath,
+                    processObjectName(componentName, true)
+                );
 
                 if (
                     command.extensions &&
