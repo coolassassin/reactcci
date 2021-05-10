@@ -15,7 +15,10 @@ jest.mock('../src/componentSettingsMap', () => {
             root: process.cwd(),
             moduleRoot: '',
             project: '',
-            templateName: 'component'
+            templateName: 'component',
+            commandLineFlags: {
+                nfc: false
+            }
         }
     };
 });

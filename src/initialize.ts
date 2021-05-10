@@ -10,7 +10,7 @@ import { getQuestionsSettings } from './getQuestionsSettings';
 import { writeToConsole } from './helpers';
 
 export const initialize = async () => {
-    const { root, moduleRoot } = componentSettingsMap;
+    const { root, moduleRoot, commandLineFlags } = componentSettingsMap;
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
     if (fs.existsSync(localConfigPath)) {
         return;
@@ -90,22 +90,27 @@ export const initialize = async () => {
 
     writeToConsole(kleur.green(`Well done! Configuration is finished!`));
 
-    const { firstComponentAgreement } = await Prompt(
-        {
-            type: 'toggle',
-            name: 'firstComponentAgreement',
-            message: `Would you like to create your first component?`,
-            initial: true,
-            active: 'Yes',
-            inactive: 'No'
-        },
-        getQuestionsSettings()
-    );
+    if (!commandLineFlags.nfc) {
+        const { firstComponentAgreement } = await Prompt(
+            {
+                type: 'toggle',
+                name: 'firstComponentAgreement',
+                message: `Would you like to create your first component?`,
+                initial: true,
+                active: 'Yes',
+                inactive: 'No'
+            },
+            getQuestionsSettings()
+        );
 
-    if (!firstComponentAgreement) {
-        writeToConsole('Well, see you next time!');
-        writeToConsole(`You can set up everything you need in the ${kleur.yellow(CONFIG_FILE_NAME)} file.`);
-        writeToConsole('After configuration just run me again (◉ ◡ ◉ )');
+        if (!firstComponentAgreement) {
+            writeToConsole('Well, see you next time!');
+            writeToConsole(`You can set up everything you need in the ${kleur.yellow(CONFIG_FILE_NAME)} file.`);
+            writeToConsole('After configuration just run me again (◉ ◡ ◉ )');
+            process.exit();
+            return;
+        }
+    } else {
         process.exit();
         return;
     }

@@ -60,6 +60,7 @@ export type Setting = {
         update: boolean;
         skipSearch: boolean;
         sls: boolean;
+        nfc: boolean;
         dest: string;
         name: string;
         template: string;

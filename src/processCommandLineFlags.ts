@@ -13,6 +13,7 @@ export const processCommandLineFlags = () => {
     program.option('-p, --project <type>', 'project name');
     program.option('-f, --files <type>', 'file types (style, test, stories)');
     program.option('--sls', 'skip last step');
+    program.option('--nfc', 'without first component after initialization');
     program.parse(processCommandLineArguments(process.argv));
 
     const commandLineKeys: (keyof Setting['commandLineFlags'])[] = [
@@ -23,13 +24,15 @@ export const processCommandLineFlags = () => {
         'template',
         'files',
         'skipSearch',
-        'sls'
+        'sls',
+        'nfc'
     ];
 
     const {
         update = false,
         skipSearch = false,
         sls = false,
+        nfc = false,
         dest = '',
         name = '',
         template = '',
@@ -43,5 +46,15 @@ export const processCommandLineFlags = () => {
         {} as Setting['commandLineFlags']
     );
 
-    componentSettingsMap.commandLineFlags = { update, skipSearch, sls, dest, name, template, project, files };
+    componentSettingsMap.commandLineFlags = {
+        update,
+        skipSearch,
+        sls,
+        nfc,
+        dest,
+        name,
+        template,
+        project,
+        files
+    };
 };
