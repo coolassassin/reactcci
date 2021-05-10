@@ -46,7 +46,7 @@ describe('helpers', () => {
 
     beforeEach(() => {
         (componentSettingsMap.commandLineFlags as any) = undefined;
-        (componentSettingsMap.config as any) = defaultConfig;
+        (componentSettingsMap.config as any) = { ...defaultConfig, templates: defaultConfig.templates[0].files };
         mockFs(fsMockFolders);
     });
 
