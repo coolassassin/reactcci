@@ -23,7 +23,10 @@ export const getTemplate = async (fileName, insertionData) => {
 
     let templateData = (await fs.promises.readFile(templateFilePath)).toString();
     Object.entries(placeholders).forEach(([placeholder, replacer]) => {
-        templateData = templateData.replace(new RegExp(`#${placeholder}#`, 'gim'), replacer(insertionData));
+        const placeholderRegular = new RegExp(`#${placeholder}#`, 'gim');
+        if (placeholderRegular.test(templateData)) {
+            templateData = templateData.replace(new RegExp(`#${placeholder}#`, 'gim'), replacer(insertionData));
+        }
     });
 
     return templateData;
