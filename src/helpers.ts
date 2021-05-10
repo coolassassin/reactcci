@@ -139,7 +139,7 @@ export const mapNameToCase = (name: string, mapCase: TypingCases): string => {
 };
 
 export const generateFileName = (fileNameTemplate: string, objectName: string) => {
-    return fileNameTemplate.replace('[name]', processObjectName(objectName));
+    return fileNameTemplate.replace(/\[name]/g, processObjectName(objectName));
 };
 
 export const getIsFileAlreadyExists = (fileNameTemplate: string, objectName: string) => {
