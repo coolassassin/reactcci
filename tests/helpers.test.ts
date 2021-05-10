@@ -153,16 +153,16 @@ describe('helpers', () => {
         ['TestComponent', ['Test', 'Component']],
         ['test-component', ['test', 'component']],
         ['_test__Component__', ['test', 'Component']],
-        ['test-component123', ['test', 'component123']]
+        ['test-component123test', ['test', 'component', '123', 'test']]
     ])('getObjectNameParts: parts from "%s" mast be "%s"', (name, expected) => {
         expect(getObjectNameParts(name)).toEqual(expected);
     });
 
     const allCases: [TypingCases, string][] = [
-        ['camelCase', 'testComponent'],
-        ['PascalCase', 'TestComponent'],
-        ['dash-case', 'test-component'],
-        ['snake_case', 'test_component']
+        ['camelCase', 'testComponent123'],
+        ['PascalCase', 'TestComponent123'],
+        ['dash-case', 'test-component-123'],
+        ['snake_case', 'test_component_123']
     ];
 
     it.each(

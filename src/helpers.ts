@@ -97,6 +97,7 @@ export const splitStringByCapitalLetter = (value?: string): string[] | undefined
 
 export const getObjectNameParts = (name: string): string[] => {
     return name
+        .replace(/(\d\D|\D\d)/g, (str) => `${str[0]}-${str[1]}`)
         .replace(/([A-Z])/g, '-$1')
         .replace(/[^a-zA-Z0-9]/g, '-')
         .split('-')
