@@ -9,7 +9,7 @@ import { generateFileName, getFileTemplates, getIsFileAlreadyExists } from './he
 
 export const getTemplateNamesToUpdate = async () => {
     const { config, componentNames, commandLineFlags } = componentSettingsMap;
-
+    const componentName = componentNames[0];
     const { fileTemplates, undefinedFileTemplates } = getFileTemplates();
 
     if (commandLineFlags.files) {
@@ -25,8 +25,8 @@ export const getTemplateNamesToUpdate = async () => {
 
     const choices = Object.entries(config.templates as TemplateDescriptionObject).map(([tmpFileName, options]) => {
         const { default: isDefault = true, optional: isOptional = false, name } = options;
-        const fileName = generateFileName(name, componentNames[0]);
-        const isAlreadyExists = getIsFileAlreadyExists(name, componentNames[0]);
+        const fileName = generateFileName(name, componentName);
+        const isAlreadyExists = getIsFileAlreadyExists(name, componentName);
         return {
             title: `${tmpFileName}${kleur.reset(
                 ` (${isAlreadyExists ? 'Replace' : 'Create'}: ${kleur.yellow(fileName)})`

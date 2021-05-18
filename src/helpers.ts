@@ -145,8 +145,8 @@ export const generateFileName = (fileNameTemplate: string, objectName: string) =
 
 export const getIsFileAlreadyExists = (fileNameTemplate: string, objectName: string) => {
     const { root, project, projectRootPath, resultPath } = componentSettingsMap;
-    const folder = path.join(root, project, projectRootPath, resultPath, objectName);
-    const fileName = generateFileName(fileNameTemplate, objectName);
+    const folder = path.join(root, project, projectRootPath, resultPath, processObjectName(objectName, true));
+    const fileName = generateFileName(fileNameTemplate, processObjectName(objectName, false));
     return fs.existsSync(path.resolve(folder, fileName));
 };
 
