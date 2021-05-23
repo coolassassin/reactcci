@@ -1,3 +1,6 @@
+## 1.8.3
+* add new stringToCase method to placeholder function
+
 ## 1.8.2
 * fix processing commander options
 

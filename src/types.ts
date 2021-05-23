@@ -32,6 +32,9 @@ export type FilesList = {
 };
 
 export type TypingCases = 'camelCase' | 'PascalCase' | 'snake_case' | 'dash-case';
+export const isTypingCase = (value: string): value is TypingCases => {
+    return ['camelCase', 'PascalCase', 'snake_case', 'dash-case'].includes(value);
+};
 
 export type ProcessFileAndFolderName = ((name?: string, parts?: string[], isFolder?: boolean) => string) | TypingCases;
 
@@ -83,6 +86,7 @@ export type templatePlaceholdersData = {
     files: FilesList;
     getRelativePath: (to: string) => string;
     join: (...parts: string[]) => string;
+    stringToCase: (str: string, toCase: TypingCases) => string;
 };
 
 type DeepPartial<T> = {

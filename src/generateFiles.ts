@@ -3,19 +3,13 @@ import path from 'path';
 
 import { getTemplate } from './getTemplate';
 import { componentSettingsMap } from './componentSettingsMap';
-import { getRelativePath, processPath, processObjectName } from './helpers';
-import { templatePlaceholdersData } from './types';
+import { getRelativePath, processPath, processObjectName, mapNameToCase } from './helpers';
+import { isTypingCase, templatePlaceholdersData } from './types';
 
 export const generateFiles = async () => {
-    const {
-        root,
-        project,
-        componentNames,
-        componentFileList,
-        projectRootPath,
-        resultPath,
-        templateName
-    } = componentSettingsMap;
+    const { root, project, componentNames, componentFileList, projectRootPath, resultPath, templateName } =
+        componentSettingsMap;
+
     for (const componentName of componentNames) {
         const fileList = componentFileList[componentName];
         const folder = path.join(root, project, projectRootPath, resultPath, processObjectName(componentName, true));
@@ -39,7 +33,13 @@ export const generateFiles = async () => {
             folderName: processObjectName(componentName, true),
             files: fileList,
             getRelativePath: (to: string) => getRelativePath(objectFolder, to),
-            join: (...parts: string[]) => processPath(path.join(...parts))
+            join: (...parts: string[]) => processPath(path.join(...parts)),
+            stringToCase: (str: string, toCase: string) => {
+                if (isTypingCase(toCase)) {
+                    return mapNameToCase(str, toCase);
+                }
+                throw new Error('Unknown case');
+            }
         };
 
         for (const fileOptions of Object.values(fileList)) {
