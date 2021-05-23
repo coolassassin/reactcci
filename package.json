@@ -25,9 +25,9 @@
         "coverage": "yarn test --coverage --collectCoverageFrom=./src/**"
     },
     "dependencies": {
-        "commander": "^5.1.0",
-        "kleur": "^4.0.2",
-        "prompts": "^2.3.2"
+        "commander": "^7.2.0",
+        "kleur": "^4.1.4",
+        "prompts": "^2.4.1"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
