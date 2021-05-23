@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { #NAME# } from './#NAME#';
 
 export default { title: '#STORY_PATH#' };
