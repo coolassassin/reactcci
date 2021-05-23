@@ -1,7 +1,6 @@
 import { program } from 'commander';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { Setting } from './types';
 import { processCommandLineArguments } from './helpers';
 
 export const processCommandLineFlags = () => {
@@ -16,18 +15,6 @@ export const processCommandLineFlags = () => {
     program.option('--nfc', 'without first component after initialization');
     program.parse(processCommandLineArguments(process.argv));
 
-    const commandLineKeys: (keyof Setting['commandLineFlags'])[] = [
-        'update',
-        'dest',
-        'project',
-        'name',
-        'template',
-        'files',
-        'skipSearch',
-        'sls',
-        'nfc'
-    ];
-
     const {
         update = false,
         skipSearch = false,
@@ -38,13 +25,7 @@ export const processCommandLineFlags = () => {
         template = '',
         project = '',
         files = ''
-    } = commandLineKeys.reduce(
-        (acc, key) => ({
-            ...acc,
-            [key]: Object.prototype.hasOwnProperty.call(program, key) ? program[key] : undefined
-        }),
-        {} as Setting['commandLineFlags']
-    );
+    } = program.opts() || {};
 
     componentSettingsMap.commandLineFlags = {
         update,
