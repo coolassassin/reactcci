@@ -1,3 +1,11 @@
+## 1.8.2
+* fix processing commander options
+
+## 1.8.1
+* fix check files to update with different case
+* update dependencies
+* update imports in templates
+
 ## 1.8.0
 * fixed resolving placeholders. Avoid unnecessary executions
 * afterCreation filepath resolving fix
