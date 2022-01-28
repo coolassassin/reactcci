@@ -124,7 +124,7 @@ Below, you can see the list of all available data and functions to create a new 
 | `files` | Object of files which is being created |
 | `getRelativePath(to: string)` | Function to get relative path to any another path<br>Example: `../../src/helpers` |
 | `join(...parts: string)` | Function to get joined parts of path. <br>Example:<br> `join(project, destinationFolder, componentName)` => `Project/Footer/Email` |
-| `stringToCase(...parts: string)` | Function to map any string to case. <br>Example:<br> `stringToCase('dash-case-string', 'PascalCase')` => `DashCaseString` |
+| `stringToCase(str: string, toCase: string)` | Function to map any string to case. <br>Example:<br> `stringToCase('dash-case-string', 'PascalCase')` => `DashCaseString` |
 
 
 ## Arguments

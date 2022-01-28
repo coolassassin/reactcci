@@ -1,3 +1,6 @@
+## 1.8.4
+* update templates and config to support "processFileAndFolderName" param
+
 ## 1.8.3
 * add new stringToCase method to placeholder function
 
