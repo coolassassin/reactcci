@@ -3,23 +3,21 @@ import kleur from 'kleur';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { CommandLineFlags } from './types';
+import { CommandLineFlags, Config } from './types';
 
 type Properties = {
+    config: Config;
     commandLineFlags: CommandLineFlags;
 };
 
-export const setComponentTemplate = async ({ commandLineFlags: { template } }: Properties) => {
-    const {
-        config: { templates }
-    } = componentSettingsMap;
-
+export const setComponentTemplate = async ({ commandLineFlags: { template }, config }: Properties): Promise<Config> => {
+    const { templates } = config;
     if (Array.isArray(templates)) {
         if (template) {
             if (!templates.map((tmp) => tmp.name).includes(template)) {
                 console.error(kleur.red(`Error: There is no ${template} template`));
                 process.exit();
-                return;
+                return config;
             }
             componentSettingsMap.templateName = template;
         } else if (templates.length === 1) {
@@ -41,13 +39,15 @@ export const setComponentTemplate = async ({ commandLineFlags: { template } }: P
 
         const selectedTemplate = templates.find((tmp) => tmp.name === componentSettingsMap.templateName);
         if (selectedTemplate) {
-            componentSettingsMap.config.templates = selectedTemplate.files;
+            const newConfig = { ...config };
+            newConfig.templates = selectedTemplate.files;
             if (selectedTemplate.folderPath) {
-                componentSettingsMap.config.folderPath = selectedTemplate.folderPath;
+                newConfig.folderPath = selectedTemplate.folderPath;
             }
-            return;
+            return newConfig;
         }
     }
 
     componentSettingsMap.templateName = 'component';
+    return config;
 };

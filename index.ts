@@ -21,17 +21,17 @@ import { parseDestinationPath } from './src/parseDestinationPath';
         const commandLineFlags = processCommandLineFlags();
 
         await initialize({ root, moduleRoot, commandLineFlags });
-        await setConfig({ root });
-        await checkConfig();
+        let config = await setConfig({ root });
+        await checkConfig({ config });
 
-        await setComponentTemplate({ commandLineFlags });
-        await parseDestinationPath({ root, commandLineFlags });
-        await setProject({ root, commandLineFlags });
-        await setPath({ root, commandLineFlags });
+        config = await setComponentTemplate({ commandLineFlags, config });
+        await parseDestinationPath({ root, commandLineFlags, config });
+        await setProject({ root, commandLineFlags, config });
+        await setPath({ root, commandLineFlags, config });
 
         await setComponentNames({ commandLineFlags });
 
-        await buildComponent({ root, moduleRoot, commandLineFlags });
+        await buildComponent({ root, moduleRoot, commandLineFlags, config });
     } catch (e) {
         console.error(kleur.red('Unexpected error'), e);
         process.exit();

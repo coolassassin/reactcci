@@ -5,18 +5,19 @@ import fs from 'fs';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { processPath } from './helpers';
-import { CommandLineFlags } from './types';
+import { CommandLineFlags, Config } from './types';
 
 type Properties = {
     root: string;
     commandLineFlags: CommandLineFlags;
+    config: Config;
 };
 
-export const parseDestinationPath = async ({ root, commandLineFlags: { dest } }: Properties) => {
-    const {
-        config: { folderPath, multiProject }
-    } = componentSettingsMap;
-
+export const parseDestinationPath = async ({
+    root,
+    commandLineFlags: { dest },
+    config: { folderPath, multiProject }
+}: Properties) => {
     if (!dest) {
         return false;
     }

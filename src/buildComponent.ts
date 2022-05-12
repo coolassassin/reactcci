@@ -8,7 +8,7 @@ import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { CommandLineFlags, FilesList, Setting, TemplateDescriptionObject } from './types';
+import { CommandLineFlags, Config, FilesList, Setting, TemplateDescriptionObject } from './types';
 import { capitalizeName, generateFileName, getIsFileAlreadyExists, writeToConsole } from './helpers';
 import { getTemplateNamesToUpdate } from './getTemplateNamesToUpdate';
 
@@ -16,14 +16,16 @@ type Properties = {
     root: string;
     moduleRoot: string;
     commandLineFlags: CommandLineFlags;
+    config: Config;
 };
 
-export const buildComponent = async ({ root, moduleRoot, commandLineFlags }: Properties) => {
-    const { config, project, componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
+export const buildComponent = async ({ root, moduleRoot, commandLineFlags, config }: Properties) => {
+    const { processFileAndFolderName } = config;
+    const { project, componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
 
     const templateNames = commandLineFlags.update
-        ? await getTemplateNamesToUpdate({ root, commandLineFlags })
-        : await getTemplateNamesToCreate({ commandLineFlags });
+        ? await getTemplateNamesToUpdate({ root, commandLineFlags, config })
+        : await getTemplateNamesToCreate({ commandLineFlags, config });
 
     const fileList: FilesList = {};
 
@@ -50,14 +52,23 @@ export const buildComponent = async ({ root, moduleRoot, commandLineFlags }: Pro
                 .filter(([, fileObject]) => {
                     return (
                         fileObject.selected ||
-                        getIsFileAlreadyExists({ root, fileNameTemplate: fileObject.name, objectName: componentName })
+                        getIsFileAlreadyExists({
+                            root,
+                            fileNameTemplate: fileObject.name,
+                            objectName: componentName,
+                            processFileAndFolderName
+                        })
                     );
                 })
                 .map(([tmpName, fileObject]) => [
                     tmpName,
                     {
                         ...fileObject,
-                        name: generateFileName(fileObject.name, componentName)
+                        name: generateFileName({
+                            fileNameTemplate: fileObject.name,
+                            objectName: componentName,
+                            processFileAndFolderName
+                        })
                     }
                 ])
         );
@@ -88,8 +99,8 @@ export const buildComponent = async ({ root, moduleRoot, commandLineFlags }: Pro
     }
 
     if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
-        await generateFiles({ root, moduleRoot });
-        await processAfterGeneration({ root });
+        await generateFiles({ root, moduleRoot, config });
+        await processAfterGeneration({ root, config });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
         const action = commandLineFlags.update ? 'updated' : 'created';
         writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));

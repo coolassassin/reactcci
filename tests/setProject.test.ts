@@ -3,7 +3,7 @@ import prompts from 'prompts';
 import { setProject } from '../src/setProject';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 import * as helpers from '../src/helpers';
-import { CommandLineFlags } from '../src/types';
+import { CommandLineFlags, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
@@ -11,11 +11,7 @@ jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
             project: '',
-            templateName: 'component',
-            config: {
-                multiProject: true,
-                folderPath: 'Folder1'
-            }
+            templateName: 'component'
         }
     };
 });
@@ -37,7 +33,11 @@ describe('setProject', () => {
         commandLineFlags: {
             dest: '',
             project: ''
-        } as CommandLineFlags
+        } as CommandLineFlags,
+        config: {
+            multiProject: true,
+            folderPath: 'Folder1'
+        } as Config
     };
     const { exitMock } = mockProcess();
     mockConsole();
@@ -47,7 +47,7 @@ describe('setProject', () => {
         delete componentSettingsMap.project;
         props.commandLineFlags.dest = '';
         props.commandLineFlags.project = '';
-        componentSettingsMap.config.folderPath = 'Folder1';
+        props.config.folderPath = 'Folder1';
         (helpers.isDirectory as any) = jest.fn(() => true);
     });
 
@@ -71,7 +71,7 @@ describe('setProject', () => {
     });
 
     it('several projects', async () => {
-        componentSettingsMap.config.folderPath = ['Folder1', 'Folder2'];
+        props.config.folderPath = ['Folder1', 'Folder2'];
         prompts.inject(['Folder1']);
         await setProject(props);
         expect(componentSettingsMap.project).toBe('Folder1');

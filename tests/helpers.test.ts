@@ -3,7 +3,6 @@ import mockFs from 'mock-fs';
 import path from 'path';
 
 import defaultConfig from '../defaultConfig';
-import { componentSettingsMap } from '../src/componentSettingsMap';
 import {
     capitalizeName,
     getFileIndexForTemplate,
@@ -18,13 +17,12 @@ import {
     processPath,
     splitStringByCapitalLetter
 } from '../src/helpers';
-import { CommandLineFlags, TypingCases } from '../src/types';
+import { CommandLineFlags, TypingCases, Config } from '../src/types';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
             project: '',
-            config: {},
             projectRootPath: 'src/',
             resultPath: '.'
         }
@@ -33,6 +31,7 @@ jest.mock('../src/componentSettingsMap', () => {
 
 describe('helpers', () => {
     const root = process.cwd();
+    let config = {} as Config;
     let commandLineFlags: CommandLineFlags | undefined = undefined;
     const fsMockFolders = {
         node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
@@ -47,7 +46,7 @@ describe('helpers', () => {
 
     beforeEach(() => {
         commandLineFlags = undefined;
-        (componentSettingsMap.config as any) = { ...defaultConfig, templates: defaultConfig.templates[0].files };
+        config = { ...defaultConfig, templates: defaultConfig.templates[0].files } as Config;
         mockFs(fsMockFolders);
     });
 
@@ -147,7 +146,14 @@ describe('helpers', () => {
         ['[name].tsx', true],
         ['[name].module.css', false]
     ])('getIsFileAlreadyExists: is file exists "%s" ? %s', (fileNameTemplate, expected) => {
-        expect(getIsFileAlreadyExists({ root, fileNameTemplate, objectName: 'TestComponent' })).toEqual(expected);
+        expect(
+            getIsFileAlreadyExists({
+                root,
+                fileNameTemplate,
+                objectName: 'TestComponent',
+                processFileAndFolderName: config.processFileAndFolderName
+            })
+        ).toEqual(expected);
     });
 
     it.each([
@@ -186,7 +192,8 @@ describe('helpers', () => {
         commandLineFlags = { files: str } as CommandLineFlags;
         const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates({
             commandLineFlags,
-            withRequired
+            withRequired,
+            templates: config.templates
         });
         expect(fileTemplates).toEqual(templates);
         expect(undefinedFileTemplates).toEqual(unexpected);

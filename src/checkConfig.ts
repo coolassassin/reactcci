@@ -1,12 +1,12 @@
 import kleur from 'kleur';
 
-import { componentSettingsMap } from './componentSettingsMap';
-import { TypingCases } from './types';
+import { Config, TypingCases } from './types';
 
-export const checkConfig = async () => {
-    const {
-        config: { templates, afterCreation, processFileAndFolderName }
-    } = componentSettingsMap;
+type Properties = {
+    config: Config;
+};
+
+export const checkConfig = async ({ config: { templates, afterCreation, processFileAndFolderName } }: Properties) => {
     const stopProgram = () => {
         process.exit(1);
     };

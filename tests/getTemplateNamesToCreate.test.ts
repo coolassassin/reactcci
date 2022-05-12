@@ -1,8 +1,7 @@
 import prompts from 'prompts';
 
 import { getTemplateNamesToCreate } from '../src/getTemplateNamesToCreate';
-import { componentSettingsMap } from '../src/componentSettingsMap';
-import { CommandLineFlags, PartialSetting } from '../src/types';
+import { CommandLineFlags, PartialSetting, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
@@ -20,18 +19,21 @@ describe('getTemplateNamesToCreate', () => {
     const props: Parameters<typeof getTemplateNamesToCreate>[0] = {
         commandLineFlags: {
             files: ''
-        } as CommandLineFlags
+        } as CommandLineFlags,
+        config: {
+            templates: {}
+        } as Config
     };
     mockConsole();
     const { exitMock } = mockProcess();
 
     beforeEach(() => {
-        componentSettingsMap.config.templates = {};
+        props.config.templates = {};
         props.commandLineFlags.files = '';
     });
 
     it('no optional', async () => {
-        componentSettingsMap.config.templates = {
+        props.config.templates = {
             index: {
                 name: 'index.ts',
                 file: 'index.ts'
@@ -42,7 +44,7 @@ describe('getTemplateNamesToCreate', () => {
     });
 
     it('with optional and without selection', async () => {
-        componentSettingsMap.config.templates = {
+        props.config.templates = {
             file1: {
                 name: 'index.ts',
                 file: 'index.ts'
@@ -59,7 +61,7 @@ describe('getTemplateNamesToCreate', () => {
     });
 
     it('with optional and with selection', async () => {
-        componentSettingsMap.config.templates = {
+        props.config.templates = {
             file1: {
                 name: 'index.ts',
                 file: 'index.ts'
@@ -76,7 +78,7 @@ describe('getTemplateNamesToCreate', () => {
     });
 
     it('command line selection', async () => {
-        componentSettingsMap.config.templates = {
+        props.config.templates = {
             file1: {
                 name: 'index.ts',
                 file: 'index.ts'
@@ -93,7 +95,7 @@ describe('getTemplateNamesToCreate', () => {
     });
 
     it('command line selection with no', async () => {
-        componentSettingsMap.config.templates = {
+        props.config.templates = {
             file1: {
                 name: 'index.ts',
                 file: 'index.ts'
@@ -110,7 +112,7 @@ describe('getTemplateNamesToCreate', () => {
     });
 
     it('command line selection with unexpected filename', async () => {
-        componentSettingsMap.config.templates = {
+        props.config.templates = {
             file1: {
                 name: 'index.ts',
                 file: 'index.ts'

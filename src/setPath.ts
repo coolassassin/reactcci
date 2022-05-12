@@ -15,7 +15,7 @@ import {
 } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
-import { CommandLineFlags } from './types';
+import { CommandLineFlags, Config } from './types';
 
 export const filterChoicesByText = (choices: { title: string }[], query: string, isRoot: boolean) =>
     choices.filter((choice, index) => {
@@ -36,14 +36,15 @@ export const filterChoicesByText = (choices: { title: string }[], query: string,
 type Properties = {
     root: string;
     commandLineFlags: CommandLineFlags;
+    config: Config;
 };
 
-export const setPath = async ({ root, commandLineFlags: { dest, update, skipSearch } }: Properties) => {
-    const {
-        project,
-        templateName,
-        config: { folderPath }
-    } = componentSettingsMap;
+export const setPath = async ({
+    root,
+    commandLineFlags: { dest, update, skipSearch },
+    config: { folderPath, processFileAndFolderName }
+}: Properties) => {
+    const { project, templateName } = componentSettingsMap;
 
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
     const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
@@ -166,6 +167,13 @@ export const setPath = async ({ root, commandLineFlags: { dest, update, skipSear
     if (update) {
         const pathParts = componentSettingsMap.resultPath.split('/');
         componentSettingsMap.resultPath = pathParts.slice(0, pathParts.length - 1).join('/');
-        componentSettingsMap.componentNames = [processObjectName(pathParts[pathParts.length - 1], true, true)];
+        componentSettingsMap.componentNames = [
+            processObjectName({
+                name: pathParts[pathParts.length - 1],
+                isFolder: true,
+                toComponent: true,
+                processFileAndFolderName
+            })
+        ];
     }
 };

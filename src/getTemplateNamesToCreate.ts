@@ -1,19 +1,20 @@
 import Prompt from 'prompts';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
 import { getFileTemplates } from './helpers';
-import { CommandLineFlags } from './types';
+import { CommandLineFlags, Config } from './types';
 
 type Properties = {
     commandLineFlags: CommandLineFlags;
+    config: Config;
 };
 
-export const getTemplateNamesToCreate = async ({ commandLineFlags }: Properties) => {
-    const { config } = componentSettingsMap;
-
-    const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates({ commandLineFlags });
+export const getTemplateNamesToCreate = async ({ commandLineFlags, config: { templates } }: Properties) => {
+    const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates({
+        commandLineFlags,
+        templates
+    });
 
     let selectedTemplateNames: string[] = [];
     if (commandLineFlags.files) {
@@ -27,7 +28,7 @@ export const getTemplateNamesToCreate = async ({ commandLineFlags }: Properties)
             selectedTemplateNames = fileTemplates;
         }
     } else {
-        const templesToSelect = Object.entries(config.templates).filter(([, options]) => options.optional);
+        const templesToSelect = Object.entries(templates).filter(([, options]) => options.optional);
         if (templesToSelect.length) {
             selectedTemplateNames = (
                 await Prompt(

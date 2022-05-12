@@ -8,7 +8,7 @@ import { componentSettingsMap } from '../src/componentSettingsMap';
 import { getProjectRootPath } from '../src/getProjectRootPath';
 import * as helpers from '../src/helpers';
 import { processPath } from '../src/helpers';
-import { CommandLineFlags, PartialSetting } from '../src/types';
+import { CommandLineFlags, PartialSetting, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
@@ -16,9 +16,6 @@ jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
             project: '',
-            config: {
-                folderPath: 'src/'
-            },
             templateName: 'component'
         } as PartialSetting
     };
@@ -45,7 +42,10 @@ describe('setPath', () => {
         root: process.cwd(),
         commandLineFlags: {
             dest: ''
-        } as CommandLineFlags
+        } as CommandLineFlags,
+        config: {
+            folderPath: 'src/'
+        } as Config
     };
     const fsMockFolders = {
         node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
@@ -82,7 +82,7 @@ describe('setPath', () => {
         prompts.inject([1]);
         await setPath(props);
 
-        expect(getPath()).toBe(processPath(componentSettingsMap.config.folderPath as string));
+        expect(getPath()).toBe(processPath(props.config.folderPath as string));
     });
 
     it('first folder path', async () => {
@@ -90,7 +90,7 @@ describe('setPath', () => {
         prompts.inject([anyFolderName, 1]);
         await setPath(props);
 
-        expect(getPath()).toBe(processPath(path.join(componentSettingsMap.config.folderPath as string, anyFolderName)));
+        expect(getPath()).toBe(processPath(path.join(props.config.folderPath as string, anyFolderName)));
     });
 
     it('first folder and back path', async () => {
@@ -98,7 +98,7 @@ describe('setPath', () => {
         prompts.inject([anyFolderName, -1, 1]);
         await setPath(props);
 
-        expect(getPath()).toBe(processPath(componentSettingsMap.config.folderPath as string));
+        expect(getPath()).toBe(processPath(props.config.folderPath as string));
     });
 
     it('manual set', async () => {
@@ -125,21 +125,21 @@ describe('setPath', () => {
     });
 
     it('multi-path choice', async () => {
-        componentSettingsMap.config.folderPath = ['src/folder1', 'src/folder2'];
+        props.config.folderPath = ['src/folder1', 'src/folder2'];
         prompts.inject([1]);
         await setPath(props);
         expect(getProjectRootPath).toBeCalledTimes(1);
     });
 
     it('multi-path only one', async () => {
-        componentSettingsMap.config.folderPath = ['src', 'nonExistentFolder'];
+        props.config.folderPath = ['src', 'nonExistentFolder'];
         await setPath(props);
         expect(getProjectRootPath).toBeCalledTimes(0);
         expect(componentSettingsMap.projectRootPath).toBe('src');
     });
 
     it('multi-path no one', async () => {
-        componentSettingsMap.config.folderPath = ['nonExistentFolder', 'nonExistentFolder'];
+        props.config.folderPath = ['nonExistentFolder', 'nonExistentFolder'];
         prompts.inject([1]);
         await setPath(props);
         expect(exitMock).toBeCalledTimes(1);

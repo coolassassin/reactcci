@@ -5,20 +5,18 @@ import childProcess from 'child_process';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { processObjectName, writeToConsole } from './helpers';
+import { Config } from './types';
 
 type Properties = {
     root: string;
+    config: Config;
 };
 
-export const processAfterGeneration = async ({ root }: Properties) => {
-    const {
-        project,
-        resultPath,
-        projectRootPath,
-        componentNames,
-        componentFileList,
-        config: { afterCreation }
-    } = componentSettingsMap;
+export const processAfterGeneration = async ({
+    root,
+    config: { afterCreation, processFileAndFolderName }
+}: Properties) => {
+    const { project, resultPath, projectRootPath, componentNames, componentFileList } = componentSettingsMap;
     if (afterCreation) {
         for (const [type, command] of Object.entries(afterCreation)) {
             let isFirstExecution = true;
@@ -29,7 +27,7 @@ export const processAfterGeneration = async ({ root }: Properties) => {
                     project,
                     projectRootPath,
                     resultPath,
-                    processObjectName(componentName, true)
+                    processObjectName({ name: componentName, isFolder: true, processFileAndFolderName })
                 );
 
                 if (

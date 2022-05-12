@@ -2,22 +2,21 @@ import prompts from 'prompts';
 
 import { setComponentTemplate } from '../src/setComponentTemplate';
 import { componentSettingsMap } from '../src/componentSettingsMap';
-import { CommandLineFlags } from '../src/types';
+import { CommandLineFlags, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
-        componentSettingsMap: {
-            config: {
-                templates: {}
-            }
-        }
+        componentSettingsMap: {}
     };
 });
 
 describe('getFinalAgreement', () => {
     const props: Parameters<typeof setComponentTemplate>[0] = {
+        config: {
+            templates: {}
+        } as Config,
         commandLineFlags: {
             template: ''
         } as CommandLineFlags
@@ -26,7 +25,7 @@ describe('getFinalAgreement', () => {
     mockConsole();
 
     beforeEach(() => {
-        componentSettingsMap.config.templates = {};
+        props.config.templates = {};
     });
 
     it('basic config with component template', async () => {
@@ -35,7 +34,7 @@ describe('getFinalAgreement', () => {
     });
 
     it('config with array of components but with only one', async () => {
-        componentSettingsMap.config.templates = [
+        props.config.templates = [
             {
                 name: 'service',
                 files: {}
@@ -46,7 +45,7 @@ describe('getFinalAgreement', () => {
     });
 
     it('config with array and select', async () => {
-        componentSettingsMap.config.templates = [
+        props.config.templates = [
             {
                 name: 'component',
                 files: {}
@@ -62,21 +61,21 @@ describe('getFinalAgreement', () => {
     });
 
     it('config with array and unique folder path', async () => {
-        componentSettingsMap.config.templates = [
+        props.config.templates = [
             {
                 name: 'service',
                 folderPath: 'src/components/',
                 files: {}
             }
         ];
-        await setComponentTemplate(props);
+        const newConfig = await setComponentTemplate(props);
         expect(componentSettingsMap.templateName).toBe('service');
-        expect(componentSettingsMap.config.folderPath).toBe('src/components/');
+        expect(newConfig.folderPath).toBe('src/components/');
     });
 
     it('config with array and wrong commandline flag', async () => {
         props.commandLineFlags.template = 'cmp';
-        componentSettingsMap.config.templates = [
+        props.config.templates = [
             {
                 name: 'component',
                 files: {}
@@ -88,7 +87,7 @@ describe('getFinalAgreement', () => {
 
     it('config with array and right commandline flag', async () => {
         props.commandLineFlags.template = 'component';
-        componentSettingsMap.config.templates = [
+        props.config.templates = [
             {
                 name: 'component',
                 files: {}

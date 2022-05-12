@@ -4,18 +4,23 @@ import kleur from 'kleur';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
-import { CommandLineFlags, TemplateDescriptionObject } from './types';
+import { CommandLineFlags, Config, TemplateDescriptionObject } from './types';
 import { generateFileName, getFileTemplates, getIsFileAlreadyExists } from './helpers';
 
 type Properties = {
     root: string;
     commandLineFlags: CommandLineFlags;
+    config: Config;
 };
 
-export const getTemplateNamesToUpdate = async ({ root, commandLineFlags }: Properties) => {
-    const { config, componentNames } = componentSettingsMap;
+export const getTemplateNamesToUpdate = async ({
+    root,
+    commandLineFlags,
+    config: { templates, processFileAndFolderName }
+}: Properties) => {
+    const { componentNames } = componentSettingsMap;
     const componentName = componentNames[0];
-    const { fileTemplates, undefinedFileTemplates } = getFileTemplates({ commandLineFlags });
+    const { fileTemplates, undefinedFileTemplates } = getFileTemplates({ commandLineFlags, templates });
 
     if (commandLineFlags.files) {
         if (undefinedFileTemplates.length > 0) {
@@ -28,10 +33,19 @@ export const getTemplateNamesToUpdate = async ({ root, commandLineFlags }: Prope
         return fileTemplates;
     }
 
-    const choices = Object.entries(config.templates as TemplateDescriptionObject).map(([tmpFileName, options]) => {
+    const choices = Object.entries(templates as TemplateDescriptionObject).map(([tmpFileName, options]) => {
         const { default: isDefault = true, optional: isOptional = false, name } = options;
-        const fileName = generateFileName(name, componentName);
-        const isAlreadyExists = getIsFileAlreadyExists({ root, fileNameTemplate: name, objectName: componentName });
+        const fileName = generateFileName({
+            fileNameTemplate: name,
+            objectName: componentName,
+            processFileAndFolderName
+        });
+        const isAlreadyExists = getIsFileAlreadyExists({
+            root,
+            fileNameTemplate: name,
+            objectName: componentName,
+            processFileAndFolderName
+        });
         return {
             title: `${tmpFileName}${kleur.reset(
                 ` (${isAlreadyExists ? 'Replace' : 'Create'}: ${kleur.yellow(fileName)})`

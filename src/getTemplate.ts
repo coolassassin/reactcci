@@ -1,21 +1,23 @@
 import fs from 'fs';
 import path from 'path';
 
-import { componentSettingsMap } from './componentSettingsMap';
-import { templatePlaceholdersData } from './types';
+import { Config, templatePlaceholdersData } from './types';
 
 type Properties = {
     root: string;
     moduleRoot: string;
     fileName: string;
     insertionData: templatePlaceholdersData;
+    config: Config;
 };
 
-export const getTemplate = async ({ root, moduleRoot, fileName, insertionData }: Properties) => {
-    const {
-        config: { templatesFolder, placeholders }
-    } = componentSettingsMap;
-
+export const getTemplate = async ({
+    root,
+    moduleRoot,
+    fileName,
+    insertionData,
+    config: { templatesFolder, placeholders }
+}: Properties) => {
     const defaultTemplatesFolder = path.resolve(moduleRoot, 'templates');
     const templatesPath = (await fs.existsSync(path.join(root, templatesFolder)))
         ? path.resolve(root, templatesFolder)

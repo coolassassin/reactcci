@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { CommandLineFlags, TypingCases } from './types';
+import { CommandLineFlags, Config, TypingCases } from './types';
 
 export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
 
@@ -109,11 +109,19 @@ export const getObjectNameParts = (name: string): string[] => {
         .filter((l) => l);
 };
 
-export const processObjectName = (name: string, isFolder = false, toComponent = false): string => {
-    const {
-        config: { processFileAndFolderName }
-    } = componentSettingsMap;
+type processObjectNameProperties = {
+    name: string;
+    isFolder?: boolean;
+    toComponent?: boolean;
+    processFileAndFolderName: Config['processFileAndFolderName'];
+};
 
+export const processObjectName = ({
+    name,
+    isFolder = false,
+    toComponent = false,
+    processFileAndFolderName
+}: processObjectNameProperties): string => {
     if (processFileAndFolderName) {
         if (toComponent) {
             return mapNameToCase(name, 'PascalCase');
@@ -144,32 +152,61 @@ export const mapNameToCase = (name: string, mapCase: TypingCases): string => {
     }
 };
 
-export const generateFileName = (fileNameTemplate: string, objectName: string) => {
-    return fileNameTemplate.replace(/\[name]/g, processObjectName(objectName));
+type generateFileNameProperties = {
+    fileNameTemplate: string;
+    objectName: string;
+    processFileAndFolderName: Config['processFileAndFolderName'];
+};
+
+export const generateFileName = ({
+    fileNameTemplate,
+    objectName,
+    processFileAndFolderName
+}: generateFileNameProperties) => {
+    return fileNameTemplate.replace(/\[name]/g, processObjectName({ name: objectName, processFileAndFolderName }));
 };
 
 type getIsFileAlreadyExistsProperties = {
     root: string;
     fileNameTemplate: string;
     objectName: string;
+    processFileAndFolderName: Config['processFileAndFolderName'];
 };
 
-export const getIsFileAlreadyExists = ({ fileNameTemplate, objectName, root }: getIsFileAlreadyExistsProperties) => {
+export const getIsFileAlreadyExists = ({
+    fileNameTemplate,
+    objectName,
+    root,
+    processFileAndFolderName
+}: getIsFileAlreadyExistsProperties) => {
     const { project, projectRootPath, resultPath } = componentSettingsMap;
-    const folder = path.join(root, project, projectRootPath, resultPath, processObjectName(objectName, true));
-    const fileName = generateFileName(fileNameTemplate, processObjectName(objectName, false));
+    const folder = path.join(
+        root,
+        project,
+        projectRootPath,
+        resultPath,
+        processObjectName({ name: objectName, isFolder: true, processFileAndFolderName })
+    );
+    const fileName = generateFileName({
+        fileNameTemplate,
+        objectName,
+        processFileAndFolderName
+    });
     return fs.existsSync(path.resolve(folder, fileName));
 };
 
 type getFileTemplatesProperties = {
     withRequired?: boolean;
     commandLineFlags: CommandLineFlags;
+    templates: Config['templates'];
 };
 
-export const getFileTemplates = ({ withRequired = false, commandLineFlags: { files } }: getFileTemplatesProperties) => {
-    const { config } = componentSettingsMap;
-
-    const requiredTemplateNames = Object.entries(config.templates)
+export const getFileTemplates = ({
+    withRequired = false,
+    commandLineFlags: { files },
+    templates
+}: getFileTemplatesProperties) => {
+    const requiredTemplateNames = Object.entries(templates)
         .filter(([, options]) => !options.optional)
         .map(([name]) => name);
 
@@ -180,7 +217,7 @@ export const getFileTemplates = ({ withRequired = false, commandLineFlags: { fil
     }
 
     const undefinedFileTemplates = fileTemplates.filter(
-        (tmp) => !Object.prototype.hasOwnProperty.call(config.templates, tmp) && tmp !== 'no'
+        (tmp) => !Object.prototype.hasOwnProperty.call(templates, tmp) && tmp !== 'no'
     );
 
     return {

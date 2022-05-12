@@ -4,20 +4,28 @@ import path from 'path';
 import { getTemplate } from './getTemplate';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getRelativePath, processPath, processObjectName, mapNameToCase } from './helpers';
-import { isTypingCase, templatePlaceholdersData } from './types';
+import { Config, isTypingCase, templatePlaceholdersData } from './types';
 
 type Properties = {
     root: string;
     moduleRoot: string;
+    config: Config;
 };
 
-export const generateFiles = async ({ root, moduleRoot }: Properties) => {
+export const generateFiles = async ({ root, moduleRoot, config }: Properties) => {
+    const { processFileAndFolderName } = config;
     const { project, componentNames, componentFileList, projectRootPath, resultPath, templateName } =
         componentSettingsMap;
 
     for (const componentName of componentNames) {
         const fileList = componentFileList[componentName];
-        const folder = path.join(root, project, projectRootPath, resultPath, processObjectName(componentName, true));
+        const folder = path.join(
+            root,
+            project,
+            projectRootPath,
+            resultPath,
+            processObjectName({ name: componentName, isFolder: true, processFileAndFolderName })
+        );
 
         if (!fs.existsSync(folder)) {
             await fs.promises.mkdir(folder);
@@ -34,8 +42,8 @@ export const generateFiles = async ({ root, moduleRoot }: Properties) => {
             destinationFolder: processPath(resultPath),
             objectFolder,
             relativeObjectFolder: processPath(path.join(project, projectRootPath, resultPath, componentName)),
-            filePrefix: processObjectName(componentName, false),
-            folderName: processObjectName(componentName, true),
+            filePrefix: processObjectName({ name: componentName, isFolder: false, processFileAndFolderName }),
+            folderName: processObjectName({ name: componentName, isFolder: true, processFileAndFolderName }),
             files: fileList,
             getRelativePath: (to: string) => getRelativePath({ root, from: objectFolder, to }),
             join: (...parts: string[]) => processPath(path.join(...parts)),
@@ -72,7 +80,8 @@ export const generateFiles = async ({ root, moduleRoot }: Properties) => {
                       root,
                       moduleRoot,
                       fileName: fileOptions.file,
-                      insertionData: dataForTemplate
+                      insertionData: dataForTemplate,
+                      config
                   })) ?? ''
                 : '';
             await fs.promises.writeFile(path.join(folder, ...subFolders, fileName), template);

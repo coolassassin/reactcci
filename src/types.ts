@@ -38,19 +38,20 @@ export const isTypingCase = (value: string): value is TypingCases => {
 
 export type ProcessFileAndFolderName = ((name?: string, parts?: string[], isFolder?: boolean) => string) | TypingCases;
 
-export type Setting = {
-    config: {
-        multiProject: boolean;
-        skipFinalStep: boolean;
-        folderPath: string | string[];
-        templatesFolder: string;
-        templates: TemplateDescriptionObject | MultiTemplate;
-        placeholders: { [key in string]: (data: any) => string };
-        processFileAndFolderName?: ProcessFileAndFolderName;
-        afterCreation?: {
-            [key in string]: AfterCreationCommand;
-        };
+export type Config = {
+    multiProject: boolean;
+    skipFinalStep: boolean;
+    folderPath: string | string[];
+    templatesFolder: string;
+    templates: TemplateDescriptionObject | MultiTemplate;
+    placeholders: { [key in string]: (data: unknown) => string };
+    processFileAndFolderName?: ProcessFileAndFolderName;
+    afterCreation?: {
+        [key in string]: AfterCreationCommand;
     };
+};
+
+export type Setting = {
     project: string;
     componentNames: string[];
     templateName: string;
