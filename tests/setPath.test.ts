@@ -15,7 +15,6 @@ import { mockConsole, mockProcess } from './testUtils';
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            project: '',
             templateName: 'component'
         } as PartialSetting
     };
@@ -40,6 +39,7 @@ const getPath = () => {
 describe('setPath', () => {
     const props: Parameters<typeof setPath>[0] = {
         root: process.cwd(),
+        project: '',
         commandLineFlags: {
             dest: ''
         } as CommandLineFlags,

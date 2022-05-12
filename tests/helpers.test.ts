@@ -17,12 +17,11 @@ import {
     processPath,
     splitStringByCapitalLetter
 } from '../src/helpers';
-import { CommandLineFlags, TypingCases, Config } from '../src/types';
+import { CommandLineFlags, TypingCases, Config, Project } from '../src/types';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            project: '',
             projectRootPath: 'src/',
             resultPath: '.'
         }
@@ -31,6 +30,7 @@ jest.mock('../src/componentSettingsMap', () => {
 
 describe('helpers', () => {
     const root = process.cwd();
+    const project: Project = '';
     let config = {} as Config;
     let commandLineFlags: CommandLineFlags | undefined = undefined;
     const fsMockFolders = {
@@ -149,6 +149,7 @@ describe('helpers', () => {
         expect(
             getIsFileAlreadyExists({
                 root,
+                project,
                 fileNameTemplate,
                 objectName: 'TestComponent',
                 processFileAndFolderName: config.processFileAndFolderName

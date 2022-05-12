@@ -51,8 +51,9 @@ export type Config = {
     };
 };
 
+export type Project = string;
+
 export type Setting = {
-    project: string;
     componentNames: string[];
     templateName: string;
     projectRootPath: string;

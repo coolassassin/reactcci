@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { CommandLineFlags, Config, TypingCases } from './types';
+import { CommandLineFlags, Config, Project, TypingCases } from './types';
 
 export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
 
@@ -170,6 +170,7 @@ type getIsFileAlreadyExistsProperties = {
     root: string;
     fileNameTemplate: string;
     objectName: string;
+    project: Project;
     processFileAndFolderName: Config['processFileAndFolderName'];
 };
 
@@ -177,9 +178,10 @@ export const getIsFileAlreadyExists = ({
     fileNameTemplate,
     objectName,
     root,
+    project,
     processFileAndFolderName
 }: getIsFileAlreadyExistsProperties) => {
-    const { project, projectRootPath, resultPath } = componentSettingsMap;
+    const { projectRootPath, resultPath } = componentSettingsMap;
     const folder = path.join(
         root,
         project,

@@ -3,7 +3,7 @@ import mockFs from 'mock-fs';
 import path from 'path';
 import fs from 'fs';
 
-import { Setting, Config } from '../src/types';
+import { Setting, Config, Project } from '../src/types';
 import { generateFiles } from '../src/generateFiles';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 import { getTemplate } from '../src/getTemplate';
@@ -11,7 +11,6 @@ import { getTemplate } from '../src/getTemplate';
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            project: '',
             projectRootPath: 'src/',
             resultPath: '.',
             componentNames: ['Comp1', 'Comp2'],
@@ -65,6 +64,7 @@ describe('generateFiles', () => {
     const root = process.cwd();
     const moduleRoot = '';
     const config = {} as Config;
+    const project: Project = '';
 
     beforeEach(() => {
         mockFs(fsMockFolders);
@@ -75,11 +75,11 @@ describe('generateFiles', () => {
     });
 
     it('generate', async () => {
-        const { project, projectRootPath, resultPath, componentNames } = componentSettingsMap;
+        const { projectRootPath, resultPath, componentNames } = componentSettingsMap;
         const folder = path.resolve(root, project, projectRootPath, resultPath);
         const mkdirSpy = jest.spyOn(fs.promises, 'mkdir');
         const writeFileSpy = jest.spyOn(fs.promises, 'writeFile');
-        await generateFiles({ root, moduleRoot, config });
+        await generateFiles({ root, moduleRoot, config, project });
         const filesComp1 = await fs.promises.readdir(path.resolve(folder, componentNames[0]));
         const filesComp2 = await fs.promises.readdir(path.resolve(folder, componentNames[1]));
         expect(filesComp1.length).toBe(2);

@@ -1,7 +1,6 @@
 import prompts from 'prompts';
 
 import { setProject } from '../src/setProject';
-import { componentSettingsMap } from '../src/componentSettingsMap';
 import * as helpers from '../src/helpers';
 import { CommandLineFlags, Config } from '../src/types';
 
@@ -10,7 +9,6 @@ import { mockConsole, mockProcess } from './testUtils';
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            project: '',
             templateName: 'component'
         }
     };
@@ -30,6 +28,7 @@ jest.mock('fs', () => {
 describe('setProject', () => {
     const props: Parameters<typeof setProject>[0] = {
         root: process.cwd(),
+        project: '',
         commandLineFlags: {
             dest: '',
             project: ''
@@ -44,7 +43,7 @@ describe('setProject', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        delete componentSettingsMap.project;
+        delete props.project;
         props.commandLineFlags.dest = '';
         props.commandLineFlags.project = '';
         props.config.folderPath = 'Folder1';
@@ -53,8 +52,7 @@ describe('setProject', () => {
 
     it('default project', async () => {
         prompts.inject(['Folder1']);
-        await setProject(props);
-        expect(componentSettingsMap.project).toBe('Folder1');
+        expect(await setProject(props)).toBe('Folder1');
     });
 
     it('wrong project', async () => {
@@ -65,22 +63,19 @@ describe('setProject', () => {
 
     it('manual project', async () => {
         props.commandLineFlags.project = 'Folder1';
-        await setProject(props);
+        expect(await setProject(props)).toBe('Folder1');
         expect(exitMock).toHaveBeenCalledTimes(0);
-        expect(componentSettingsMap.project).toBe('Folder1');
     });
 
     it('several projects', async () => {
         props.config.folderPath = ['Folder1', 'Folder2'];
         prompts.inject(['Folder1']);
-        await setProject(props);
-        expect(componentSettingsMap.project).toBe('Folder1');
+        expect(await setProject(props)).toBe('Folder1');
     });
 
     it('command line destinations', async () => {
         props.commandLineFlags.dest = 'src/';
-        await setProject(props);
-        expect(componentSettingsMap.project).toBe('');
+        expect(await setProject(props)).toBe('');
     });
 
     it('no projects exception', async () => {
@@ -91,7 +86,6 @@ describe('setProject', () => {
 
     it('only one project match to folderPath', async () => {
         (helpers.isDirectory as any) = jest.fn((pathStr: string) => pathStr.includes('Folder1'));
-        await setProject(props);
-        expect(componentSettingsMap.project).toBe('Folder1');
+        expect(await setProject(props)).toBe('Folder1');
     });
 });

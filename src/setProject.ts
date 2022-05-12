@@ -7,30 +7,35 @@ import path from 'path';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory, writeToConsole } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
-import { CommandLineFlags, Config } from './types';
+import { CommandLineFlags, Config, Project } from './types';
 
 const typeAboutSelectedProject = (project) => {
     writeToConsole(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
 };
 
 type Properties = {
+    project: Project;
     root: string;
     commandLineFlags: CommandLineFlags;
     config: Config;
 };
 
-export const setProject = async ({ root, commandLineFlags, config: { multiProject, folderPath } }: Properties) => {
+export const setProject = async ({
+    project: inputProject,
+    root,
+    commandLineFlags,
+    config: { multiProject, folderPath }
+}: Properties): Promise<Project> => {
     let project = '';
     const { templateName } = componentSettingsMap;
 
-    if (componentSettingsMap.project) {
-        typeAboutSelectedProject(componentSettingsMap.project);
-        return;
+    if (inputProject) {
+        typeAboutSelectedProject(inputProject);
+        return inputProject;
     }
 
     if (commandLineFlags.dest || !multiProject) {
-        componentSettingsMap.project = '';
-        return;
+        return '';
     }
 
     if (commandLineFlags.project) {
@@ -57,13 +62,12 @@ export const setProject = async ({ root, commandLineFlags, config: { multiProjec
                 )}`
             );
             process.exit();
-            return;
+            return '';
         }
 
         if (projectList.length === 1) {
             writeToConsole(`Creating ${templateName} for ${kleur.yellow(projectList[0])} project`);
-            componentSettingsMap.project = projectList[0];
-            return;
+            return projectList[0];
         }
 
         const { selectedProject } = await Prompt(
@@ -84,12 +88,13 @@ export const setProject = async ({ root, commandLineFlags, config: { multiProjec
         (Array.isArray(folderPath) && folderPath.some((fp) => fs.existsSync(path.resolve(root, project, fp)))) ||
         (!Array.isArray(folderPath) && fs.existsSync(path.resolve(root, project, folderPath)))
     ) {
-        componentSettingsMap.project = project;
-    } else {
-        console.error(
-            kleur.red(`Error: There is no folder for ${templateName} in ${kleur.yellow(project)} project`),
-            folderPath
-        );
-        process.exit();
+        return project;
     }
+
+    console.error(
+        kleur.red(`Error: There is no folder for ${templateName} in ${kleur.yellow(project)} project`),
+        folderPath
+    );
+    process.exit();
+    return '';
 };

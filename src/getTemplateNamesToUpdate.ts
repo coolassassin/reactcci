@@ -4,19 +4,21 @@ import kleur from 'kleur';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
-import { CommandLineFlags, Config, TemplateDescriptionObject } from './types';
+import { CommandLineFlags, Config, Project, TemplateDescriptionObject } from './types';
 import { generateFileName, getFileTemplates, getIsFileAlreadyExists } from './helpers';
 
 type Properties = {
     root: string;
     commandLineFlags: CommandLineFlags;
     config: Config;
+    project: Project;
 };
 
 export const getTemplateNamesToUpdate = async ({
     root,
     commandLineFlags,
-    config: { templates, processFileAndFolderName }
+    config: { templates, processFileAndFolderName },
+    project
 }: Properties) => {
     const { componentNames } = componentSettingsMap;
     const componentName = componentNames[0];
@@ -44,7 +46,8 @@ export const getTemplateNamesToUpdate = async ({
             root,
             fileNameTemplate: name,
             objectName: componentName,
-            processFileAndFolderName
+            processFileAndFolderName,
+            project
         });
         return {
             title: `${tmpFileName}${kleur.reset(

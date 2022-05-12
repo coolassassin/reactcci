@@ -5,7 +5,7 @@ import fs from 'fs';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { processPath } from './helpers';
-import { CommandLineFlags, Config } from './types';
+import { CommandLineFlags, Config, Project } from './types';
 
 type Properties = {
     root: string;
@@ -17,9 +17,9 @@ export const parseDestinationPath = async ({
     root,
     commandLineFlags: { dest },
     config: { folderPath, multiProject }
-}: Properties) => {
+}: Properties): Promise<Project> => {
     if (!dest) {
-        return false;
+        return '';
     }
 
     const absolutePath = path.isAbsolute(dest) ? dest : path.resolve(root, dest);
@@ -28,7 +28,7 @@ export const parseDestinationPath = async ({
         console.error(kleur.red("Error: Path doesn't exist:"));
         console.error(kleur.yellow(absolutePath));
         process.exit();
-        return;
+        return '';
     }
 
     let relativePath = path.relative(root, absolutePath);
@@ -36,7 +36,7 @@ export const parseDestinationPath = async ({
     if (relativePath === absolutePath || relativePath.startsWith('..')) {
         console.error(kleur.red('Error: component destination must be in project'));
         process.exit();
-        return;
+        return '';
     }
 
     let project = '';
@@ -56,14 +56,13 @@ export const parseDestinationPath = async ({
     if (!currentProjectRootPath) {
         console.error(kleur.red('Error: component destination must match to folderPath configuration parameter'));
         process.exit();
-        return;
+        return '';
     }
 
     const destinationPath = path.relative(path.resolve(root, project, currentProjectRootPath), absolutePath);
 
-    componentSettingsMap.project = project;
     componentSettingsMap.projectRootPath = processPath(currentProjectRootPath);
     componentSettingsMap.resultPath = processPath(destinationPath);
 
-    return true;
+    return project;
 };

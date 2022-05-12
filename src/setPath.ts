@@ -15,7 +15,7 @@ import {
 } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
-import { CommandLineFlags, Config } from './types';
+import { CommandLineFlags, Config, Project } from './types';
 
 export const filterChoicesByText = (choices: { title: string }[], query: string, isRoot: boolean) =>
     choices.filter((choice, index) => {
@@ -37,14 +37,16 @@ type Properties = {
     root: string;
     commandLineFlags: CommandLineFlags;
     config: Config;
+    project: Project;
 };
 
 export const setPath = async ({
     root,
     commandLineFlags: { dest, update, skipSearch },
-    config: { folderPath, processFileAndFolderName }
+    config: { folderPath, processFileAndFolderName },
+    project
 }: Properties) => {
-    const { project, templateName } = componentSettingsMap;
+    const { templateName } = componentSettingsMap;
 
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
     const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));

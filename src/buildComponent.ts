@@ -8,7 +8,7 @@ import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { CommandLineFlags, Config, FilesList, Setting, TemplateDescriptionObject } from './types';
+import { CommandLineFlags, Config, FilesList, Project, Setting, TemplateDescriptionObject } from './types';
 import { capitalizeName, generateFileName, getIsFileAlreadyExists, writeToConsole } from './helpers';
 import { getTemplateNamesToUpdate } from './getTemplateNamesToUpdate';
 
@@ -17,14 +17,15 @@ type Properties = {
     moduleRoot: string;
     commandLineFlags: CommandLineFlags;
     config: Config;
+    project: Project;
 };
 
-export const buildComponent = async ({ root, moduleRoot, commandLineFlags, config }: Properties) => {
+export const buildComponent = async ({ root, moduleRoot, commandLineFlags, config, project }: Properties) => {
     const { processFileAndFolderName } = config;
-    const { project, componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
+    const { componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
 
     const templateNames = commandLineFlags.update
-        ? await getTemplateNamesToUpdate({ root, commandLineFlags, config })
+        ? await getTemplateNamesToUpdate({ root, commandLineFlags, config, project })
         : await getTemplateNamesToCreate({ commandLineFlags, config });
 
     const fileList: FilesList = {};
@@ -54,6 +55,7 @@ export const buildComponent = async ({ root, moduleRoot, commandLineFlags, confi
                         fileObject.selected ||
                         getIsFileAlreadyExists({
                             root,
+                            project,
                             fileNameTemplate: fileObject.name,
                             objectName: componentName,
                             processFileAndFolderName
@@ -99,8 +101,8 @@ export const buildComponent = async ({ root, moduleRoot, commandLineFlags, confi
     }
 
     if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
-        await generateFiles({ root, moduleRoot, config });
-        await processAfterGeneration({ root, config });
+        await generateFiles({ root, moduleRoot, config, project });
+        await processAfterGeneration({ root, config, project });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
         const action = commandLineFlags.update ? 'updated' : 'created';
         writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));

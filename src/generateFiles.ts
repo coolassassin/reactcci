@@ -4,18 +4,18 @@ import path from 'path';
 import { getTemplate } from './getTemplate';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getRelativePath, processPath, processObjectName, mapNameToCase } from './helpers';
-import { Config, isTypingCase, templatePlaceholdersData } from './types';
+import { Config, isTypingCase, Project, templatePlaceholdersData } from './types';
 
 type Properties = {
     root: string;
     moduleRoot: string;
     config: Config;
+    project: Project;
 };
 
-export const generateFiles = async ({ root, moduleRoot, config }: Properties) => {
+export const generateFiles = async ({ root, moduleRoot, config, project }: Properties) => {
     const { processFileAndFolderName } = config;
-    const { project, componentNames, componentFileList, projectRootPath, resultPath, templateName } =
-        componentSettingsMap;
+    const { componentNames, componentFileList, projectRootPath, resultPath, templateName } = componentSettingsMap;
 
     for (const componentName of componentNames) {
         const fileList = componentFileList[componentName];
