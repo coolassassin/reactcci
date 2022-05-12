@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
-import { TypingCases } from './types';
+import { CommandLineFlags, TypingCases } from './types';
 
 export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
 
@@ -35,8 +35,13 @@ export const writeToConsole = (str: string) => {
     process.stdout.write(`${str}\n`);
 };
 
-export const getRelativePath = (from: string, to: string): string => {
-    const { root } = componentSettingsMap;
+type getRelativePathProperties = {
+    root: string;
+    from: string;
+    to: string;
+};
+
+export const getRelativePath = ({ root, from, to }: getRelativePathProperties): string => {
     const destination = path.isAbsolute(to) ? processPath(to) : processPath(path.resolve(root, processPath(to)));
     return processPath(path.relative(from, destination));
 };
@@ -143,18 +148,26 @@ export const generateFileName = (fileNameTemplate: string, objectName: string) =
     return fileNameTemplate.replace(/\[name]/g, processObjectName(objectName));
 };
 
-export const getIsFileAlreadyExists = (fileNameTemplate: string, objectName: string) => {
-    const { root, project, projectRootPath, resultPath } = componentSettingsMap;
+type getIsFileAlreadyExistsProperties = {
+    root: string;
+    fileNameTemplate: string;
+    objectName: string;
+};
+
+export const getIsFileAlreadyExists = ({ fileNameTemplate, objectName, root }: getIsFileAlreadyExistsProperties) => {
+    const { project, projectRootPath, resultPath } = componentSettingsMap;
     const folder = path.join(root, project, projectRootPath, resultPath, processObjectName(objectName, true));
     const fileName = generateFileName(fileNameTemplate, processObjectName(objectName, false));
     return fs.existsSync(path.resolve(folder, fileName));
 };
 
-export const getFileTemplates = (withRequired = false) => {
-    const {
-        config,
-        commandLineFlags: { files }
-    } = componentSettingsMap;
+type getFileTemplatesProperties = {
+    withRequired?: boolean;
+    commandLineFlags: CommandLineFlags;
+};
+
+export const getFileTemplates = ({ withRequired = false, commandLineFlags: { files } }: getFileTemplatesProperties) => {
+    const { config } = componentSettingsMap;
 
     const requiredTemplateNames = Object.entries(config.templates)
         .filter(([, options]) => !options.optional)

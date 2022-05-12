@@ -3,21 +3,18 @@ import prompts from 'prompts';
 import { setProject } from '../src/setProject';
 import { componentSettingsMap } from '../src/componentSettingsMap';
 import * as helpers from '../src/helpers';
+import { CommandLineFlags } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            root: process.cwd(),
             project: '',
             templateName: 'component',
             config: {
                 multiProject: true,
                 folderPath: 'Folder1'
-            },
-            commandLineFlags: {
-                dest: ''
             }
         }
     };
@@ -35,33 +32,40 @@ jest.mock('fs', () => {
 });
 
 describe('setProject', () => {
+    const props: Parameters<typeof setProject>[0] = {
+        root: process.cwd(),
+        commandLineFlags: {
+            dest: '',
+            project: ''
+        } as CommandLineFlags
+    };
     const { exitMock } = mockProcess();
     mockConsole();
 
     beforeEach(() => {
         jest.clearAllMocks();
         delete componentSettingsMap.project;
-        componentSettingsMap.commandLineFlags.dest = '';
-        componentSettingsMap.commandLineFlags.project = '';
+        props.commandLineFlags.dest = '';
+        props.commandLineFlags.project = '';
         componentSettingsMap.config.folderPath = 'Folder1';
         (helpers.isDirectory as any) = jest.fn(() => true);
     });
 
     it('default project', async () => {
         prompts.inject(['Folder1']);
-        await setProject();
+        await setProject(props);
         expect(componentSettingsMap.project).toBe('Folder1');
     });
 
     it('wrong project', async () => {
-        componentSettingsMap.commandLineFlags.project = 'NONEXISTENT_FOLDER';
-        await setProject();
+        props.commandLineFlags.project = 'NONEXISTENT_FOLDER';
+        await setProject(props);
         expect(exitMock).toBeCalled();
     });
 
     it('manual project', async () => {
-        componentSettingsMap.commandLineFlags.project = 'Folder1';
-        await setProject();
+        props.commandLineFlags.project = 'Folder1';
+        await setProject(props);
         expect(exitMock).toHaveBeenCalledTimes(0);
         expect(componentSettingsMap.project).toBe('Folder1');
     });
@@ -69,25 +73,25 @@ describe('setProject', () => {
     it('several projects', async () => {
         componentSettingsMap.config.folderPath = ['Folder1', 'Folder2'];
         prompts.inject(['Folder1']);
-        await setProject();
+        await setProject(props);
         expect(componentSettingsMap.project).toBe('Folder1');
     });
 
     it('command line destinations', async () => {
-        componentSettingsMap.commandLineFlags.dest = 'src/';
-        await setProject();
+        props.commandLineFlags.dest = 'src/';
+        await setProject(props);
         expect(componentSettingsMap.project).toBe('');
     });
 
     it('no projects exception', async () => {
         (helpers.isDirectory as any) = jest.fn(() => false);
-        await setProject();
+        await setProject(props);
         expect(exitMock).toBeCalled();
     });
 
     it('only one project match to folderPath', async () => {
         (helpers.isDirectory as any) = jest.fn((pathStr: string) => pathStr.includes('Folder1'));
-        await setProject();
+        await setProject(props);
         expect(componentSettingsMap.project).toBe('Folder1');
     });
 });

@@ -6,9 +6,12 @@ import childProcess from 'child_process';
 import { componentSettingsMap } from './componentSettingsMap';
 import { processObjectName, writeToConsole } from './helpers';
 
-export const processAfterGeneration = async () => {
+type Properties = {
+    root: string;
+};
+
+export const processAfterGeneration = async ({ root }: Properties) => {
     const {
-        root,
         project,
         resultPath,
         projectRootPath,

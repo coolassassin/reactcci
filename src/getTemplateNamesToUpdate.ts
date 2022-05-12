@@ -4,13 +4,18 @@ import kleur from 'kleur';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
-import { TemplateDescriptionObject } from './types';
+import { CommandLineFlags, TemplateDescriptionObject } from './types';
 import { generateFileName, getFileTemplates, getIsFileAlreadyExists } from './helpers';
 
-export const getTemplateNamesToUpdate = async () => {
-    const { config, componentNames, commandLineFlags } = componentSettingsMap;
+type Properties = {
+    root: string;
+    commandLineFlags: CommandLineFlags;
+};
+
+export const getTemplateNamesToUpdate = async ({ root, commandLineFlags }: Properties) => {
+    const { config, componentNames } = componentSettingsMap;
     const componentName = componentNames[0];
-    const { fileTemplates, undefinedFileTemplates } = getFileTemplates();
+    const { fileTemplates, undefinedFileTemplates } = getFileTemplates({ commandLineFlags });
 
     if (commandLineFlags.files) {
         if (undefinedFileTemplates.length > 0) {
@@ -26,7 +31,7 @@ export const getTemplateNamesToUpdate = async () => {
     const choices = Object.entries(config.templates as TemplateDescriptionObject).map(([tmpFileName, options]) => {
         const { default: isDefault = true, optional: isOptional = false, name } = options;
         const fileName = generateFileName(name, componentName);
-        const isAlreadyExists = getIsFileAlreadyExists(name, componentName);
+        const isAlreadyExists = getIsFileAlreadyExists({ root, fileNameTemplate: name, objectName: componentName });
         return {
             title: `${tmpFileName}${kleur.reset(
                 ` (${isAlreadyExists ? 'Replace' : 'Create'}: ${kleur.yellow(fileName)})`

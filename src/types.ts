@@ -39,8 +39,6 @@ export const isTypingCase = (value: string): value is TypingCases => {
 export type ProcessFileAndFolderName = ((name?: string, parts?: string[], isFolder?: boolean) => string) | TypingCases;
 
 export type Setting = {
-    root: string;
-    moduleRoot: string;
     config: {
         multiProject: boolean;
         skipFinalStep: boolean;
@@ -59,17 +57,18 @@ export type Setting = {
     projectRootPath: string;
     resultPath: string;
     componentFileList: { [key in string]: FilesList };
-    commandLineFlags: {
-        update: boolean;
-        skipSearch: boolean;
-        sls: boolean;
-        nfc: boolean;
-        dest: string;
-        name: string;
-        template: string;
-        project: string;
-        files: string;
-    };
+};
+
+export type CommandLineFlags = {
+    update: boolean;
+    skipSearch: boolean;
+    sls: boolean;
+    nfc: boolean;
+    dest: string;
+    name: string;
+    template: string;
+    project: string;
+    files: string;
 };
 
 export type templatePlaceholdersData = {

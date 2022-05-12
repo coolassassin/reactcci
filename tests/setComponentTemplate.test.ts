@@ -2,6 +2,7 @@ import prompts from 'prompts';
 
 import { setComponentTemplate } from '../src/setComponentTemplate';
 import { componentSettingsMap } from '../src/componentSettingsMap';
+import { CommandLineFlags } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
@@ -10,15 +11,17 @@ jest.mock('../src/componentSettingsMap', () => {
         componentSettingsMap: {
             config: {
                 templates: {}
-            },
-            commandLineFlags: {
-                template: ''
             }
         }
     };
 });
 
 describe('getFinalAgreement', () => {
+    const props: Parameters<typeof setComponentTemplate>[0] = {
+        commandLineFlags: {
+            template: ''
+        } as CommandLineFlags
+    };
     const { exitMock } = mockProcess();
     mockConsole();
 
@@ -27,7 +30,7 @@ describe('getFinalAgreement', () => {
     });
 
     it('basic config with component template', async () => {
-        await setComponentTemplate();
+        await setComponentTemplate(props);
         expect(componentSettingsMap.templateName).toBe('component');
     });
 
@@ -38,7 +41,7 @@ describe('getFinalAgreement', () => {
                 files: {}
             }
         ];
-        await setComponentTemplate();
+        await setComponentTemplate(props);
         expect(componentSettingsMap.templateName).toBe('service');
     });
 
@@ -54,7 +57,7 @@ describe('getFinalAgreement', () => {
             }
         ];
         prompts.inject(['service']);
-        await setComponentTemplate();
+        await setComponentTemplate(props);
         expect(componentSettingsMap.templateName).toBe('service');
     });
 
@@ -66,32 +69,32 @@ describe('getFinalAgreement', () => {
                 files: {}
             }
         ];
-        await setComponentTemplate();
+        await setComponentTemplate(props);
         expect(componentSettingsMap.templateName).toBe('service');
         expect(componentSettingsMap.config.folderPath).toBe('src/components/');
     });
 
     it('config with array and wrong commandline flag', async () => {
-        componentSettingsMap.commandLineFlags.template = 'cmp';
+        props.commandLineFlags.template = 'cmp';
         componentSettingsMap.config.templates = [
             {
                 name: 'component',
                 files: {}
             }
         ];
-        await setComponentTemplate();
+        await setComponentTemplate(props);
         expect(exitMock).toBeCalled();
     });
 
     it('config with array and right commandline flag', async () => {
-        componentSettingsMap.commandLineFlags.template = 'component';
+        props.commandLineFlags.template = 'component';
         componentSettingsMap.config.templates = [
             {
                 name: 'component',
                 files: {}
             }
         ];
-        await setComponentTemplate();
+        await setComponentTemplate(props);
         expect(componentSettingsMap.templateName).toBe('component');
     });
 });

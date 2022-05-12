@@ -2,7 +2,7 @@ import prompts from 'prompts';
 
 import { getTemplateNamesToCreate } from '../src/getTemplateNamesToCreate';
 import { componentSettingsMap } from '../src/componentSettingsMap';
-import { PartialSetting } from '../src/types';
+import { CommandLineFlags, PartialSetting } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
@@ -11,21 +11,23 @@ jest.mock('../src/componentSettingsMap', () => {
         componentSettingsMap: {
             config: {
                 templates: {}
-            },
-            commandLineFlags: {
-                files: ''
             }
         } as PartialSetting
     };
 });
 
 describe('getTemplateNamesToCreate', () => {
+    const props: Parameters<typeof getTemplateNamesToCreate>[0] = {
+        commandLineFlags: {
+            files: ''
+        } as CommandLineFlags
+    };
     mockConsole();
     const { exitMock } = mockProcess();
 
     beforeEach(() => {
         componentSettingsMap.config.templates = {};
-        componentSettingsMap.commandLineFlags.files = '';
+        props.commandLineFlags.files = '';
     });
 
     it('no optional', async () => {
@@ -35,7 +37,7 @@ describe('getTemplateNamesToCreate', () => {
                 file: 'index.ts'
             }
         };
-        const res = await getTemplateNamesToCreate();
+        const res = await getTemplateNamesToCreate(props);
         expect(res).toEqual(['index']);
     });
 
@@ -52,7 +54,7 @@ describe('getTemplateNamesToCreate', () => {
             }
         };
         prompts.inject([[]]);
-        const res = await getTemplateNamesToCreate();
+        const res = await getTemplateNamesToCreate(props);
         expect(res).toEqual(['file1']);
     });
 
@@ -69,7 +71,7 @@ describe('getTemplateNamesToCreate', () => {
             }
         };
         prompts.inject([['file2']]);
-        const res = await getTemplateNamesToCreate();
+        const res = await getTemplateNamesToCreate(props);
         expect(res).toEqual(['file1', 'file2']);
     });
 
@@ -85,8 +87,8 @@ describe('getTemplateNamesToCreate', () => {
                 optional: true
             }
         };
-        componentSettingsMap.commandLineFlags.files = 'file2[1]';
-        const res = await getTemplateNamesToCreate();
+        props.commandLineFlags.files = 'file2[1]';
+        const res = await getTemplateNamesToCreate(props);
         expect(res).toEqual(['file1', 'file2']);
     });
 
@@ -102,8 +104,8 @@ describe('getTemplateNamesToCreate', () => {
                 optional: true
             }
         };
-        componentSettingsMap.commandLineFlags.files = 'no';
-        const res = await getTemplateNamesToCreate();
+        props.commandLineFlags.files = 'no';
+        const res = await getTemplateNamesToCreate(props);
         expect(res).toEqual(['file1']);
     });
 
@@ -119,8 +121,8 @@ describe('getTemplateNamesToCreate', () => {
                 optional: true
             }
         };
-        componentSettingsMap.commandLineFlags.files = 'unexpected';
-        await getTemplateNamesToCreate();
+        props.commandLineFlags.files = 'unexpected';
+        await getTemplateNamesToCreate(props);
         expect(exitMock).toBeCalled();
     });
 });

@@ -5,12 +5,17 @@ import fs from 'fs';
 import path from 'path';
 
 import { CONFIG_FILE_NAME } from './constants';
-import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { writeToConsole } from './helpers';
+import { CommandLineFlags } from './types';
 
-export const initialize = async () => {
-    const { root, moduleRoot, commandLineFlags } = componentSettingsMap;
+type Properties = {
+    root: string;
+    moduleRoot: string;
+    commandLineFlags: CommandLineFlags;
+};
+
+export const initialize = async ({ root, moduleRoot, commandLineFlags }: Properties) => {
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
     if (fs.existsSync(localConfigPath)) {
         return;

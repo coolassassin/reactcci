@@ -1,14 +1,17 @@
 import Prompt from 'prompts';
 import kleur from 'kleur';
 
-import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { FileOption } from './types';
+import { CommandLineFlags, FileOption } from './types';
 import { getFileIndexForTemplate } from './helpers';
 
-export const getTemplateFile = async (name: string, files: FileOption[]) => {
-    const { commandLineFlags } = componentSettingsMap;
+type Properties = {
+    name: string;
+    files: FileOption[];
+    commandLineFlags: CommandLineFlags;
+};
 
+export const getTemplateFile = async ({ name, files, commandLineFlags }: Properties) => {
     if (commandLineFlags.files) {
         const index = getFileIndexForTemplate(commandLineFlags.files, name);
 

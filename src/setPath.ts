@@ -15,6 +15,7 @@ import {
 } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
+import { CommandLineFlags } from './types';
 
 export const filterChoicesByText = (choices: { title: string }[], query: string, isRoot: boolean) =>
     choices.filter((choice, index) => {
@@ -32,13 +33,16 @@ export const filterChoicesByText = (choices: { title: string }[], query: string,
         );
     });
 
-export const setPath = async () => {
+type Properties = {
+    root: string;
+    commandLineFlags: CommandLineFlags;
+};
+
+export const setPath = async ({ root, commandLineFlags: { dest, update, skipSearch } }: Properties) => {
     const {
-        root,
         project,
         templateName,
-        config: { folderPath },
-        commandLineFlags: { dest, update, skipSearch }
+        config: { folderPath }
     } = componentSettingsMap;
 
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
@@ -81,9 +85,9 @@ export const setPath = async () => {
                 return;
             }
 
-            const folders = (
-                await fs.promises.readdir(path.resolve(project, projectRootPath, relativePath))
-            ).filter((item) => isDirectory(path.resolve(project, projectRootPath, relativePath, item)));
+            const folders = (await fs.promises.readdir(path.resolve(project, projectRootPath, relativePath))).filter(
+                (item) => isDirectory(path.resolve(project, projectRootPath, relativePath, item))
+            );
 
             if (folders.length === 0) {
                 resultPath = path.join(relativePath);

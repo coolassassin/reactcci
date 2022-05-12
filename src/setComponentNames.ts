@@ -4,10 +4,14 @@ import kleur from 'kleur';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { capitalizeName, mapNameToCase, processComponentNameString, writeToConsole } from './helpers';
-import { Setting } from './types';
+import { CommandLineFlags, Setting } from './types';
 
-export const setComponentNames = async () => {
-    const { commandLineFlags, templateName } = componentSettingsMap;
+type Properties = {
+    commandLineFlags: CommandLineFlags;
+};
+
+export const setComponentNames = async ({ commandLineFlags }: Properties) => {
+    const { templateName } = componentSettingsMap;
 
     if (commandLineFlags.update) {
         return;

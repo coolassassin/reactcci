@@ -1,56 +1,54 @@
 import prompts from 'prompts';
 
-import { FileOption } from '../src/types';
+import { CommandLineFlags } from '../src/types';
 import { getTemplateFile } from '../src/getTemplateFile';
-import { componentSettingsMap } from '../src/componentSettingsMap';
 
 import { mockConsole, mockProcess } from './testUtils';
 
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {
-            commandLineFlags: {
-                files: ''
-            }
-        }
-    };
-});
-
 describe('getTemplateFile', () => {
+    const props: Parameters<typeof getTemplateFile>[0] = {
+        name: 'component',
+        files: [],
+        commandLineFlags: {
+            files: ''
+        } as CommandLineFlags
+    };
+
     const { exitMock } = mockProcess();
     mockConsole();
 
     beforeEach(() => {
-        componentSettingsMap.commandLineFlags.files = '';
+        props.files = [];
+        props.commandLineFlags.files = '';
     });
 
     it('select by prompt', async () => {
-        const fileOptions: FileOption[] = [
+        props.files = [
             { name: 'fc.tsx', description: 'Functional component' },
             { name: 'class.tsx', description: 'Class component' }
         ];
-        prompts.inject([fileOptions[0]]);
-        const selectedFileOption = await getTemplateFile('component', fileOptions);
-        expect(selectedFileOption).toEqual(fileOptions[0]);
+        prompts.inject([props.files[0]]);
+        const selectedFileOption = await getTemplateFile(props);
+        expect(selectedFileOption).toEqual(props.files[0]);
     });
 
     it('select by command line', async () => {
-        const fileOptions: FileOption[] = [
+        props.files = [
             { name: 'fc.tsx', description: 'Functional component' },
             { name: 'class.tsx', description: 'Class component' }
         ];
-        componentSettingsMap.commandLineFlags.files = 'style component[0] test';
-        const selectedFileOption = await getTemplateFile('component', fileOptions);
-        expect(selectedFileOption).toEqual(fileOptions[0]);
+        props.commandLineFlags.files = 'style component[0] test';
+        const selectedFileOption = await getTemplateFile(props);
+        expect(selectedFileOption).toEqual(props.files[0]);
     });
 
     it('wrong select by command line', async () => {
-        const fileOptions: FileOption[] = [
+        props.files = [
             { name: 'fc.tsx', description: 'Functional component' },
             { name: 'class.tsx', description: 'Class component' }
         ];
-        componentSettingsMap.commandLineFlags.files = 'style component[2] test';
-        await getTemplateFile('component', fileOptions);
+        props.commandLineFlags.files = 'style component[2] test';
+        await getTemplateFile(props);
         expect(exitMock).toBeCalled();
     });
 });

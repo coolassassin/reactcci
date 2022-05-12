@@ -8,29 +8,29 @@ import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { FilesList, Setting, TemplateDescriptionObject } from './types';
+import { CommandLineFlags, FilesList, Setting, TemplateDescriptionObject } from './types';
 import { capitalizeName, generateFileName, getIsFileAlreadyExists, writeToConsole } from './helpers';
 import { getTemplateNamesToUpdate } from './getTemplateNamesToUpdate';
 
-export const buildComponent = async () => {
-    const {
-        config,
-        project,
-        componentNames,
-        projectRootPath,
-        resultPath,
-        templateName,
-        commandLineFlags
-    } = componentSettingsMap;
+type Properties = {
+    root: string;
+    moduleRoot: string;
+    commandLineFlags: CommandLineFlags;
+};
 
-    const templateNames = commandLineFlags.update ? await getTemplateNamesToUpdate() : await getTemplateNamesToCreate();
+export const buildComponent = async ({ root, moduleRoot, commandLineFlags }: Properties) => {
+    const { config, project, componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
+
+    const templateNames = commandLineFlags.update
+        ? await getTemplateNamesToUpdate({ root, commandLineFlags })
+        : await getTemplateNamesToCreate({ commandLineFlags });
 
     const fileList: FilesList = {};
 
     for (const [templateName, { name, file }] of Object.entries(config.templates as TemplateDescriptionObject)) {
         const isTemplateSelected = templateNames.includes(templateName);
         if (Array.isArray(file) && isTemplateSelected) {
-            const selectedFile = await getTemplateFile(templateName, file);
+            const selectedFile = await getTemplateFile({ commandLineFlags, name: templateName, files: file });
             fileList[templateName] = {
                 name,
                 file: selectedFile.name,
@@ -48,7 +48,10 @@ export const buildComponent = async () => {
         componentFileList[componentName] = Object.fromEntries(
             Object.entries(fileList)
                 .filter(([, fileObject]) => {
-                    return fileObject.selected || getIsFileAlreadyExists(fileObject.name, componentName);
+                    return (
+                        fileObject.selected ||
+                        getIsFileAlreadyExists({ root, fileNameTemplate: fileObject.name, objectName: componentName })
+                    );
                 })
                 .map(([tmpName, fileObject]) => [
                     tmpName,
@@ -85,8 +88,8 @@ export const buildComponent = async () => {
     }
 
     if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
-        await generateFiles();
-        await processAfterGeneration();
+        await generateFiles({ root, moduleRoot });
+        await processAfterGeneration({ root });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
         const action = commandLineFlags.update ? 'updated' : 'created';
         writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));

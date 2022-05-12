@@ -7,17 +7,21 @@ import path from 'path';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory, writeToConsole } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
+import { CommandLineFlags } from './types';
 
 const typeAboutSelectedProject = (project) => {
     writeToConsole(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
 };
 
-export const setProject = async () => {
+type Properties = {
+    root: string;
+    commandLineFlags: CommandLineFlags;
+};
+
+export const setProject = async ({ root, commandLineFlags }: Properties) => {
     let project = '';
     const {
-        root,
         config: { multiProject, folderPath },
-        commandLineFlags,
         templateName
     } = componentSettingsMap;
 

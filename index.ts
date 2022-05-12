@@ -9,7 +9,6 @@ import { initialize } from './src/initialize';
 import { checkConfig } from './src/checkConfig';
 import { setComponentNames } from './src/setComponentNames';
 import { buildComponent } from './src/buildComponent';
-import { componentSettingsMap } from './src/componentSettingsMap';
 import { processCommandLineFlags } from './src/processCommandLineFlags';
 import { getModuleRootPath } from './src/getModuleRootPath';
 import { setComponentTemplate } from './src/setComponentTemplate';
@@ -17,23 +16,22 @@ import { parseDestinationPath } from './src/parseDestinationPath';
 
 (async () => {
     try {
-        componentSettingsMap.root = process.cwd();
-        componentSettingsMap.moduleRoot = getModuleRootPath();
+        const root = process.cwd();
+        const moduleRoot = getModuleRootPath();
+        const commandLineFlags = processCommandLineFlags();
 
-        processCommandLineFlags();
-
-        await initialize();
-        await setConfig();
+        await initialize({ root, moduleRoot, commandLineFlags });
+        await setConfig({ root });
         await checkConfig();
 
-        await setComponentTemplate();
-        await parseDestinationPath();
-        await setProject();
-        await setPath();
+        await setComponentTemplate({ commandLineFlags });
+        await parseDestinationPath({ root, commandLineFlags });
+        await setProject({ root, commandLineFlags });
+        await setPath({ root, commandLineFlags });
 
-        await setComponentNames();
+        await setComponentNames({ commandLineFlags });
 
-        await buildComponent();
+        await buildComponent({ root, moduleRoot, commandLineFlags });
     } catch (e) {
         console.error(kleur.red('Unexpected error'), e);
         process.exit();

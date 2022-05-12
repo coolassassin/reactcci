@@ -4,11 +4,16 @@ import { getQuestionsSettings } from './getQuestionsSettings';
 import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
 import { getFileTemplates } from './helpers';
+import { CommandLineFlags } from './types';
 
-export const getTemplateNamesToCreate = async () => {
-    const { config, commandLineFlags } = componentSettingsMap;
+type Properties = {
+    commandLineFlags: CommandLineFlags;
+};
 
-    const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates();
+export const getTemplateNamesToCreate = async ({ commandLineFlags }: Properties) => {
+    const { config } = componentSettingsMap;
+
+    const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates({ commandLineFlags });
 
     let selectedTemplateNames: string[] = [];
     if (commandLineFlags.files) {

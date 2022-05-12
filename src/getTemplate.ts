@@ -2,11 +2,17 @@ import fs from 'fs';
 import path from 'path';
 
 import { componentSettingsMap } from './componentSettingsMap';
+import { templatePlaceholdersData } from './types';
 
-export const getTemplate = async (fileName, insertionData) => {
+type Properties = {
+    root: string;
+    moduleRoot: string;
+    fileName: string;
+    insertionData: templatePlaceholdersData;
+};
+
+export const getTemplate = async ({ root, moduleRoot, fileName, insertionData }: Properties) => {
     const {
-        root,
-        moduleRoot,
         config: { templatesFolder, placeholders }
     } = componentSettingsMap;
 

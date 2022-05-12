@@ -18,12 +18,11 @@ import {
     processPath,
     splitStringByCapitalLetter
 } from '../src/helpers';
-import { TypingCases } from '../src/types';
+import { CommandLineFlags, TypingCases } from '../src/types';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            root: process.cwd(),
             project: '',
             config: {},
             projectRootPath: 'src/',
@@ -33,6 +32,8 @@ jest.mock('../src/componentSettingsMap', () => {
 });
 
 describe('helpers', () => {
+    const root = process.cwd();
+    let commandLineFlags: CommandLineFlags | undefined = undefined;
     const fsMockFolders = {
         node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
         src: {
@@ -45,7 +46,7 @@ describe('helpers', () => {
     };
 
     beforeEach(() => {
-        (componentSettingsMap.commandLineFlags as any) = undefined;
+        commandLineFlags = undefined;
         (componentSettingsMap.config as any) = { ...defaultConfig, templates: defaultConfig.templates[0].files };
         mockFs(fsMockFolders);
     });
@@ -146,7 +147,7 @@ describe('helpers', () => {
         ['[name].tsx', true],
         ['[name].module.css', false]
     ])('getIsFileAlreadyExists: is file exists "%s" ? %s', (fileNameTemplate, expected) => {
-        expect(getIsFileAlreadyExists(fileNameTemplate, 'TestComponent')).toEqual(expected);
+        expect(getIsFileAlreadyExists({ root, fileNameTemplate, objectName: 'TestComponent' })).toEqual(expected);
     });
 
     it.each([
@@ -182,8 +183,11 @@ describe('helpers', () => {
         ['bug component[1] test', ['bug', 'component', 'test'], true, ['bug']],
         ['no', ['no'], false, []]
     ])('getFileTemplates: %s must be converted to %s', (str, templates, withRequired, unexpected) => {
-        (componentSettingsMap.commandLineFlags as any) = { files: str };
-        const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates(withRequired);
+        commandLineFlags = { files: str } as CommandLineFlags;
+        const { fileTemplates, undefinedFileTemplates, requiredTemplateNames } = getFileTemplates({
+            commandLineFlags,
+            withRequired
+        });
         expect(fileTemplates).toEqual(templates);
         expect(undefinedFileTemplates).toEqual(unexpected);
         expect(requiredTemplateNames).toEqual(['index', 'component']);

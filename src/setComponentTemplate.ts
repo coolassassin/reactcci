@@ -3,11 +3,15 @@ import kleur from 'kleur';
 
 import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
+import { CommandLineFlags } from './types';
 
-export const setComponentTemplate = async () => {
+type Properties = {
+    commandLineFlags: CommandLineFlags;
+};
+
+export const setComponentTemplate = async ({ commandLineFlags: { template } }: Properties) => {
     const {
-        config: { templates },
-        commandLineFlags: { template }
+        config: { templates }
     } = componentSettingsMap;
 
     if (Array.isArray(templates)) {

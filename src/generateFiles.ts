@@ -6,8 +6,13 @@ import { componentSettingsMap } from './componentSettingsMap';
 import { getRelativePath, processPath, processObjectName, mapNameToCase } from './helpers';
 import { isTypingCase, templatePlaceholdersData } from './types';
 
-export const generateFiles = async () => {
-    const { root, project, componentNames, componentFileList, projectRootPath, resultPath, templateName } =
+type Properties = {
+    root: string;
+    moduleRoot: string;
+};
+
+export const generateFiles = async ({ root, moduleRoot }: Properties) => {
+    const { project, componentNames, componentFileList, projectRootPath, resultPath, templateName } =
         componentSettingsMap;
 
     for (const componentName of componentNames) {
@@ -32,7 +37,7 @@ export const generateFiles = async () => {
             filePrefix: processObjectName(componentName, false),
             folderName: processObjectName(componentName, true),
             files: fileList,
-            getRelativePath: (to: string) => getRelativePath(objectFolder, to),
+            getRelativePath: (to: string) => getRelativePath({ root, from: objectFolder, to }),
             join: (...parts: string[]) => processPath(path.join(...parts)),
             stringToCase: (str: string, toCase: string) => {
                 if (isTypingCase(toCase)) {
@@ -60,9 +65,16 @@ export const generateFiles = async () => {
                     }
                 }
                 dataForTemplate.getRelativePath = (to: string) =>
-                    getRelativePath(path.resolve(objectFolder, subFolders.join('/')), to);
+                    getRelativePath({ root, from: path.resolve(objectFolder, subFolders.join('/')), to });
             }
-            const template = fileOptions.file ? (await getTemplate(fileOptions.file, dataForTemplate)) ?? '' : '';
+            const template = fileOptions.file
+                ? (await getTemplate({
+                      root,
+                      moduleRoot,
+                      fileName: fileOptions.file,
+                      insertionData: dataForTemplate
+                  })) ?? ''
+                : '';
             await fs.promises.writeFile(path.join(folder, ...subFolders, fileName), template);
         }
     }

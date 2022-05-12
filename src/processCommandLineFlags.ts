@@ -1,9 +1,9 @@
 import { program } from 'commander';
 
-import { componentSettingsMap } from './componentSettingsMap';
 import { processCommandLineArguments } from './helpers';
+import { CommandLineFlags } from './types';
 
-export const processCommandLineFlags = () => {
+export const processCommandLineFlags = (): CommandLineFlags => {
     program.option('-u, --update', 'update mode, to add or replace files in existent object');
     program.option('-n, --name <type>', 'object name');
     program.option('-t, --template <type>', 'template name');
@@ -27,7 +27,7 @@ export const processCommandLineFlags = () => {
         files = ''
     } = program.opts() || {};
 
-    componentSettingsMap.commandLineFlags = {
+    return {
         update,
         skipSearch,
         sls,

@@ -9,8 +9,11 @@ const prepareFolderPath = (path: string): string => {
     return `${path.replace(/(^\/|^\\|\/$|\\$)/g, '')}/`;
 };
 
-export const setConfig = async () => {
-    const { root } = componentSettingsMap;
+type Properties = {
+    root: string;
+};
+
+export const setConfig = async ({ root }: Properties) => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     let res: Setting['config'] = require('../defaultConfig.js');
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);

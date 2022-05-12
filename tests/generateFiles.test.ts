@@ -11,7 +11,6 @@ import { getTemplate } from '../src/getTemplate';
 jest.mock('../src/componentSettingsMap', () => {
     return {
         componentSettingsMap: {
-            root: process.cwd(),
             project: '',
             config: {} as any,
             projectRootPath: 'src/',
@@ -64,6 +63,8 @@ describe('generateFiles', () => {
             Comp1: {}
         }
     };
+    const root = process.cwd();
+    const moduleRoot = '';
 
     beforeEach(() => {
         mockFs(fsMockFolders);
@@ -74,11 +75,11 @@ describe('generateFiles', () => {
     });
 
     it('generate', async () => {
-        const { root, project, projectRootPath, resultPath, componentNames } = componentSettingsMap;
+        const { project, projectRootPath, resultPath, componentNames } = componentSettingsMap;
         const folder = path.resolve(root, project, projectRootPath, resultPath);
         const mkdirSpy = jest.spyOn(fs.promises, 'mkdir');
         const writeFileSpy = jest.spyOn(fs.promises, 'writeFile');
-        await generateFiles();
+        await generateFiles({ root, moduleRoot });
         const filesComp1 = await fs.promises.readdir(path.resolve(folder, componentNames[0]));
         const filesComp2 = await fs.promises.readdir(path.resolve(folder, componentNames[1]));
         expect(filesComp1.length).toBe(2);
