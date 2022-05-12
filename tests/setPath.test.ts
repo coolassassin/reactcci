@@ -61,6 +61,7 @@ describe('setPath', () => {
         [emptyFolderPath]: {}
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (helpers.isDirectory as any) = jest.fn(() => true);
 
     const { exitMock } = mockProcess();

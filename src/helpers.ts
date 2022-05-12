@@ -4,7 +4,7 @@ import path from 'path';
 import { componentSettingsMap } from './componentSettingsMap';
 import { CommandLineFlags, Config, Project, TypingCases } from './types';
 
-export const isDirectory = (source) => fs.lstatSync(source).isDirectory();
+export const isDirectory = (source: string) => fs.lstatSync(source).isDirectory();
 
 export const capitalizeName = (value: string) => value.replace(/^./g, value[0].toUpperCase());
 

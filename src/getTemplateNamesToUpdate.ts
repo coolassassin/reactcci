@@ -68,9 +68,11 @@ export const getTemplateNamesToUpdate = async ({
                 message: 'Select files to replace or create',
                 instructions: TEMPLATE_NAMES_SELECTING_INSTRUCTIONS,
                 choices,
+                // @ts-ignore
                 onRender() {
                     if (!initialized) {
                         const choiceToSelect = choices.findIndex((choice) => choice.selected);
+                        // @ts-ignore
                         this.cursor = choiceToSelect !== -1 ? choiceToSelect : 0;
                         initialized = true;
                     }

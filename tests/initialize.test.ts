@@ -43,6 +43,7 @@ describe('initialize', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (consts.CONFIG_FILE_NAME as any) = configFileName;
         mockFs(fsMockFolders);
     });
@@ -52,6 +53,7 @@ describe('initialize', () => {
     });
 
     it('config exists, skip everything', async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (consts.CONFIG_FILE_NAME as any) = existentConfigName;
         const result = await initialize(props);
         expect(result).toBeUndefined();

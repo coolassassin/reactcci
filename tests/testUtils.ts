@@ -8,6 +8,7 @@ export const mockProcess = () => {
             ...realProcess,
             exit: exitMock,
             stdout: { ...realProcess.stdout, write: stdoutWrite }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any;
     });
 
@@ -24,6 +25,7 @@ export const mockConsole = () => {
     const realConsole = console;
 
     beforeEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         global.console = { ...realConsole, error: consoleError } as any;
     });
 

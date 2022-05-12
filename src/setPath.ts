@@ -138,10 +138,14 @@ export const setPath = async ({
                     choices: choices.map((choice) => ({ ...choice, description: kleur.yellow(choice.description) })),
                     initial: isRoot ? 0 : 1,
                     onState() {
+                        // @ts-ignore
                         if (this.input === '' && searching) {
+                            // @ts-ignore
                             this.select = isRoot ? 0 : 1;
                             searching = false;
+                            // @ts-ignore
                         } else if (this.input !== '' && !searching) {
+                            // @ts-ignore
                             this.select = 0;
                             searching = true;
                         }

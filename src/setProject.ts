@@ -9,7 +9,7 @@ import { isDirectory, writeToConsole } from './helpers';
 import { componentSettingsMap } from './componentSettingsMap';
 import { CommandLineFlags, Config, Project } from './types';
 
-const typeAboutSelectedProject = (project) => {
+const typeAboutSelectedProject = (project: Project) => {
     writeToConsole(`${kleur.green('√')} Selected project ${kleur.gray(`»`)} ${project}`);
 };
 

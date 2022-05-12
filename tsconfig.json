@@ -5,7 +5,7 @@
       "dom",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "preserve",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "isolatedModules": false,
     "baseUrl": "./"
   },

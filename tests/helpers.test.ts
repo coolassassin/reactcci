@@ -2,6 +2,7 @@ import mockFs from 'mock-fs';
 
 import path from 'path';
 
+// @ts-ignore
 import defaultConfig from '../defaultConfig';
 import {
     capitalizeName,

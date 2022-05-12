@@ -16,7 +16,7 @@ jest.mock('../src/componentSettingsMap', () => {
 
 jest.mock('fs', () => {
     return {
-        existsSync: (p) => !p.includes('NONEXISTENT_FOLDER'),
+        existsSync: (p: string) => !p.includes('NONEXISTENT_FOLDER'),
         promises: {
             readdir: () => {
                 return Promise.resolve(['Folder1', 'Folder2']);
@@ -47,6 +47,7 @@ describe('setProject', () => {
         props.commandLineFlags.dest = '';
         props.commandLineFlags.project = '';
         props.config.folderPath = 'Folder1';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (helpers.isDirectory as any) = jest.fn(() => true);
     });
 
@@ -79,12 +80,14 @@ describe('setProject', () => {
     });
 
     it('no projects exception', async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (helpers.isDirectory as any) = jest.fn(() => false);
         await setProject(props);
         expect(exitMock).toBeCalled();
     });
 
     it('only one project match to folderPath', async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (helpers.isDirectory as any) = jest.fn((pathStr: string) => pathStr.includes('Folder1'));
         expect(await setProject(props)).toBe('Folder1');
     });
