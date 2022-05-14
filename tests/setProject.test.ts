@@ -8,9 +8,7 @@ import { mockConsole, mockProcess } from './testUtils';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
-        componentSettingsMap: {
-            templateName: 'component'
-        }
+        componentSettingsMap: {}
     };
 });
 
@@ -36,7 +34,8 @@ describe('setProject', () => {
         config: {
             multiProject: true,
             folderPath: 'Folder1'
-        } as Config
+        } as Config,
+        templateName: 'component'
     };
     const { exitMock } = mockProcess();
     mockConsole();

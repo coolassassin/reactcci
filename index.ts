@@ -24,16 +24,17 @@ import { parseDestinationPath } from './src/parseDestinationPath';
 
         let config = await setConfig({ root });
         await checkConfig({ config });
-        config = await setComponentTemplate({ commandLineFlags, config });
+        const { config: newConfig, templateName } = await setComponentTemplate({ commandLineFlags, config });
+        config = newConfig;
 
         let project = await parseDestinationPath({ root, commandLineFlags, config });
-        project = await setProject({ project, root, commandLineFlags, config });
+        project = await setProject({ project, root, commandLineFlags, config, templateName });
 
-        await setPath({ root, commandLineFlags, config, project });
+        await setPath({ root, commandLineFlags, config, project, templateName });
 
-        await setComponentNames({ commandLineFlags });
+        const componentNames = await setComponentNames({ commandLineFlags, templateName });
 
-        await buildComponent({ root, moduleRoot, commandLineFlags, config, project });
+        await buildComponent({ root, moduleRoot, commandLineFlags, config, project, templateName, componentNames });
     } catch (e) {
         console.error(kleur.red('Unexpected error'), e);
         process.exit();

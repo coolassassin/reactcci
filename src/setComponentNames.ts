@@ -2,25 +2,23 @@ import Prompt from 'prompts';
 import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { componentSettingsMap } from './componentSettingsMap';
 import { capitalizeName, mapNameToCase, processComponentNameString, writeToConsole } from './helpers';
-import { CommandLineFlags, Setting } from './types';
+import { CommandLineFlags } from './types';
 
 type Properties = {
+    templateName: string;
     commandLineFlags: CommandLineFlags;
 };
 
-export const setComponentNames = async ({ commandLineFlags }: Properties) => {
-    const { templateName } = componentSettingsMap;
-
+export const setComponentNames = async ({ templateName, commandLineFlags }: Properties): Promise<string[]> => {
     if (commandLineFlags.update) {
-        return;
+        return [];
     }
 
-    let res: Setting['componentNames'] = [commandLineFlags.name];
+    let res: string[] = [commandLineFlags.name];
 
     do {
-        let componentName: Setting['componentNames'] | undefined = [''];
+        let componentName: string[] | undefined = [''];
 
         if (res[0]) {
             componentName = processComponentNameString(res[0]);
@@ -40,7 +38,7 @@ export const setComponentNames = async ({ commandLineFlags }: Properties) => {
 
         if (typeof componentName === 'undefined') {
             process.exit();
-            return;
+            return [];
         }
 
         if (componentName.some((name) => name.length === 0)) {
@@ -68,5 +66,5 @@ export const setComponentNames = async ({ commandLineFlags }: Properties) => {
         res = componentName;
     } while (!res[0]);
 
-    componentSettingsMap.componentNames = res.map((name) => mapNameToCase(name, 'PascalCase'));
+    return res.map((name) => mapNameToCase(name, 'PascalCase'));
 };

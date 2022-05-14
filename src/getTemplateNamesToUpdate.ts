@@ -2,7 +2,6 @@ import Prompt from 'prompts';
 import kleur from 'kleur';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { componentSettingsMap } from './componentSettingsMap';
 import { TEMPLATE_NAMES_SELECTING_INSTRUCTIONS } from './constants';
 import { CommandLineFlags, Config, Project, TemplateDescriptionObject } from './types';
 import { generateFileName, getFileTemplates, getIsFileAlreadyExists } from './helpers';
@@ -12,15 +11,16 @@ type Properties = {
     commandLineFlags: CommandLineFlags;
     config: Config;
     project: Project;
+    componentNames: string[];
 };
 
 export const getTemplateNamesToUpdate = async ({
     root,
     commandLineFlags,
     config: { templates, processFileAndFolderName },
-    project
+    project,
+    componentNames
 }: Properties) => {
-    const { componentNames } = componentSettingsMap;
     const componentName = componentNames[0];
     const { fileTemplates, undefinedFileTemplates } = getFileTemplates({ commandLineFlags, templates });
 

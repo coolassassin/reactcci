@@ -1,7 +1,6 @@
 import Prompt from 'prompts';
 import kleur from 'kleur';
 
-import { componentSettingsMap } from './componentSettingsMap';
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { CommandLineFlags, Config } from './types';
 
@@ -10,23 +9,29 @@ type Properties = {
     commandLineFlags: CommandLineFlags;
 };
 
-export const setComponentTemplate = async ({ commandLineFlags: { template }, config }: Properties): Promise<Config> => {
+type Output = {
+    config: Config;
+    templateName: string;
+};
+
+export const setComponentTemplate = async ({ commandLineFlags: { template }, config }: Properties): Promise<Output> => {
     const { templates } = config;
+    let templateName = 'component';
     if (Array.isArray(templates)) {
         if (template) {
             if (!templates.map((tmp) => tmp.name).includes(template)) {
                 console.error(kleur.red(`Error: There is no ${template} template`));
                 process.exit();
-                return config;
+                return { config, templateName };
             }
-            componentSettingsMap.templateName = template;
+            templateName = template;
         } else if (templates.length === 1) {
-            componentSettingsMap.templateName = templates[0].name;
+            templateName = templates[0].name;
         } else {
-            const { templateName } = await Prompt(
+            const { selectedTemplateName } = await Prompt(
                 {
                     type: 'select',
-                    name: 'templateName',
+                    name: 'selectedTemplateName',
                     message: `What would you want to create?`,
                     hint: 'Select using arrows and press Enter',
                     choices: templates.map((tmp) => ({ title: tmp.name, value: tmp.name })),
@@ -34,20 +39,19 @@ export const setComponentTemplate = async ({ commandLineFlags: { template }, con
                 },
                 getQuestionsSettings()
             );
-            componentSettingsMap.templateName = templateName;
+            templateName = selectedTemplateName;
         }
 
-        const selectedTemplate = templates.find((tmp) => tmp.name === componentSettingsMap.templateName);
+        const selectedTemplate = templates.find((tmp) => tmp.name === templateName);
         if (selectedTemplate) {
             const newConfig = { ...config };
             newConfig.templates = selectedTemplate.files;
             if (selectedTemplate.folderPath) {
                 newConfig.folderPath = selectedTemplate.folderPath;
             }
-            return newConfig;
+            return { config: newConfig, templateName: selectedTemplate.name };
         }
     }
 
-    componentSettingsMap.templateName = 'component';
-    return config;
+    return { config, templateName };
 };

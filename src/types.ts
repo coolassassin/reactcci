@@ -54,8 +54,6 @@ export type Config = {
 export type Project = string;
 
 export type Setting = {
-    componentNames: string[];
-    templateName: string;
     projectRootPath: string;
     resultPath: string;
     componentFileList: { [key in string]: FilesList };

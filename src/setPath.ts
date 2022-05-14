@@ -38,16 +38,20 @@ type Properties = {
     commandLineFlags: CommandLineFlags;
     config: Config;
     project: Project;
+    templateName: string;
+};
+
+type Output = {
+    componentNames: string[];
 };
 
 export const setPath = async ({
     root,
     commandLineFlags: { dest, update, skipSearch },
     config: { folderPath, processFileAndFolderName },
-    project
-}: Properties) => {
-    const { templateName } = componentSettingsMap;
-
+    project,
+    templateName
+}: Properties): Promise<Output> => {
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
     const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
 
@@ -58,7 +62,7 @@ export const setPath = async ({
             console.error(kleur.red(`Error: There is no any folder for ${templateName} from the list below`));
             console.error(kleur.yellow(potentialFolders.map((f) => path.resolve(root, project, f)).join('\n')));
             process.exit();
-            return;
+            return { componentNames: [] };
         } else if (availableFolders.length === 1) {
             projectRootPath = availableFolders[0];
         } else {
@@ -85,7 +89,7 @@ export const setPath = async ({
                 console.error(kleur.red(`Error: There is no folder for ${templateName}`), kleur.yellow(currentFolder));
                 console.error(e);
                 process.exit();
-                return;
+                return { componentNames: [] };
             }
 
             const folders = (await fs.promises.readdir(path.resolve(project, projectRootPath, relativePath))).filter(
@@ -173,13 +177,17 @@ export const setPath = async ({
     if (update) {
         const pathParts = componentSettingsMap.resultPath.split('/');
         componentSettingsMap.resultPath = pathParts.slice(0, pathParts.length - 1).join('/');
-        componentSettingsMap.componentNames = [
-            processObjectName({
-                name: pathParts[pathParts.length - 1],
-                isFolder: true,
-                toComponent: true,
-                processFileAndFolderName
-            })
-        ];
+        return {
+            componentNames: [
+                processObjectName({
+                    name: pathParts[pathParts.length - 1],
+                    isFolder: true,
+                    toComponent: true,
+                    processFileAndFolderName
+                })
+            ]
+        };
     }
+
+    return { componentNames: [] };
 };

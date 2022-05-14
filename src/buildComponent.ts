@@ -18,14 +18,24 @@ type Properties = {
     commandLineFlags: CommandLineFlags;
     config: Config;
     project: Project;
+    templateName: string;
+    componentNames: string[];
 };
 
-export const buildComponent = async ({ root, moduleRoot, commandLineFlags, config, project }: Properties) => {
+export const buildComponent = async ({
+    root,
+    moduleRoot,
+    commandLineFlags,
+    config,
+    project,
+    templateName,
+    componentNames
+}: Properties) => {
     const { processFileAndFolderName } = config;
-    const { componentNames, projectRootPath, resultPath, templateName } = componentSettingsMap;
+    const { projectRootPath, resultPath } = componentSettingsMap;
 
     const templateNames = commandLineFlags.update
-        ? await getTemplateNamesToUpdate({ root, commandLineFlags, config, project })
+        ? await getTemplateNamesToUpdate({ root, commandLineFlags, config, project, componentNames })
         : await getTemplateNamesToCreate({ commandLineFlags, config });
 
     const fileList: FilesList = {};
@@ -101,8 +111,8 @@ export const buildComponent = async ({ root, moduleRoot, commandLineFlags, confi
     }
 
     if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
-        await generateFiles({ root, moduleRoot, config, project });
-        await processAfterGeneration({ root, config, project });
+        await generateFiles({ root, moduleRoot, config, project, templateName, componentNames });
+        await processAfterGeneration({ root, config, project, componentNames });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
         const action = commandLineFlags.update ? 'updated' : 'created';
         writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));

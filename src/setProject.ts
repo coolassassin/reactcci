@@ -6,7 +6,6 @@ import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
 import { isDirectory, writeToConsole } from './helpers';
-import { componentSettingsMap } from './componentSettingsMap';
 import { CommandLineFlags, Config, Project } from './types';
 
 const typeAboutSelectedProject = (project: Project) => {
@@ -18,16 +17,17 @@ type Properties = {
     root: string;
     commandLineFlags: CommandLineFlags;
     config: Config;
+    templateName: string;
 };
 
 export const setProject = async ({
     project: inputProject,
     root,
     commandLineFlags,
-    config: { multiProject, folderPath }
+    config: { multiProject, folderPath },
+    templateName
 }: Properties): Promise<Project> => {
     let project = '';
-    const { templateName } = componentSettingsMap;
 
     if (inputProject) {
         typeAboutSelectedProject(inputProject);

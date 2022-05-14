@@ -11,11 +11,20 @@ type Properties = {
     moduleRoot: string;
     config: Config;
     project: Project;
+    componentNames: string[];
+    templateName: string;
 };
 
-export const generateFiles = async ({ root, moduleRoot, config, project }: Properties) => {
+export const generateFiles = async ({
+    root,
+    moduleRoot,
+    config,
+    project,
+    templateName,
+    componentNames
+}: Properties) => {
     const { processFileAndFolderName } = config;
-    const { componentNames, componentFileList, projectRootPath, resultPath, templateName } = componentSettingsMap;
+    const { componentFileList, projectRootPath, resultPath } = componentSettingsMap;
 
     for (const componentName of componentNames) {
         const fileList = componentFileList[componentName];

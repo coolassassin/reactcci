@@ -14,9 +14,7 @@ import { mockConsole, mockProcess } from './testUtils';
 
 jest.mock('../src/componentSettingsMap', () => {
     return {
-        componentSettingsMap: {
-            templateName: 'component'
-        } as PartialSetting
+        componentSettingsMap: {} as PartialSetting
     };
 });
 
@@ -45,7 +43,8 @@ describe('setPath', () => {
         } as CommandLineFlags,
         config: {
             folderPath: 'src/'
-        } as Config
+        } as Config,
+        templateName: 'component'
     };
     const fsMockFolders = {
         node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),

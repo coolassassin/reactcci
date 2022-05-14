@@ -11,14 +11,16 @@ type Properties = {
     root: string;
     config: Config;
     project: Project;
+    componentNames: string[];
 };
 
 export const processAfterGeneration = async ({
     root,
     config: { afterCreation, processFileAndFolderName },
-    project
+    project,
+    componentNames
 }: Properties) => {
-    const { resultPath, projectRootPath, componentNames, componentFileList } = componentSettingsMap;
+    const { resultPath, projectRootPath, componentFileList } = componentSettingsMap;
     if (afterCreation) {
         for (const [type, command] of Object.entries(afterCreation)) {
             let isFirstExecution = true;
