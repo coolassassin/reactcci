@@ -23,30 +23,13 @@ type Properties = {
     resultPath: string;
 };
 
-export const buildComponent = async ({
-    root,
-    moduleRoot,
-    commandLineFlags,
-    config,
-    project,
-    templateName,
-    componentNames,
-    projectRootPath,
-    resultPath
-}: Properties) => {
+export const buildComponent = async (properties: Properties) => {
+    const { commandLineFlags, config, project, templateName, componentNames, projectRootPath, resultPath } = properties;
     const { processFileAndFolderName } = config;
 
     const templateNames = commandLineFlags.update
-        ? await getTemplateNamesToUpdate({
-              root,
-              commandLineFlags,
-              config,
-              project,
-              componentNames,
-              resultPath,
-              projectRootPath
-          })
-        : await getTemplateNamesToCreate({ commandLineFlags, config });
+        ? await getTemplateNamesToUpdate(properties)
+        : await getTemplateNamesToCreate(properties);
 
     const fileList: FilesList = {};
 
@@ -74,13 +57,10 @@ export const buildComponent = async ({
                     return (
                         fileObject.selected ||
                         getIsFileAlreadyExists({
-                            root,
-                            project,
+                            ...properties,
                             fileNameTemplate: fileObject.name,
                             objectName: componentName,
-                            processFileAndFolderName,
-                            resultPath,
-                            projectRootPath
+                            processFileAndFolderName
                         })
                     );
                 })
@@ -122,23 +102,11 @@ export const buildComponent = async ({
 
     if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
         await generateFiles({
-            root,
-            moduleRoot,
-            config,
-            project,
-            templateName,
-            componentNames,
-            resultPath,
-            projectRootPath,
+            ...properties,
             componentFileList
         });
         await processAfterGeneration({
-            root,
-            config,
-            project,
-            componentNames,
-            resultPath,
-            projectRootPath,
+            ...properties,
             componentFileList
         });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
