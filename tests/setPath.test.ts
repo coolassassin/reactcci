@@ -19,6 +19,12 @@ jest.mock('../src/getProjectRootPath', () => {
     };
 });
 
+jest.mock('../src/setComponentNames', () => {
+    return {
+        setComponentNames: jest.fn(() => Promise.resolve([]))
+    };
+});
+
 const getPath = ({ projectRootPath, resultPath }: { projectRootPath: string; resultPath: string }) => {
     return path
         .join(projectRootPath, resultPath)
@@ -31,7 +37,8 @@ describe('setPath', () => {
         root: process.cwd(),
         project: '',
         commandLineFlags: {
-            dest: ''
+            dest: '',
+            name: 'Component'
         } as CommandLineFlags,
         config: {
             folderPath: 'src/'
@@ -120,7 +127,7 @@ describe('setPath', () => {
 
     it('multi-path only one', async () => {
         props.config.folderPath = ['src', 'nonExistentFolder'];
-        const { projectRootPath } = await setPath(props);
+        const { projectRootPath } = await setPath({ ...props, resultPathInput: 'any' });
         expect(getProjectRootPath).toBeCalledTimes(0);
         expect(projectRootPath).toBe('src');
     });

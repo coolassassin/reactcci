@@ -14,6 +14,7 @@ import {
     writeToConsole
 } from './helpers';
 import { getProjectRootPath } from './getProjectRootPath';
+import { setComponentNames } from './setComponentNames';
 import { CommandLineFlags, Config, Project } from './types';
 
 export const filterChoicesByText = (choices: { title: string }[], query: string, isRoot: boolean) =>
@@ -50,13 +51,14 @@ type Output = {
 
 export const setPath = async ({
     root,
-    commandLineFlags: { dest, update, skipSearch },
+    commandLineFlags,
     config: { folderPath, processFileAndFolderName },
     project,
     templateName,
     projectRootPathInput,
     resultPathInput
 }: Properties): Promise<Output> => {
+    const { dest, update, skipSearch } = commandLineFlags;
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
     const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
 
@@ -196,5 +198,5 @@ export const setPath = async ({
         };
     }
 
-    return { componentNames: [], resultPath, projectRootPath };
+    return { componentNames: await setComponentNames({ commandLineFlags, templateName }), resultPath, projectRootPath };
 };

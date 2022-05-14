@@ -5,7 +5,7 @@ import { CommandLineFlags } from '../src/types';
 
 import { mockProcess } from './testUtils';
 
-describe('setComponentName', () => {
+describe('setComponentNames', () => {
     const props: Parameters<typeof setComponentNames>[0] = {
         commandLineFlags: { name: '' } as CommandLineFlags,
         templateName: 'component'

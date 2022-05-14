@@ -7,7 +7,6 @@ import { setConfig } from './src/setConfig';
 import { setProject } from './src/setProject';
 import { initialize } from './src/initialize';
 import { checkConfig } from './src/checkConfig';
-import { setComponentNames } from './src/setComponentNames';
 import { buildComponent } from './src/buildComponent';
 import { processCommandLineFlags } from './src/processCommandLineFlags';
 import { getModuleRootPath } from './src/getModuleRootPath';
@@ -34,11 +33,7 @@ import { parseDestinationPath } from './src/parseDestinationPath';
         });
         const project = await setProject({ project: parsedPath.project, root, commandLineFlags, config, templateName });
 
-        const {
-            componentNames: componentNamesByPath,
-            resultPath,
-            projectRootPath
-        } = await setPath({
+        const { componentNames, resultPath, projectRootPath } = await setPath({
             root,
             commandLineFlags,
             config,
@@ -47,11 +42,6 @@ import { parseDestinationPath } from './src/parseDestinationPath';
             resultPathInput: parsedPath.resultPath,
             projectRootPathInput: parsedPath.projectRootPath
         });
-
-        const componentNames =
-            componentNamesByPath.length > 0
-                ? componentNamesByPath
-                : await setComponentNames({ commandLineFlags, templateName });
 
         await buildComponent({
             root,
