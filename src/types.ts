@@ -31,6 +31,8 @@ export type FilesList = {
     [key in string]: FileDescription;
 };
 
+export type ComponentFileList = { [key in string]: FilesList };
+
 export type TypingCases = 'camelCase' | 'PascalCase' | 'snake_case' | 'dash-case';
 export const isTypingCase = (value: string): value is TypingCases => {
     return ['camelCase', 'PascalCase', 'snake_case', 'dash-case'].includes(value);
@@ -52,10 +54,6 @@ export type Config = {
 };
 
 export type Project = string;
-
-export type Setting = {
-    componentFileList: { [key in string]: FilesList };
-};
 
 export type CommandLineFlags = {
     update: boolean;
@@ -89,5 +87,3 @@ export type templatePlaceholdersData = {
 type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
-
-export type PartialSetting = DeepPartial<Setting>;

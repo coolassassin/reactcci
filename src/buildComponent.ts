@@ -2,13 +2,12 @@ import kleur from 'kleur';
 
 import path from 'path';
 
-import { componentSettingsMap } from './componentSettingsMap';
 import { getTemplateNamesToCreate } from './getTemplateNamesToCreate';
 import { generateFiles } from './generateFiles';
 import { getTemplateFile } from './getTemplateFile';
 import { getFinalAgreement } from './getFinalAgreement';
 import { processAfterGeneration } from './processAfterGeneration';
-import { CommandLineFlags, Config, FilesList, Project, Setting, TemplateDescriptionObject } from './types';
+import { CommandLineFlags, ComponentFileList, Config, FilesList, Project, TemplateDescriptionObject } from './types';
 import { capitalizeName, generateFileName, getIsFileAlreadyExists, writeToConsole } from './helpers';
 import { getTemplateNamesToUpdate } from './getTemplateNamesToUpdate';
 
@@ -66,7 +65,7 @@ export const buildComponent = async ({
         }
     }
 
-    const componentFileList: Setting['componentFileList'] = {};
+    const componentFileList: ComponentFileList = {};
 
     for (const componentName of componentNames) {
         componentFileList[componentName] = Object.fromEntries(
@@ -99,8 +98,6 @@ export const buildComponent = async ({
         );
     }
 
-    componentSettingsMap.componentFileList = componentFileList;
-
     if (!config.skipFinalStep) {
         for (const componentName of componentNames) {
             if (commandLineFlags.update) {
@@ -132,9 +129,18 @@ export const buildComponent = async ({
             templateName,
             componentNames,
             resultPath,
-            projectRootPath
+            projectRootPath,
+            componentFileList
         });
-        await processAfterGeneration({ root, config, project, componentNames, resultPath, projectRootPath });
+        await processAfterGeneration({
+            root,
+            config,
+            project,
+            componentNames,
+            resultPath,
+            projectRootPath,
+            componentFileList
+        });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
         const action = commandLineFlags.update ? 'updated' : 'created';
         writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));

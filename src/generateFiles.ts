@@ -2,9 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 import { getTemplate } from './getTemplate';
-import { componentSettingsMap } from './componentSettingsMap';
 import { getRelativePath, processPath, processObjectName, mapNameToCase } from './helpers';
-import { Config, isTypingCase, Project, templatePlaceholdersData } from './types';
+import { ComponentFileList, Config, isTypingCase, Project, templatePlaceholdersData } from './types';
 
 type Properties = {
     root: string;
@@ -15,6 +14,7 @@ type Properties = {
     templateName: string;
     projectRootPath: string;
     resultPath: string;
+    componentFileList: ComponentFileList;
 };
 
 export const generateFiles = async ({
@@ -25,10 +25,10 @@ export const generateFiles = async ({
     templateName,
     componentNames,
     projectRootPath,
-    resultPath
+    resultPath,
+    componentFileList
 }: Properties) => {
     const { processFileAndFolderName } = config;
-    const { componentFileList } = componentSettingsMap;
 
     for (const componentName of componentNames) {
         const fileList = componentFileList[componentName];

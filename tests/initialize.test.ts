@@ -10,16 +10,6 @@ import { CommandLineFlags } from '../src/types';
 
 import { mockProcess } from './testUtils';
 
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {
-            moduleRoot: '',
-            project: '',
-            templateName: 'component'
-        }
-    };
-});
-
 describe('initialize', () => {
     const props: Parameters<typeof initialize>[0] = {
         root: process.cwd(),

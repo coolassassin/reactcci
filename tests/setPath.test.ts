@@ -4,19 +4,12 @@ import mockFs from 'mock-fs';
 import path from 'path';
 
 import { filterChoicesByText, setPath } from '../src/setPath';
-import { componentSettingsMap } from '../src/componentSettingsMap';
 import { getProjectRootPath } from '../src/getProjectRootPath';
 import * as helpers from '../src/helpers';
 import { processPath } from '../src/helpers';
-import { CommandLineFlags, PartialSetting, Config } from '../src/types';
+import { CommandLineFlags, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
-
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {} as PartialSetting
-    };
-});
 
 const emptyFolderPath = 'some/path/to/emptyFolder';
 

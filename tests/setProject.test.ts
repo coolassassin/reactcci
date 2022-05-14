@@ -6,12 +6,6 @@ import { CommandLineFlags, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
 
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {}
-    };
-});
-
 jest.mock('fs', () => {
     return {
         existsSync: (p: string) => !p.includes('NONEXISTENT_FOLDER'),

@@ -3,9 +3,8 @@ import kleur from 'kleur';
 import path from 'path';
 import childProcess from 'child_process';
 
-import { componentSettingsMap } from './componentSettingsMap';
 import { processObjectName, writeToConsole } from './helpers';
-import { Config, Project } from './types';
+import { ComponentFileList, Config, Project } from './types';
 
 type Properties = {
     root: string;
@@ -14,6 +13,7 @@ type Properties = {
     componentNames: string[];
     resultPath: string;
     projectRootPath: string;
+    componentFileList: ComponentFileList;
 };
 
 export const processAfterGeneration = async ({
@@ -22,9 +22,9 @@ export const processAfterGeneration = async ({
     project,
     componentNames,
     projectRootPath,
-    resultPath
+    resultPath,
+    componentFileList
 }: Properties) => {
-    const { componentFileList } = componentSettingsMap;
     if (afterCreation) {
         for (const [type, command] of Object.entries(afterCreation)) {
             let isFirstExecution = true;

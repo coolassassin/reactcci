@@ -1,19 +1,9 @@
 import prompts from 'prompts';
 
 import { getTemplateNamesToCreate } from '../src/getTemplateNamesToCreate';
-import { CommandLineFlags, PartialSetting, Config } from '../src/types';
+import { CommandLineFlags, Config } from '../src/types';
 
 import { mockConsole, mockProcess } from './testUtils';
-
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {
-            config: {
-                templates: {}
-            }
-        } as PartialSetting
-    };
-});
 
 describe('getTemplateNamesToCreate', () => {
     const props: Parameters<typeof getTemplateNamesToCreate>[0] = {

@@ -3,47 +3,9 @@ import mockFs from 'mock-fs';
 import path from 'path';
 import fs from 'fs';
 
-import { Setting, Config, Project } from '../src/types';
+import { ComponentFileList, Config, Project } from '../src/types';
 import { generateFiles } from '../src/generateFiles';
 import { getTemplate } from '../src/getTemplate';
-
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {
-            componentFileList: {
-                Comp1: {
-                    index: {
-                        name: 'index.ts',
-                        file: 'index.ts',
-                        selected: true
-                    },
-                    component: {
-                        name: 'Comp1.tsx',
-                        file: 'fc.tsx',
-                        selected: true,
-                        type: 'Functional component'
-                    },
-                    styles: {
-                        name: 'Comp1.module.css',
-                        selected: false
-                    }
-                },
-                Comp2: {
-                    index: {
-                        name: 'index.ts',
-                        file: 'index.ts',
-                        selected: true
-                    },
-                    test: {
-                        name: '__test__/test.ts',
-                        file: 'tst.tsx',
-                        selected: true
-                    }
-                }
-            }
-        } as Partial<Setting>
-    };
-});
 
 jest.mock('../src/getTemplate', () => ({
     getTemplate: jest.fn(() => 'data')
@@ -64,6 +26,37 @@ describe('generateFiles', () => {
     const templateName = 'component';
     const projectRootPath = 'src/';
     const resultPath = '.';
+    const componentFileList: ComponentFileList = {
+        Comp1: {
+            index: {
+                name: 'index.ts',
+                file: 'index.ts',
+                selected: true
+            },
+            component: {
+                name: 'Comp1.tsx',
+                file: 'fc.tsx',
+                selected: true,
+                type: 'Functional component'
+            },
+            styles: {
+                name: 'Comp1.module.css',
+                selected: false
+            }
+        },
+        Comp2: {
+            index: {
+                name: 'index.ts',
+                file: 'index.ts',
+                selected: true
+            },
+            test: {
+                name: '__test__/test.ts',
+                file: 'tst.tsx',
+                selected: true
+            }
+        }
+    };
 
     beforeEach(() => {
         mockFs(fsMockFolders);
@@ -85,7 +78,8 @@ describe('generateFiles', () => {
             componentNames,
             templateName,
             resultPath,
-            projectRootPath
+            projectRootPath,
+            componentFileList
         });
         const filesComp1 = await fs.promises.readdir(path.resolve(folder, componentNames[0]));
         const filesComp2 = await fs.promises.readdir(path.resolve(folder, componentNames[1]));
