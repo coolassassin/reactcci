@@ -20,6 +20,8 @@ type Properties = {
     project: Project;
     templateName: string;
     componentNames: string[];
+    projectRootPath: string;
+    resultPath: string;
 };
 
 export const buildComponent = async ({
@@ -29,13 +31,22 @@ export const buildComponent = async ({
     config,
     project,
     templateName,
-    componentNames
+    componentNames,
+    projectRootPath,
+    resultPath
 }: Properties) => {
     const { processFileAndFolderName } = config;
-    const { projectRootPath, resultPath } = componentSettingsMap;
 
     const templateNames = commandLineFlags.update
-        ? await getTemplateNamesToUpdate({ root, commandLineFlags, config, project, componentNames })
+        ? await getTemplateNamesToUpdate({
+              root,
+              commandLineFlags,
+              config,
+              project,
+              componentNames,
+              resultPath,
+              projectRootPath
+          })
         : await getTemplateNamesToCreate({ commandLineFlags, config });
 
     const fileList: FilesList = {};
@@ -68,7 +79,9 @@ export const buildComponent = async ({
                             project,
                             fileNameTemplate: fileObject.name,
                             objectName: componentName,
-                            processFileAndFolderName
+                            processFileAndFolderName,
+                            resultPath,
+                            projectRootPath
                         })
                     );
                 })
@@ -111,8 +124,17 @@ export const buildComponent = async ({
     }
 
     if (config.skipFinalStep || commandLineFlags.sls || (await getFinalAgreement())) {
-        await generateFiles({ root, moduleRoot, config, project, templateName, componentNames });
-        await processAfterGeneration({ root, config, project, componentNames });
+        await generateFiles({
+            root,
+            moduleRoot,
+            config,
+            project,
+            templateName,
+            componentNames,
+            resultPath,
+            projectRootPath
+        });
+        await processAfterGeneration({ root, config, project, componentNames, resultPath, projectRootPath });
         const verb = componentNames.length > 1 ? 's are ' : ` is `;
         const action = commandLineFlags.update ? 'updated' : 'created';
         writeToConsole(kleur.green(`\n${capitalizeName(templateName)}${verb}${action}!!! \\(•◡ •)/ `));

@@ -27,14 +27,43 @@ import { parseDestinationPath } from './src/parseDestinationPath';
         const { config: newConfig, templateName } = await setComponentTemplate({ commandLineFlags, config });
         config = newConfig;
 
-        let project = await parseDestinationPath({ root, commandLineFlags, config });
-        project = await setProject({ project, root, commandLineFlags, config, templateName });
+        const parsedPath = await parseDestinationPath({
+            root,
+            commandLineFlags,
+            config
+        });
+        const project = await setProject({ project: parsedPath.project, root, commandLineFlags, config, templateName });
 
-        await setPath({ root, commandLineFlags, config, project, templateName });
+        const {
+            componentNames: componentNamesByPath,
+            resultPath,
+            projectRootPath
+        } = await setPath({
+            root,
+            commandLineFlags,
+            config,
+            project,
+            templateName,
+            resultPathInput: parsedPath.resultPath,
+            projectRootPathInput: parsedPath.projectRootPath
+        });
 
-        const componentNames = await setComponentNames({ commandLineFlags, templateName });
+        const componentNames =
+            componentNamesByPath.length > 0
+                ? componentNamesByPath
+                : await setComponentNames({ commandLineFlags, templateName });
 
-        await buildComponent({ root, moduleRoot, commandLineFlags, config, project, templateName, componentNames });
+        await buildComponent({
+            root,
+            moduleRoot,
+            commandLineFlags,
+            config,
+            project,
+            templateName,
+            componentNames,
+            resultPath,
+            projectRootPath
+        });
     } catch (e) {
         console.error(kleur.red('Unexpected error'), e);
         process.exit();

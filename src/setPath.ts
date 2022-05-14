@@ -13,7 +13,6 @@ import {
     splitStringByCapitalLetter,
     writeToConsole
 } from './helpers';
-import { componentSettingsMap } from './componentSettingsMap';
 import { getProjectRootPath } from './getProjectRootPath';
 import { CommandLineFlags, Config, Project } from './types';
 
@@ -39,10 +38,14 @@ type Properties = {
     config: Config;
     project: Project;
     templateName: string;
+    projectRootPathInput?: string;
+    resultPathInput?: string;
 };
 
 type Output = {
     componentNames: string[];
+    projectRootPath: string;
+    resultPath: string;
 };
 
 export const setPath = async ({
@@ -50,19 +53,21 @@ export const setPath = async ({
     commandLineFlags: { dest, update, skipSearch },
     config: { folderPath, processFileAndFolderName },
     project,
-    templateName
+    templateName,
+    projectRootPathInput,
+    resultPathInput
 }: Properties): Promise<Output> => {
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
     const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
 
-    let projectRootPath = componentSettingsMap.projectRootPath ?? dest;
+    let projectRootPath = projectRootPathInput ?? dest;
 
     if (!projectRootPath) {
         if (availableFolders.length === 0) {
             console.error(kleur.red(`Error: There is no any folder for ${templateName} from the list below`));
             console.error(kleur.yellow(potentialFolders.map((f) => path.resolve(root, project, f)).join('\n')));
             process.exit();
-            return { componentNames: [] };
+            return { componentNames: [], projectRootPath, resultPath: resultPathInput ?? '' };
         } else if (availableFolders.length === 1) {
             projectRootPath = availableFolders[0];
         } else {
@@ -70,14 +75,14 @@ export const setPath = async ({
         }
     }
 
-    if (componentSettingsMap.resultPath) {
-        componentSettingsMap.resultPath.split('/').forEach((part) => {
+    if (resultPathInput) {
+        resultPathInput.split('/').forEach((part) => {
             writeToConsole(`${kleur.green('√')} Select destination folder for component ${kleur.gray(`»`)} ${part}`);
         });
     }
 
     let resultPath: string | null = null;
-    let relativePath = componentSettingsMap.resultPath ?? '.';
+    let relativePath = resultPathInput ?? '.';
     if (skipSearch) {
         resultPath = relativePath;
     } else {
@@ -89,7 +94,7 @@ export const setPath = async ({
                 console.error(kleur.red(`Error: There is no folder for ${templateName}`), kleur.yellow(currentFolder));
                 console.error(e);
                 process.exit();
-                return { componentNames: [] };
+                return { componentNames: [], projectRootPath, resultPath: resultPathInput ?? '' };
             }
 
             const folders = (await fs.promises.readdir(path.resolve(project, projectRootPath, relativePath))).filter(
@@ -171,13 +176,15 @@ export const setPath = async ({
         }
     }
 
-    componentSettingsMap.projectRootPath = processPath(projectRootPath);
-    componentSettingsMap.resultPath = processPath(resultPath);
+    projectRootPath = processPath(projectRootPath);
+    resultPath = processPath(resultPath);
 
     if (update) {
-        const pathParts = componentSettingsMap.resultPath.split('/');
-        componentSettingsMap.resultPath = pathParts.slice(0, pathParts.length - 1).join('/');
+        const pathParts = resultPath.split('/');
+        resultPath = pathParts.slice(0, pathParts.length - 1).join('/');
         return {
+            resultPath,
+            projectRootPath,
             componentNames: [
                 processObjectName({
                     name: pathParts[pathParts.length - 1],
@@ -189,5 +196,5 @@ export const setPath = async ({
         };
     }
 
-    return { componentNames: [] };
+    return { componentNames: [], resultPath, projectRootPath };
 };

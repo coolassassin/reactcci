@@ -26,8 +26,7 @@ jest.mock('../src/getProjectRootPath', () => {
     };
 });
 
-const getPath = () => {
-    const { projectRootPath, resultPath } = componentSettingsMap;
+const getPath = ({ projectRootPath, resultPath }: { projectRootPath: string; resultPath: string }) => {
     return path
         .join(projectRootPath, resultPath)
         .replace(/[\\/]$/g, '')
@@ -68,8 +67,6 @@ describe('setPath', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        delete componentSettingsMap.resultPath;
-        delete componentSettingsMap.projectRootPath;
         props.commandLineFlags.dest = '';
         mockFs(fsMockFolders);
     });
@@ -80,25 +77,24 @@ describe('setPath', () => {
 
     it('default path', async () => {
         prompts.inject([1]);
-        await setPath(props);
 
-        expect(getPath()).toBe(processPath(props.config.folderPath as string));
+        expect(getPath(await setPath(props))).toBe(processPath(props.config.folderPath as string));
     });
 
     it('first folder path', async () => {
         const anyFolderName = Object.keys(fsMockFolders.src)[0];
         prompts.inject([anyFolderName, 1]);
-        await setPath(props);
 
-        expect(getPath()).toBe(processPath(path.join(props.config.folderPath as string, anyFolderName)));
+        expect(getPath(await setPath(props))).toBe(
+            processPath(path.join(props.config.folderPath as string, anyFolderName))
+        );
     });
 
     it('first folder and back path', async () => {
         const anyFolderName = Object.keys(fsMockFolders.src)[0];
         prompts.inject([anyFolderName, -1, 1]);
-        await setPath(props);
 
-        expect(getPath()).toBe(processPath(props.config.folderPath as string));
+        expect(getPath(await setPath(props))).toBe(processPath(props.config.folderPath as string));
     });
 
     it('manual set', async () => {
@@ -106,16 +102,14 @@ describe('setPath', () => {
         props.commandLineFlags.dest = MANUAL_PATH;
 
         prompts.inject([1]);
-        await setPath(props);
 
-        expect(getPath()).toBe(MANUAL_PATH);
+        expect(getPath(await setPath(props))).toBe(MANUAL_PATH);
     });
 
     it('empty folder', async () => {
         const pathToEmptyFolder = emptyFolderPath;
         props.commandLineFlags.dest = pathToEmptyFolder;
-        await setPath(props);
-        expect(getPath()).toBe(pathToEmptyFolder);
+        expect(getPath(await setPath(props))).toBe(pathToEmptyFolder);
     });
 
     it('folder is not exists', async () => {
@@ -133,9 +127,9 @@ describe('setPath', () => {
 
     it('multi-path only one', async () => {
         props.config.folderPath = ['src', 'nonExistentFolder'];
-        await setPath(props);
+        const { projectRootPath } = await setPath(props);
         expect(getProjectRootPath).toBeCalledTimes(0);
-        expect(componentSettingsMap.projectRootPath).toBe('src');
+        expect(projectRootPath).toBe('src');
     });
 
     it('multi-path no one', async () => {

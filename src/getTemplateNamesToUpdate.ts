@@ -12,6 +12,8 @@ type Properties = {
     config: Config;
     project: Project;
     componentNames: string[];
+    resultPath: string;
+    projectRootPath: string;
 };
 
 export const getTemplateNamesToUpdate = async ({
@@ -19,7 +21,9 @@ export const getTemplateNamesToUpdate = async ({
     commandLineFlags,
     config: { templates, processFileAndFolderName },
     project,
-    componentNames
+    componentNames,
+    resultPath,
+    projectRootPath
 }: Properties) => {
     const componentName = componentNames[0];
     const { fileTemplates, undefinedFileTemplates } = getFileTemplates({ commandLineFlags, templates });
@@ -47,7 +51,9 @@ export const getTemplateNamesToUpdate = async ({
             fileNameTemplate: name,
             objectName: componentName,
             processFileAndFolderName,
-            project
+            project,
+            resultPath,
+            projectRootPath
         });
         return {
             title: `${tmpFileName}${kleur.reset(

@@ -20,18 +20,11 @@ import {
 } from '../src/helpers';
 import { CommandLineFlags, TypingCases, Config, Project } from '../src/types';
 
-jest.mock('../src/componentSettingsMap', () => {
-    return {
-        componentSettingsMap: {
-            projectRootPath: 'src/',
-            resultPath: '.'
-        }
-    };
-});
-
 describe('helpers', () => {
     const root = process.cwd();
     const project: Project = '';
+    const projectRootPath = 'src/';
+    const resultPath = '.';
     let config = {} as Config;
     let commandLineFlags: CommandLineFlags | undefined = undefined;
     const fsMockFolders = {
@@ -153,7 +146,9 @@ describe('helpers', () => {
                 project,
                 fileNameTemplate,
                 objectName: 'TestComponent',
-                processFileAndFolderName: config.processFileAndFolderName
+                processFileAndFolderName: config.processFileAndFolderName,
+                resultPath,
+                projectRootPath
             })
         ).toEqual(expected);
     });

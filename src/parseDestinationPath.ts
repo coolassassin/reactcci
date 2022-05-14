@@ -3,7 +3,6 @@ import kleur from 'kleur';
 import path from 'path';
 import fs from 'fs';
 
-import { componentSettingsMap } from './componentSettingsMap';
 import { processPath } from './helpers';
 import { CommandLineFlags, Config, Project } from './types';
 
@@ -13,13 +12,19 @@ type Properties = {
     config: Config;
 };
 
+type Output = {
+    project: Project;
+    projectRootPath?: string;
+    resultPath?: string;
+};
+
 export const parseDestinationPath = async ({
     root,
     commandLineFlags: { dest },
     config: { folderPath, multiProject }
-}: Properties): Promise<Project> => {
+}: Properties): Promise<Output> => {
     if (!dest) {
-        return '';
+        return { project: '' };
     }
 
     const absolutePath = path.isAbsolute(dest) ? dest : path.resolve(root, dest);
@@ -28,7 +33,7 @@ export const parseDestinationPath = async ({
         console.error(kleur.red("Error: Path doesn't exist:"));
         console.error(kleur.yellow(absolutePath));
         process.exit();
-        return '';
+        return { project: '' };
     }
 
     let relativePath = path.relative(root, absolutePath);
@@ -36,7 +41,7 @@ export const parseDestinationPath = async ({
     if (relativePath === absolutePath || relativePath.startsWith('..')) {
         console.error(kleur.red('Error: component destination must be in project'));
         process.exit();
-        return '';
+        return { project: '' };
     }
 
     let project = '';
@@ -56,13 +61,14 @@ export const parseDestinationPath = async ({
     if (!currentProjectRootPath) {
         console.error(kleur.red('Error: component destination must match to folderPath configuration parameter'));
         process.exit();
-        return '';
+        return { project: '' };
     }
 
     const destinationPath = path.relative(path.resolve(root, project, currentProjectRootPath), absolutePath);
 
-    componentSettingsMap.projectRootPath = processPath(currentProjectRootPath);
-    componentSettingsMap.resultPath = processPath(destinationPath);
-
-    return project;
+    return {
+        project,
+        projectRootPath: processPath(currentProjectRootPath),
+        resultPath: processPath(destinationPath)
+    };
 };
