@@ -20,7 +20,7 @@ CLI to create or edit **React** or **React Native** components with your own str
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcoolassassin%2Freactcci.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcoolassassin%2Freactcci?ref=badge_shield)
 
 ## Used by
-|[![Arrival](https://i.ibb.co/PYYGktr/output-onlinepngtools.png)](https://arrival.com)|[![Arrival](https://i.ibb.co/xDMDZkT/output-onlinepngtools-2.png)](https://kontur.ru)|
+|[![Arrival](https://raw.githubusercontent.com/coolassassin/reactcci/master/docs/arrival.png)](https://arrival.com)|[![Arrival](https://raw.githubusercontent.com/coolassassin/reactcci/master/docs/kontur.png)](https://kontur.ru)|
 |---|---|
 
 ## Quick Overview
