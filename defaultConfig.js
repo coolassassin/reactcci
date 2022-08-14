@@ -10,13 +10,13 @@ module.exports = {
                 /* Component folder structure declaration */
                 index: {
                     name: 'index.ts',
-                    file: 'index.ts'
+                    file: 'index.tmp'
                 },
                 component: {
                     name: '[name].tsx',
                     file: [
-                        { name: 'fc.tsx', description: 'Functional component' },
-                        { name: 'class.tsx', description: 'Class component' }
+                        { name: 'fc.tmp', description: 'Functional component' },
+                        { name: 'class.tmp', description: 'Class component' }
                     ]
                 },
                 style: {
@@ -25,13 +25,13 @@ module.exports = {
                 },
                 stories: {
                     name: '[name].stories.tsx',
-                    file: 'stories.tsx',
+                    file: 'stories.tmp',
                     optional: true,
                     default: false
                 },
                 test: {
                     name: '[name].test.tsx' /*'__tests__/[name].test.tsx' to put tests into subfolder*/,
-                    file: 'tst.tsx',
+                    file: 'test.tmp',
                     optional: true,
                     default: false
                 }
