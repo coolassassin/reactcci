@@ -1,4 +1,10 @@
-#1.9.0
+## 1.11.0
+* add checkExistenceOnCreate flag
+
+## 1.10.0
+* updated default templates file extensions
+
+## 1.9.0
 * refactoring to make project more stable and strict
 
 ## 1.8.4

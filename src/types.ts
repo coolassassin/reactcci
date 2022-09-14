@@ -43,6 +43,7 @@ export type ProcessFileAndFolderName = ((name?: string, parts?: string[], isFold
 export type Config = {
     multiProject: boolean;
     skipFinalStep: boolean;
+    checkExistenceOnCreate: boolean;
     folderPath: string | string[];
     templatesFolder: string;
     templates: TemplateDescriptionObject | MultiTemplate;

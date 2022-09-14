@@ -4,7 +4,7 @@ CLI to create or edit **React** or **React Native** components with your own str
 - **Plug and play**: Instant config for CRA with typescript
 - **Easy to config**: interactive configuration and simple templating
 - **Works with anything**: Typescript, Storybook, Redux, Jest, ...
-- **Lightweight**: *< 30kb + 3 small libraries*
+- **Lightweight**: *< 40kb + 3 small libraries*
 - **Fast search**: very fast selecting place for new component by dynamic search
 - **A lot by one command**: ton of files by multi-creation feature
 - **Created for React**: better than **plop**, **hygen** or any scaffolding library, because it's for React
@@ -59,6 +59,9 @@ Allows you to set up config for mono-repository with several projects
 Default: `false`  
 - `skipFinalStep`  
 Allows you to switch off last checking step  
+Default: `false`  
+- `checkExistenceOnCreate`  
+Allows you to switch on check component existence on create to avoid replacing  
 Default: `false`  
 - `templates`  
 Object with structure of your component

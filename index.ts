@@ -2,6 +2,7 @@
 
 import kleur from 'kleur';
 
+import { checkComponentExistence } from './src/checkComponentExistence';
 import { setPath } from './src/setPath';
 import { setConfig } from './src/setConfig';
 import { setProject } from './src/setProject';
@@ -42,6 +43,8 @@ import { parseDestinationPath } from './src/parseDestinationPath';
             resultPathInput: parsedPath.resultPath,
             projectRootPathInput: parsedPath.projectRootPath
         });
+
+        await checkComponentExistence({ componentNames, commandLineFlags, resultPath, projectRootPath, config });
 
         await buildComponent({
             root,
