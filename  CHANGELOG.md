@@ -1,3 +1,6 @@
+## 1.11.1
+* add links to website
+
 ## 1.11.0
 * add checkExistenceOnCreate flag
 

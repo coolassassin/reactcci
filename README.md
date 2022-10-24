@@ -3,6 +3,7 @@ CLI to create or edit **React** or **React Native** components with your own str
 
 - **Plug and play**: Instant config for CRA with typescript
 - **Easy to config**: interactive configuration and simple templating
+- **Great documentation**: [More info on our website](https://kamenskih.gitbook.io/reactcci/)
 - **Works with anything**: Typescript, Storybook, Redux, Jest, ...
 - **Lightweight**: *< 40kb + 3 small libraries*
 - **Fast search**: very fast selecting place for new component by dynamic search
