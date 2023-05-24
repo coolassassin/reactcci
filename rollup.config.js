@@ -9,7 +9,8 @@ export default {
     input: 'index.ts',
     output: {
         file: './build/cli.js',
-        format: 'cjs'
+        format: 'cjs',
+        inlineDynamicImports: true
     },
     plugins: [
         resolve({ extensions }),

@@ -3,3 +3,4 @@ node_modules
 build
 coverage
 rcci.config.js
+rcci.config.cjs

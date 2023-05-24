@@ -43,7 +43,7 @@ module.exports = {
         /* Template placeholders */
         NAME: ({ componentName }) => componentName,
         COMPONENT_FILE_PREFIX: ({ filePrefix }) => filePrefix,
-        STYLE: ({ files }) => (files.style ? `\nimport styles from './${files.style.name}';\n` : ''),
+        STYLE: ({ files }) => (files.style ? `import styles from './${files.style.name}';\n` : ''),
         STORY_PATH: ({ join, project, destinationFolder, componentName }) =>
             join(project, destinationFolder, componentName)
     }
