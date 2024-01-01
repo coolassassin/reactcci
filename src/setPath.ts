@@ -27,8 +27,8 @@ export const filterChoicesByText = (choices: { title: string }[], query: string,
         }
         return (
             choice.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()) ||
-            splitStringByCapitalLetter(query)?.every((part) =>
-                splitStringByCapitalLetter(choice.title)?.some((substr) => substr.startsWith(part))
+            splitStringByCapitalLetter(query)?.every(
+                (part) => splitStringByCapitalLetter(choice.title)?.some((substr) => substr.startsWith(part))
             )
         );
     });
