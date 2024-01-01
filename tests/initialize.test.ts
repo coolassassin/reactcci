@@ -9,6 +9,7 @@ import * as consts from '../src/constants';
 import { CommandLineFlags } from '../src/types';
 
 import { mockProcess } from './testUtils';
+import {getIsItemExists} from "../src/helpers";
 
 describe('initialize', () => {
     const props: Parameters<typeof initialize>[0] = {
@@ -67,7 +68,7 @@ describe('initialize', () => {
         prompts.inject([true, true, newTemplatesFolder]);
         await initialize(props);
         expect(mkdirSpy).toBeCalledTimes(1);
-        expect(fs.existsSync(path.resolve(__dirname, '../', newTemplatesFolder))).toBe(true);
+        expect(await getIsItemExists(path.resolve(__dirname, '../', newTemplatesFolder))).toBe(true);
     });
 
     it('config not exists, disagree about folder for templates', async () => {

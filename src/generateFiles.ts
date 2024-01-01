@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { getTemplate } from './getTemplate';
-import { getRelativePath, processPath, processObjectName, mapNameToCase } from './helpers';
+import { getRelativePath, processPath, processObjectName, mapNameToCase, getIsItemExists } from './helpers';
 import { ComponentFileList, Config, isTypingCase, Project, templatePlaceholdersData } from './types';
 
 type Properties = {
@@ -40,7 +40,7 @@ export const generateFiles = async ({
             processObjectName({ name: componentName, isFolder: true, processFileAndFolderName })
         );
 
-        if (!fs.existsSync(folder)) {
+        if (!(await getIsItemExists(folder))) {
             await fs.promises.mkdir(folder);
         }
 

@@ -6,6 +6,7 @@ import path from 'path';
 
 import { getQuestionsSettings } from './getQuestionsSettings';
 import {
+    getIsItemExists,
     isDirectory,
     makePathShort,
     processObjectName,
@@ -60,7 +61,14 @@ export const setPath = async ({
 }: Properties): Promise<Output> => {
     const { dest, update, skipSearch } = commandLineFlags;
     const potentialFolders = typeof folderPath === 'string' ? [folderPath] : folderPath;
-    const availableFolders = potentialFolders.filter((folder) => fs.existsSync(path.resolve(root, project, folder)));
+    const availableFolders = [];
+
+    for (const folder of potentialFolders) {
+        if (!await getIsItemExists(path.resolve(root, project, folder))) {
+            continue;
+        }
+        availableFolders.push(folder);
+    }
 
     let projectRootPath = projectRootPathInput ?? dest;
 

@@ -140,16 +140,18 @@ describe('helpers', () => {
         ['[name].tsx', true],
         ['[name].module.css', false]
     ])('getIsFileAlreadyExists: is file exists "%s" ? %s', (fileNameTemplate, expected) => {
+        const result = getIsFileAlreadyExists({
+            root,
+            project,
+            fileNameTemplate,
+            objectName: 'TestComponent',
+            processFileAndFolderName: config.processFileAndFolderName,
+            resultPath,
+            projectRootPath
+        });
+
         expect(
-            getIsFileAlreadyExists({
-                root,
-                project,
-                fileNameTemplate,
-                objectName: 'TestComponent',
-                processFileAndFolderName: config.processFileAndFolderName,
-                resultPath,
-                projectRootPath
-            })
+            result
         ).toEqual(expected);
     });
 

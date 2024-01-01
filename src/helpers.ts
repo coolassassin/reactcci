@@ -241,3 +241,9 @@ export const getFileIndexForTemplate = (files: string, template: string): number
     }
     return parseInt((/\d+/.exec(names[elementIndex]) ?? ['0'])[0], 10);
 };
+
+export const getIsItemExists = (item: string) =>
+    fs.promises.access(item).then(
+        () => true,
+        () => false
+    );

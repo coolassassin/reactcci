@@ -6,7 +6,7 @@ import path from 'path';
 
 import { CONFIG_FILE_NAME, OLD_CONFIG_FILE_NAME } from './constants';
 import { getQuestionsSettings } from './getQuestionsSettings';
-import { writeToConsole } from './helpers';
+import { getIsItemExists, writeToConsole } from './helpers';
 import { CommandLineFlags } from './types';
 
 type Properties = {
@@ -17,12 +17,12 @@ type Properties = {
 
 export const initialize = async ({ root, moduleRoot, commandLineFlags }: Properties) => {
     const localConfigPath = path.resolve(root, CONFIG_FILE_NAME);
-    if (fs.existsSync(localConfigPath)) {
+    if (await getIsItemExists(localConfigPath)) {
         return;
     }
 
     const oldLocalConfig = path.resolve(root, OLD_CONFIG_FILE_NAME);
-    if (fs.existsSync(oldLocalConfig)) {
+    if (await getIsItemExists(oldLocalConfig)) {
         writeToConsole(`Please rename file ${kleur.yellow(OLD_CONFIG_FILE_NAME)} to ${kleur.yellow(CONFIG_FILE_NAME)}`);
         process.exit();
         return;
@@ -87,7 +87,7 @@ export const initialize = async ({ root, moduleRoot, commandLineFlags }: Propert
 
     if (templatesAgreement) {
         const templateFolderPath = path.resolve(root, templateFolderName);
-        if (!fs.existsSync(templateFolderPath)) {
+        if (!(await getIsItemExists(templateFolderPath))) {
             await fs.promises.mkdir(templateFolderPath);
         }
         const defaultTempleFolder = path.resolve(moduleRoot, 'templates');
