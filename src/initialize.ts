@@ -77,7 +77,7 @@ export const initialize = async ({ root, moduleRoot, commandLineFlags }: Propert
         ).templateFolderName;
     }
 
-    const defaultConfigPath = path.resolve(moduleRoot, 'defaultConfig.js');
+    const defaultConfigPath = path.resolve(moduleRoot, 'defaultConfig.cjs');
     const defaultConfig = (await fs.promises.readFile(defaultConfigPath)).toString();
     await fs.promises.writeFile(
         path.join(root, CONFIG_FILE_NAME),

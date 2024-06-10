@@ -26,7 +26,7 @@ describe('initialize', () => {
         node_modules: mockFs.load(path.resolve(__dirname, '../node_modules')),
         templates: mockFs.load(path.resolve(__dirname, '../templates')),
         templatesFolder: {},
-        'defaultConfig.js': '',
+        'defaultConfig.cjs': '',
         [existentConfigName]: ''
     };
 

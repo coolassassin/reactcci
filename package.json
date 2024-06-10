@@ -18,7 +18,7 @@
     },
     "scripts": {
         "start": "babel-node -x .ts index.ts",
-        "build": "rollup -c",
+        "build": "rollup -c && node copyDeclarations.js",
         "typecheck": "tsc --noEmit",
         "run-build": "node build/cli.js",
         "prettier": "prettier --write src/*.ts index.ts",
@@ -61,7 +61,7 @@
         "typescript": "^5.3.3"
     },
     "files": [
-        "defaultConfig.js",
+        "defaultConfig.cjs",
         "package.json",
         "templates",
         "build",

@@ -3,7 +3,11 @@ import path from 'path';
 
 import { getTemplate } from './getTemplate';
 import { getRelativePath, processPath, processObjectName, mapNameToCase, getIsItemExists } from './helpers';
-import { ComponentFileList, Config, isTypingCase, Project, templatePlaceholdersData } from './types';
+import { ComponentFileList, Config, Project, templatePlaceholdersData, TypingCases } from './types';
+
+const isTypingCase = (value: string): value is TypingCases => {
+    return (['camelCase', 'PascalCase', 'snake_case', 'dash-case'] satisfies TypingCases[]).includes(value as any);
+};
 
 type Properties = {
     root: string;

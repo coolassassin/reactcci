@@ -1,3 +1,6 @@
+/**
+ * @type import("reactcci/build/types").Config
+ */
 module.exports = {
     multiProject: false /* Enable searching projects with component folder path */,
     skipFinalStep: false /* Toggle final step agreement */,

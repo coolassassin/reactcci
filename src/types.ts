@@ -34,9 +34,6 @@ export type FilesList = {
 export type ComponentFileList = { [key in string]: FilesList };
 
 export type TypingCases = 'camelCase' | 'PascalCase' | 'snake_case' | 'dash-case';
-export const isTypingCase = (value: string): value is TypingCases => {
-    return ['camelCase', 'PascalCase', 'snake_case', 'dash-case'].includes(value);
-};
 
 export type ProcessFileAndFolderName = ((name?: string, parts?: string[], isFolder?: boolean) => string) | TypingCases;
 
