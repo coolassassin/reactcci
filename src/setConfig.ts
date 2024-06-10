@@ -11,7 +11,11 @@ const prepareFolderPath = (path: string): string => {
 
 // This dynamic import is using because without "file://" prefix module can't be imported by Windows
 const dynamicImport = async (pathToModule: string) => {
-    return import(path.isAbsolute(pathToModule) ? pathToFileURL(pathToModule).toString() : pathToModule);
+    return import(
+        process.platform === 'win32' && path.isAbsolute(pathToModule)
+            ? pathToFileURL(pathToModule).toString()
+            : pathToModule
+    );
 };
 
 type Properties = {

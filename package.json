@@ -1,6 +1,6 @@
 {
     "name": "reactcci",
-    "version": "1.13.2",
+    "version": "1.14.0",
     "type": "commonjs",
     "description": "React create component CLI",
     "author": "Kamenskikh Dmitrii <coolstreetassassin@gmail.com>",
